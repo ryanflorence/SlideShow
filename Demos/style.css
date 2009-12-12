@@ -1,0 +1,28 @@
+div#slides {
+	position: relative;
+	width: 500px;
+	height: 280px;
+	overflow: hidden;
+}
+
+div#slides div {
+	position: absolute;
+	width: 500px;
+	height: 280px;
+	font-size: 100px;
+	line-height: 200px;
+	text-align: center;
+	background: #f0f0f0;
+}
+
+div#slides div.one {
+	background: #e00;
+}
+
+div#slides div.three {
+	background: #0e0;
+}
+
+div#slides div.five {
+	background: #00e;
+}
