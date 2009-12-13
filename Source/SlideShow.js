@@ -3,23 +3,21 @@ var SlideShow = new Class({
 	Implements: [Options, Events, Loop],
 		
 		options: {
-			delay: 4000
+			delay: 7000
 		},
 	
-	transitions: {},
-		
-	initialize: function(container, options){
+	initialize: function(element, options){
 		this.setOptions(options);
 		this.setLoop(this.showNext, this.options.delay);
-		this.container = document.id(container);
-		this.slides = this.container.getChildren();
+		this.element = document.id(element);
+		this.slides = this.element.getChildren();
 		this.current = this.slides[0];
 		this.setup();
 	},
 	
 	setup: function(){
 		this.slides.each(function(slide, index){
-			this.storeTransition(slide);
+			this.storeTransition(slide).reset(slide);
 			if(index != 0) slide.setStyle('display','none');
 		}, this);
 	},
@@ -47,19 +45,24 @@ var SlideShow = new Class({
 		var transition = this.getTransition(slide);
 		var duration = this.getDuration(slide);
 
-		var previous = this.current.setStyle('z-index',2);
-		var next = this.makeVisible(slide);
-
-		SlideShow.transitions[transition](previous, next, duration, this);
+		var previous = this.current.setStyle('z-index', 1);
+		var next = this.reset(slide);
+		
+		this.transitions[transition](previous, next, duration, this);
 		(function() { previous.setStyle('display','none'); }).bind(this).delay(duration);
 		this.current = next;
+		return this;
 	},
 	
-	makeVisible: function(slide){
+	reset: function(slide){
 		return slide.setStyles({
-			'z-index': 1,
-			'display': 'block'
+			'position': 'absolute',
+			'z-index': 0,
+			'display': 'block',
+			'left': 0,
+			'top': 0
 		}).fade('show');
+		return this;
 	},
 	
 	nextSlide: function(){
@@ -75,31 +78,152 @@ var SlideShow = new Class({
 	showNext: function(){
 		this.show(this.nextSlide());
 		return this;
+	},
+	
+	showPrevious: function(){
+		this.show(this.previousSlide());
+		return this;
 	}
 	
 });
 
-SlideShowTransitions = {
+SlideShow.adders = {
 	
-	crossfade: function(previous, next, duration, instance){
-		previous.set('tween',{duration: duration}).fade('out');
-		next.set('tween',{duration: duration}).fade('in');
-		console.log(instance);
-		return instance;
-	},
+	transitions:{},
 	
-	fade: function(previous, next, duration, instance){
-		previous.set('tween',{duration: duration}).fade('out');
-		console.log(instance);
-		return instance;
-	},
-	
-	pushLeft: function(previous, next, duration, instance){
-		next.setStyle('left', instance.container.getSize().x);
-		[next, previous].each(function(slide){
-			slide.set('tween',{duration: duration});
+	add: function(className, fn){
+		this.transitions[className] = fn;
+		this.implement({
+			transitions: this.transitions
 		});
-		return instance;
+	},
+	
+	addAllThese : function(transitions){
+		$A(transitions).each(function(transition){
+			this.add(transition[0], transition[1]);
+		}, this);
 	}
 	
-};
+}
+
+$extend(SlideShow, SlideShow.adders);
+SlideShow.implement(SlideShow.adders);
+
+SlideShow.add('fade', function(previous, next, duration, instance){
+	previous.set('tween',{duration: duration}).fade('out');
+	return this;
+});
+
+SlideShow.addAllThese([
+
+	['crossFade', function(previous, next, duration, instance){
+		previous.set('tween',{duration: duration}).fade('out');
+		next.set('tween',{duration: duration}).fade('in');
+		return this;
+	}],
+
+	['pushLeft', function(previous, next, duration, instance){
+		var distance = instance.element.getStyle('width').toInt();
+		next.setStyle('left', distance);
+		[next, previous].each(function(slide){
+			var to = slide.getStyle('left').toInt() - distance;
+			slide.set('tween',{duration: duration}).tween('left', to);
+		});
+		return this;
+	}],
+	
+	['pushRight', function(previous, next, duration, instance){
+		var distance = instance.element.getStyle('width').toInt();
+		next.setStyle('left', -distance);
+		[next, previous].each(function(slide){
+			var to = slide.getStyle('left').toInt() + distance;
+			slide.set('tween',{duration: duration}).tween('left', to);
+		});
+		return this;
+	}],
+	
+	['pushDown', function(previous, next, duration, instance){
+		var distance = instance.element.getStyle('height').toInt();
+		next.setStyle('top', -distance);
+		[next, previous].each(function(slide){
+			var to = slide.getStyle('top').toInt() + distance;
+			slide.set('tween',{duration: duration}).tween('top', to);
+		});
+		return this;
+	}],
+	
+	['pushUp', function(previous, next, duration, instance){
+		var distance = instance.element.getStyle('height').toInt();
+		next.setStyle('top', distance);
+		[next, previous].each(function(slide){
+			var to = slide.getStyle('top').toInt() - distance;
+			slide.set('tween',{duration: duration}).tween('top', to);
+		});
+		return this;
+	}],
+	
+	['blindLeft', function(previous, next, duration, instance){
+		var distance = instance.element.getStyle('width').toInt();
+		next
+			.setStyles({
+				'left': distance,
+				'z-index': 1
+			})
+			.set('tween',{duration: duration})
+			.tween('left', 0);
+		return this;
+	}],
+
+	['blindRight', function(previous, next, duration, instance){
+		var distance = instance.element.getStyle('width').toInt();
+		next
+			.setStyles({
+				'left': -distance,
+				'z-index': 1
+			})
+			.set('tween',{duration: duration})
+			.tween('left', 0);
+		return this;
+	}],
+	
+	['blindUp', function(previous, next, duration, instance){
+		var distance = instance.element.getStyle('height').toInt();
+		next
+			.setStyles({
+				'top': distance,
+				'z-index': 1
+			})
+			.set('tween',{duration: duration})
+			.tween('top', 0);
+		return this;
+	}],
+	
+	['blindDown', function(previous, next, duration, instance){
+		var distance = instance.element.getStyle('height').toInt();
+		next
+			.setStyles({
+				'top': -distance,
+				'z-index': 1
+			})
+			.set('tween',{duration: duration})
+			.tween('top', 0);
+		return this;
+	}],
+	
+	['blindDownFade', function(previous, next, duration, instance){
+		this.blindDown(previous, next, duration, instance).fade(previous, next, duration, instance);
+	}],
+	
+	['blindUpFade', function(previous, next, duration, instance){
+		this.blindUp(previous, next, duration, instance).fade(previous, next, duration, instance);
+	}],
+	
+	['blindLeftFade', function(previous, next, duration, instance){
+		this.blindLeft(previous, next, duration, instance).fade(previous, next, duration, instance);
+	}],
+	
+	['blindRightFade', function(previous, next, duration, instance){
+		this.blindRight(previous, next, duration, instance).fade(previous, next, duration, instance);
+	}]
+	
+]);

@@ -5,7 +5,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-	<title>index</title>
+	<title>SlideShow Demo</title>
 	<link rel="stylesheet" type="text/css" href="style.css" />
 	<script type="text/javascript" charset="utf-8" src="mootools-1.2.4-core-nc.js"></script>
 	<script type="text/javascript" charset="utf-8" src="Loop.js"></script>
@@ -14,17 +14,21 @@
 </head>
 
 <body>
-	
+	<h1>SlideShow Demo</h1>
 	<div id="slides">
-		<div class="one transition:fade duration:1000">1</div>
-		<div class="two transition:fade duration:500">2</div>
-		<div class="three transition:fade duration:400">3</div>
-		<div class="four transition:fade duration:1000">4</div>
-		<div class="five transition:fade duration:2000">5</div>
-		<div class="six transition:fade duration:500">6</div>
-		<div class="seven transition:fade duration:1000">7</div>
+		<div class="red transition:crossFade duration:1000">1</div>
+		<div class="green transition:blindLeft duration:500">2</div>
+		<div class="blue transition:blindRightFade duration:400">3</div>
+		<div class="red transition:fade duration:1000">4</div>
+		<div class="green transition:pushUp duration:2000">5</div>
+		<div class="blue transition:pushDown duration:500">6</div>
 	</div>
-
+	<p id="links">
+		SlideShow
+		<a href="http://moodocs.net/rpflo/mootools-rpflo/SlideShow">@moodocs.net</a> | 
+		<a href="http://github.com/rpflorence/SlideShow">@github</a>
+		<a href="http://ryanflorence.com" id="avatar"><img src="avatar.png" /></a>
+	</p>
 
 </body>
 </html>

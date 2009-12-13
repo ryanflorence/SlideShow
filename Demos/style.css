@@ -3,6 +3,7 @@ div#slides {
 	width: 500px;
 	height: 280px;
 	overflow: hidden;
+	border: solid 50px #000;
 }
 
 div#slides div {
@@ -12,17 +13,57 @@ div#slides div {
 	font-size: 100px;
 	line-height: 200px;
 	text-align: center;
-	background: #f0f0f0;
+	color: #fff;
 }
 
-div#slides div.one {
-	background: #e00;
+/* @group global */
+
+body {
+	font-family: Helvetica, arial;
+	background: #fff;
 }
 
-div#slides div.three {
-	background: #0e0;
+p#links {
+	padding-top: 50px;
+	clear: both;
 }
 
-div#slides div.five {
-	background: #00e;
+a#avatar {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
 }
+
+a#avatar img {
+	border: none;
+}
+
+h1 {
+	color: #0094d5;
+}
+
+h2 {
+	color: #43aa38;
+}
+
+a {
+	color: #0094d5;
+}
+
+a:visited, a:hover {
+	color: #00577e;
+}
+
+.red {
+	background: #e40053;
+}
+
+.blue {
+	background: #0094d5;
+}
+
+.green {
+	background: #43aa38;
+}
+
+/* @end */
