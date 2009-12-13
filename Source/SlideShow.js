@@ -1,3 +1,25 @@
+/*
+---
+
+script: SlideShow.js
+
+description: The ultimate, class-based, slideshow class. Use any element, not just images. so it's prefect for galleries, newstickers, whatever.  Comes with packaged transitions but is ridiculously easy to extend and create your own transitions
+
+license: MIT-style license.
+
+authors: Ryan Florence
+
+docs: http://moodocs.net/rpflo/mootools-rpflo/SlideShow
+
+requires:
+- core:1.2.4: '*'
+
+provides: [SlideShow]
+
+...
+*/
+
+
 var SlideShow = new Class({
 	
 	Implements: [Options, Events, Loop],
