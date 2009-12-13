@@ -11,10 +11,6 @@ authors: Ryan Florence
 
 docs: http://moodocs.net/rpflo/mootools-rpflo/SlideShow
 
-requires:
-- core:1.2.4
-- Loop:1.0
-
 provides: [SlideShow]
 
 ...
