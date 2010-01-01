@@ -5,7 +5,7 @@ Class: SlideShow {#SlideShow}
 
 ### Demo
 
-<iframe src="http://mootools.net/shell/g3nTM/embedded/result,js,html,css/" style="width: 100%; height:480px"></iframe>
+<iframe src="http://mootools.net/shell/g3nTM/embedded/result,js,html,css/" style="width: 100%; height:500px"></iframe>
 
 ### Implements:
 
