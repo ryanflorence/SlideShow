@@ -9,7 +9,7 @@ Class: SlideShow {#SlideShow}
 
 ### Implements:
 
-Options, Events, [Loop][http://moodocs.net/rpflo/mootools-rpflo/Loop]
+Options, Events, [Loop](http://moodocs.net/rpflo/mootools-rpflo/Loop)
 
 ### Example
 
