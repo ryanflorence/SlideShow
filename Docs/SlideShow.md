@@ -7,6 +7,10 @@ Class: SlideShow {#SlideShow}
 
 <iframe src="http://mootools.net/shell/VUe5J/embedded/result,js,html,css/" style="width: 100%; height:430px"></iframe>
 
+### Implements:
+
+Options, Events, [Loop][http://moodocs.net/rpflo/mootools-rpflo/Loop]
+
 ### Example
 
 #### html
@@ -89,10 +93,6 @@ SlideShow will set the position of your container to `relative` if it is not alr
     }    
 
 
-### Implements:
-
-Options, Events, [Loop][http://moodocs.net/rpflo/mootools-rpflo/Loop]
-
 ### Adding your own transitions
 
 Adding transitions is a snap.  The Class itself has an `add` function that takes two arguments: the name of the transition, and the function to control it.
@@ -152,12 +152,15 @@ SlideShow Method: constructor {#SlideShow:constructor}
 ### Arguments:
 
 1. element - (element) The string for an id of an element of an element reference.
-2. options - (object) See below
+2. options - (object) See below,
+
 
 ### Options:
 
-* delay - (number: defaults to 7000)
-
+* delay - (*number*: defaults to `7000`) Milliseconds between slide transitions
+* transition - (*string*: defaults to `crossfade`) Default transition for slides with none specified in the `class` attribute.
+* duration - (*number*: defaults to `7000`) Default transisition duration for slides with none specified in the `class` attribute.
+* autoplay - (*boolean*: defaults to `false`) Calls `play` method in the contructor if false.
 
 SlideShow Method: show {#SlideShow:show}
 -----------------------------------------
@@ -203,4 +206,22 @@ SlideShow Method: showPrevious {#SlideShow:showPrevious}
 
 This SlideShow instance.
 
+SlideShow Method: reverse {#SlideShow:reverse}
+-----------------------------------------
+
+<big>Reverses the autoplay.</big>
+
+### Syntax:
+
+    mySlideShow.reverse();
+
+### Example:
+
+    mySlideShow.play();
+    mySlideShow.reverse(); // going backwards now
+    mySlideShow.reverse(); // going forward now
+
+### Returns:
+
+This SlideShow instance.
 
