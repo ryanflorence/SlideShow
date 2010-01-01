@@ -2,12 +2,22 @@ var mySlideShow;
 
 window.addEvent('domready',function(){
 	
+	// instance with a few options
 	mySlideShow = new SlideShow('slides',{
 		delay: 2000,
 		autoplay: true
 	});
 	
+	// Event demonstration
+	mySlideShow.addEvents({
+		onShow: function(){ $('onShow').highlight(); },
+		onShowComplete: function(){ $('onShowComplete').highlight(); },
+		onReverse: function(){ $('onReverse').highlight(); },
+		onPlay: function(){ $('onPlay').highlight(); },
+		onPause: function(){ $('onPause').highlight(); }
+	});
 	
+	// the rest of the demo showing how to control the instance
 	var toggled = [$('show'), $('showNext'), $('showPrevious')];
 	
 	$('pause').addEvent('click',function(){

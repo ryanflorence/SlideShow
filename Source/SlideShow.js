@@ -25,6 +25,13 @@ var SlideShow = new Class({
 	Implements: [Options, Events, Loop],
 		
 		options: {
+			/*
+			onShow: $empty,
+			onShowComplete: $empty,
+			onReverse: $empty,
+			onPlay: $empty,
+			onPause: $empty
+			*/
 			delay: 7000,
 			transition: 'crossFade',
 			duration: '500',
@@ -38,14 +45,13 @@ var SlideShow = new Class({
 		this.slides = this.element.getChildren();
 		this.current = this.slides[0];
 		this.setup();
-		this.pause = this.stopLoop;
-		this.play = this.startLoop;
 		if(this.options.autoplay) this.startLoop();
 	},
 	
 	setup: function(){
 	  this.setupElement();
 	  this.setupSlides();
+		return this;
 	},
 	
 	setupElement: function(){
@@ -82,13 +88,17 @@ var SlideShow = new Class({
 	},
 	
 	show: function(slide){
+		this.fireEvent('show');
 		if(slide != this.current){
 			var transition = this.getTransition(slide);
 			var duration = this.getDuration(slide);
 			var previous = this.current.setStyle('z-index', 1);
 			var next = this.reset(slide);
 			this.transitions[transition](previous, next, duration, this);
-			(function() { previous.setStyle('display','none'); }).bind(this).delay(duration);
+			(function() { 
+				previous.setStyle('display','none');
+				this.fireEvent('showComplete');
+			}).bind(this).delay(duration);
 			this.current = next;
 		}
 		return this;
@@ -125,9 +135,22 @@ var SlideShow = new Class({
 		return this;
 	},
 	
+	play: function(){
+		this.startLoop();
+		this.fireEvent('play');
+		return this;
+	},
+	
+	pause: function(){
+		this.stopLoop();
+		this.fireEvent('pause');
+		return this;
+	},
+	
 	reverse: function(){
 		var fn = (this.loopMethod == this.showNext) ? this.showPrevious : this.showNext;
 		this.setLoop(fn, this.options.delay);
+		this.fireEvent('reverse');
 		return this;
 	}
 	
@@ -161,6 +184,11 @@ SlideShow.add('fade', function(previous, next, duration, instance){
 });
 
 SlideShow.addAllThese([
+
+	['none', function(previous, next, duration, instance){
+		previous.setStyle('display','none');
+		return this;
+	}],
 
 	['crossFade', function(previous, next, duration, instance){
 		previous.set('tween',{duration: duration}).fade('out');

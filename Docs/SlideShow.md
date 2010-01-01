@@ -5,7 +5,7 @@ Class: SlideShow {#SlideShow}
 
 ### Demo
 
-<iframe src="http://mootools.net/shell/VUe5J/embedded/result,js,html,css/" style="width: 100%; height:430px"></iframe>
+<iframe src="http://mootools.net/shell/g3nTM/embedded/result,js,html,css/" style="width: 100%; height:430px"></iframe>
 
 ### Implements:
 
@@ -161,6 +161,14 @@ SlideShow Method: constructor {#SlideShow:constructor}
 * transition - (*string*: defaults to `crossfade`) Default transition for slides with none specified in the `class` attribute.
 * duration - (*number*: defaults to `7000`) Default transisition duration for slides with none specified in the `class` attribute.
 * autoplay - (*boolean*: defaults to `false`) Calls `play` method in the contructor if false.
+
+### Events:
+
+* show - (*function*) The function to execute when a slide transition begins.
+* showComplete - (*function*) The function to execute when a slide transition finishes.
+* play - (*function*) The function to execute when the slide show starts playing.
+* pause - (*function*) The function to execute when the slide show pauses.
+* reverse - (*function*) The function to execute when the slideshow is reversed.
 
 SlideShow Method: show {#SlideShow:show}
 -----------------------------------------
