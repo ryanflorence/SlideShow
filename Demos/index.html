@@ -17,12 +17,21 @@
 	<h1>SlideShow Demo</h1>
 	<div id="slides">
 		<div class="red transition:crossFade duration:1000">1</div>
-		<div class="green transition:blindLeft duration:500">2</div>
-		<div class="blue transition:blindRightFade duration:400">3</div>
-		<div class="red transition:fade duration:1000">4</div>
+		<div class="green">2</div>
+		<div class="blue transition:fadeThroughBackground duration:1000">3</div>
+		<div class="red transition:blindRightFade duration:1000">4</div>
 		<div class="green transition:pushUp duration:2000">5</div>
 		<div class="blue transition:pushDown duration:500">6</div>
 	</div>
+	<h2>Methods</h2>
+	<p>
+		<button id="pause">pause</button>
+		<button id="play" disabled="disabled">play</button> 
+		<button id="reverse">reverse</button> &nbsp; 
+		<button id="showNext" disabled="disabled">showNext</button>
+		<button id="showPrevious" disabled="disabled">showPrevious</button>
+		<button id="show" disabled="disabled">show slide 5</button>
+	</p>
 	<p id="links">
 		SlideShow
 		<a href="http://moodocs.net/rpflo/mootools-rpflo/SlideShow">@moodocs.net</a> | 

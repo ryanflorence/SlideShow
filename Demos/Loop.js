@@ -19,9 +19,6 @@ provides: [Loop]
 ...
 */
 
-
-
-
 var Loop = new Class({
 
 	loopCount: 0,
@@ -30,9 +27,15 @@ var Loop = new Class({
 	loopMethod: $empty,
 
 	setLoop: function(fn,delay){
-		if(this.isLooping) this.stopLoop();
+		if(this.isLooping) {
+			this.stopLoop();
+			var wasLooping = true;
+		} else {
+			var wasLooping = false;
+		}
 		this.loopMethod = fn;
 		this.loopDelay = delay || 3000;
+		if(wasLooping) this.startLoop();
 		return this;
 	},
 

@@ -11,6 +11,9 @@ authors: Ryan Florence
 
 docs: http://moodocs.net/rpflo/mootools-rpflo/SlideShow
 
+requires:
+	- Loop
+
 provides: [SlideShow]
 
 ...
@@ -22,7 +25,10 @@ var SlideShow = new Class({
 	Implements: [Options, Events, Loop],
 		
 		options: {
-			delay: 7000
+			delay: 7000,
+			transition: 'crossFade',
+			duration: '500',
+			autoplay: false
 		},
 	
 	initialize: function(element, options){
@@ -32,21 +38,36 @@ var SlideShow = new Class({
 		this.slides = this.element.getChildren();
 		this.current = this.slides[0];
 		this.setup();
+		this.pause = this.stopLoop;
+		this.play = this.startLoop;
+		if(this.options.autoplay) this.startLoop();
 	},
 	
 	setup: function(){
+	  this.setupElement();
+	  this.setupSlides();
+	},
+	
+	setupElement: function(){
+		var el = this.element;
+		if(el.getStyle('position') != 'absolute' && el != document.body) el.setStyle('position','relative');
+		return this;
+	},
+	
+	setupSlides: function(){
 		this.slides.each(function(slide, index){
 			this.storeTransition(slide).reset(slide);
 			if(index != 0) slide.setStyle('display','none');
 		}, this);
+		return this;
 	},
 	
 	storeTransition: function(slide){
 		var classes = slide.get('class');
 		var transitionRegex = /transition:[a-zA-Z]+/;
 		var durationRegex = /duration:[0-9]+/;
-		var transition = classes.match(transitionRegex)[0].split(':')[1];
-		var duration = classes.match(durationRegex)[0].split(':')[1];
+		var transition = (classes.match(transitionRegex)) ? classes.match(transitionRegex)[0].split(':')[1] : this.options.transition;
+		var duration = (classes.match(durationRegex)) ? classes.match(durationRegex)[0].split(':')[1] : this.options.duration;
 		slide.store('ssTransition', transition);
 		slide.store('ssDuration', duration);
 		return this;
@@ -61,15 +82,15 @@ var SlideShow = new Class({
 	},
 	
 	show: function(slide){
-		var transition = this.getTransition(slide);
-		var duration = this.getDuration(slide);
-
-		var previous = this.current.setStyle('z-index', 1);
-		var next = this.reset(slide);
-		
-		this.transitions[transition](previous, next, duration, this);
-		(function() { previous.setStyle('display','none'); }).bind(this).delay(duration);
-		this.current = next;
+		if(slide != this.current){
+			var transition = this.getTransition(slide);
+			var duration = this.getDuration(slide);
+			var previous = this.current.setStyle('z-index', 1);
+			var next = this.reset(slide);
+			this.transitions[transition](previous, next, duration, this);
+			(function() { previous.setStyle('display','none'); }).bind(this).delay(duration);
+			this.current = next;
+		}
 		return this;
 	},
 	
@@ -101,6 +122,12 @@ var SlideShow = new Class({
 	
 	showPrevious: function(){
 		this.show(this.previousSlide());
+		return this;
+	},
+	
+	reverse: function(){
+		var fn = (this.loopMethod == this.showNext) ? this.showPrevious : this.showNext;
+		this.setLoop(fn, this.options.delay);
 		return this;
 	}
 	
@@ -139,6 +166,19 @@ SlideShow.addAllThese([
 		previous.set('tween',{duration: duration}).fade('out');
 		next.set('tween',{duration: duration}).fade('in');
 		return this;
+	}],
+	
+	['fadeThroughBackground', function(previous, next, duration, instance){
+		var half = duration/2;
+		next.set('tween',{
+			duration: half
+		}).fade('hide');
+		previous.set('tween',{
+			duration: half,
+			onComplete: function(){
+				next.fade('in');
+			}
+		}).fade('out');
 	}],
 
 	['pushLeft', function(previous, next, duration, instance){

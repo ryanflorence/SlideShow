@@ -1,5 +1,4 @@
 div#slides {
-	position: relative;
 	width: 500px;
 	height: 280px;
 	overflow: hidden;
@@ -7,9 +6,8 @@ div#slides {
 }
 
 div#slides div {
-	position: absolute;
-	width: 500px;
 	height: 280px;
+	width: 500px;
 	font-size: 100px;
 	line-height: 200px;
 	text-align: center;
