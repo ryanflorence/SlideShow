@@ -12,7 +12,7 @@ authors: Ryan Florence
 docs: http://moodocs.net/rpflo/mootools-rpflo/SlideShow
 
 requires:
-	- Loop
+  - Loop
 
 provides: [SlideShow]
 
