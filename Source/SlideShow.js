@@ -3,7 +3,7 @@
 
 script: SlideShow.js
 
-description: The ultimate, class-based, slideshow class. Use any element, not just images. so it's prefect for galleries, newstickers, whatever.  Comes with packaged transitions but is ridiculously easy to extend and create your own transitions
+description: Easily extendable, class-based, slideshow widget. Use any element, not just images. Comes with packaged transitions but is easy to extend and create your own transitions.  The class is built to handle the basics of a slideshow, extend it to implement your own navigation piece and custom transitions.
 
 license: MIT-style license.
 

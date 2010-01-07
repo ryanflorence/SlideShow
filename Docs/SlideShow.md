@@ -4,8 +4,8 @@ Class: SlideShow {#SlideShow}
 <big>Easily extendable, class-based, slideshow widget. Use any element, not just images. Comes with packaged transitions but is easy to extend and create your own transitions.  The class is built to handle the _basics_ of a slideshow, extend it to implement your own navigation piece and custom transitions.</big>
 
 ### Demo
-
-<iframe src="http://mootools.net/shell/g3nTM/embedded/result,js,html,css/" style="width: 100%; height:500px"></iframe>
+ 
+<iframe src="http://jsfiddle.net/rpflorence/KkuRZ/embedded/result,js,html,css/" style="width: 100%; height:500px"></iframe>
 
 ### Implements:
 
