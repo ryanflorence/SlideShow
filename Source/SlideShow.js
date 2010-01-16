@@ -89,6 +89,7 @@ var SlideShow = new Class({
 	
 	show: function(slide){
 		this.fireEvent('show');
+		slide = (typeof slide == 'number') ? this.slides[slide] : slide;
 		if(slide != this.current){
 			var transition = this.getTransition(slide);
 			var duration = this.getDuration(slide);

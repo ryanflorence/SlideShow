@@ -49,10 +49,12 @@ Just pass in the slideshow container element to the constructor (and a few optio
 
 By default, `autoplay` is false and you can control the slide show.
 
-    // show the 4th slide
+    // show the 4th slide (pass it the index if you know it)
+    mySlideShow.show(3);
+    
+    // or pass it an element
     mySlideShow.show(mySlideShow.slides[3]);
     
-    // or just grab the element if you know it's already in the slideshow
     var el = $('someSlide');
     mySlideShow.show(el);
     
@@ -177,16 +179,20 @@ SlideShow Method: show {#SlideShow:show}
 
 ### Syntax:
 
-    mySlideShow.show(mySlideShow.slides[2]);
+    mySlideShow.show(slide);
 
 ### Arguments:
 
-1. slide - (element) Must be an element reference, not just the string for an id.
+1. slide - (*mixed*) The index of the slide or an element reference to the slide.
 
 ### Returns:
 
 This SlideShow instance.
 
+### Examples:
+
+    mySlideShow.show(2); // index
+    mySlideShow.show(mySlideShow.slides[2]); // element reference
 
 SlideShow Method: showNext {#SlideShow:showNext}
 -------------------------------------------------

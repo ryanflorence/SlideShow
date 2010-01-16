@@ -18,7 +18,7 @@ window.addEvent('domready',function(){
 	});
 	
 	// the rest of the demo showing how to control the instance
-	var toggled = [$('show'), $('showNext'), $('showPrevious')];
+	var toggled = [$('show'), $('showNext'), $('showPrevious'), $('showIndex')];
 	
 	$('pause').addEvent('click',function(){
 		
@@ -47,6 +47,10 @@ window.addEvent('domready',function(){
 	
 	$('show').addEvent('click',function(){
 		mySlideShow.show(mySlideShow.slides[4]);
+	});
+	
+	$('showIndex').addEvent('click',function(){
+		mySlideShow.show(0);
 	});
 	
 	$('showNext').addEvent('click',function(){
