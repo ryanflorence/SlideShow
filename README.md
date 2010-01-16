@@ -66,9 +66,10 @@ Just pass in the slideshow container element to the constructor (and a few optio
     
 ##### Controlling the slideshow
 
-By default, `autoplay` is false and you can control the slide show.
+By default, `autoplay` is false and you're in charge of controlling the slide show using the `show` method.  It accepts either a number for the index of the slide you want to show, or an actual element reference to the slide.
 
     // show the 4th slide
+    mySlideShow.show(3);
     mySlideShow.show(mySlideShow.slides[3]);
     
     // or just grab the element if you know it's already in the slideshow
