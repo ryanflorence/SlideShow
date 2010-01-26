@@ -113,7 +113,6 @@ var SlideShow = new Class({
 			'left': 0,
 			'top': 0
 		}).fade('show');
-		return this;
 	},
 	
 	nextSlide: function(){
