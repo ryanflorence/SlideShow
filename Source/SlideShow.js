@@ -297,20 +297,20 @@ SlideShow.addAllThese([
 		return this;
 	}],
 	
-	['blindDownFade', function(previous, next, duration, instance){
-		this.blindDown(previous, next, duration, instance).fade(previous, next, duration, instance);
+	['blindDownFade', function(p,n,d,i){
+		this.blindDown(p,n,d,i).fade(p,n,d,i);
 	}],
 	
-	['blindUpFade', function(previous, next, duration, instance){
-		this.blindUp(previous, next, duration, instance).fade(previous, next, duration, instance);
+	['blindUpFade', function(p,n,d,i){
+		this.blindUp(p,n,d,i).fade(p,n,d,i);
 	}],
 	
-	['blindLeftFade', function(previous, next, duration, instance){
-		this.blindLeft(previous, next, duration, instance).fade(previous, next, duration, instance);
+	['blindLeftFade', function(p,n,d,i){
+		this.blindLeft(p,n,d,i).fade(p,n,d,i);
 	}],
 	
-	['blindRightFade', function(previous, next, duration, instance){
-		this.blindRight(previous, next, duration, instance).fade(previous, next, duration, instance);
+	['blindRightFade', function(p,n,d,i){
+		this.blindRight(p,n,d,i).fade(p,n,d,i);
 	}]
 	
 ]);
