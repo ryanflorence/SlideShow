@@ -246,28 +246,32 @@ SlideShow.add('fade', function(previous, next, duration, instance){
 
 (function(){
 
-var _moveElement = function(direction,instance){
-	
+var moveElement = function(direction, element, instance){
+	var ops = {
+		horizontal: (direction == 'left' || direction == 'right'),
+		invert: (direction == 'left' || direction == 'up')
+	};
+	ops.coordinate = (ops.horizontal) ? 'x' : 'y';	
+	ops.style = (ops.horizontal) ? 'left' : 'top';
+	ops.distance = instance.element.getSize()[ops.coordinate];
+	element.setStyle(ops.style, (ops.invert) ? ops.distance : -ops.distance);
+	return ops;
 };
 
-var _push = function(direction, previous, next, duration, instance){
-	var horizontal = (direction == 'left' || direction == 'right');
-	var	coordinate = (horizontal) ? 'x' : 'y';
-	var ops = {
-		style: (horizontal) ? 'left' : 'top',
-		invert: (direction == 'left' || direction == 'up'),
-		distance: instance.element.getSize()[coordinate]
-	};
-	next.setStyle(ops.style, (ops.invert) ? ops.distance : -ops.distance);
+var push = function(direction, previous, next, duration, instance){
+	var ops = moveElement(direction, next, instance);
 	[next, previous].each(function(slide){
 		var start = slide.getStyle(ops.style).toInt();
 		var to = (ops.invert) ? start - ops.distance : start + ops.distance;
 		slide.set('tween',{duration: duration}).tween(ops.style, to);
 	});
-	
 };
 
-var _blind = function(direction)
+var blind = function(direction, previous, next, duration, instance){
+	var ops = moveElement(direction, next, instance);
+	next.setStyle('z-index',1).set('tween',{duration: duration}).tween(ops.style, 0);
+};
+
 
 SlideShow.addAllThese([
 
@@ -294,70 +298,42 @@ SlideShow.addAllThese([
 	}],
 
 	['pushLeft', function(p,n,d,i){
-		_push('left',p,n,d,i);
+		push('left',p,n,d,i);
 		return this;
 	}],
 
 	['pushRight', function(p,n,d,i){
-		_push('right',p,n,d,i);
+		push('right',p,n,d,i);
 		return this;
 	}],
 
 	['pushDown', function(p,n,d,i){
-		_push('down',p,n,d,i);
+		push('down',p,n,d,i);
 		return this;
 	}],
 
 	['pushUp', function(p,n,d,i){
-		_push('up',p,n,d,i);
+		push('up',p,n,d,i);
 		return this;
 	}],
 
-	['blindLeft', function(previous, next, duration, instance){
-		var distance = instance.element.getSize().x;
-		next
-			.setStyles({
-				'left': distance,
-				'z-index': 1
-			})
-			.set('tween',{duration: duration})
-			.tween('left', 0);
+	['blindLeft', function(p,n,d,i){
+		blind('left',p,n,d,i)
 		return this;
 	}],
 
-	['blindRight', function(previous, next, duration, instance){
-		var distance = instance.element.getSize().x;
-		next
-			.setStyles({
-				'left': -distance,
-				'z-index': 1
-			})
-			.set('tween',{duration: duration})
-			.tween('left', 0);
+	['blindRight', function(p,n,d,i){
+		blind('right',p,n,d,i);
 		return this;
 	}],
 
-	['blindUp', function(previous, next, duration, instance){
-		var distance = instance.element.getSize().y;
-		next
-			.setStyles({
-				'top': distance,
-				'z-index': 1
-			})
-			.set('tween',{duration: duration})
-			.tween('top', 0);
+	['blindUp', function(p,n,d,i){
+		blind('up',p,n,d,i)
 		return this;
 	}],
 
-	['blindDown', function(previous, next, duration, instance){
-		var distance = instance.element.getSize().y;
-		next
-			.setStyles({
-				'top': -distance,
-				'z-index': 1
-			})
-			.set('tween',{duration: duration})
-			.tween('top', 0);
+	['blindDown', function(p,n,d,i){
+		blind('down',p,n,d,i);
 		return this;
 	}],
 
