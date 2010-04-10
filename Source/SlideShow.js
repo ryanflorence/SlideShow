@@ -7,9 +7,9 @@ description: Easily extendable, class-based, slideshow widget. Use any element, 
 
 license: MIT-style license.
 
-authors: Ryan Florence
+authors: Ryan Florence www.clockfour.com
 
-docs: http://moodocs.net/rpflo/mootools-rpflo/SlideShow
+
 
 requires:
   - Loop
@@ -30,7 +30,9 @@ var SlideShow = new Class({
 			onShowComplete: $empty,
 			onReverse: $empty,
 			onPlay: $empty,
-			onPause: $empty
+			onPause: $empty,
+			onLoop: $empty,
+			onLoopShowComplete: $empty
 			*/
 			delay: 7000,
 			transition: 'crossFade',
@@ -44,26 +46,27 @@ var SlideShow = new Class({
 		this.element = document.id(element);
 		this.slides = this.element.getChildren();
 		this.current = this.slides[0];
+		this.transitioning = false;
 		this.setup();
-		if(this.options.autoplay) this.startLoop();
+		if (this.options.autoplay) this.startLoop();
 	},
 	
 	setup: function(){
 	  this.setupElement();
-	  this.setupSlides();
+	  this.setupSlides(true);
 		return this;
 	},
 	
 	setupElement: function(){
 		var el = this.element;
-		if(el.getStyle('position') != 'absolute' && el != document.body) el.setStyle('position','relative');
+		if (el.getStyle('position') != 'absolute' && el != document.body) el.setStyle('position','relative');
 		return this;
 	},
 	
-	setupSlides: function(){
+	setupSlides: function(hideFirst){
 		this.slides.each(function(slide, index){
 			this.storeTransition(slide).reset(slide);
-			if(index != 0) slide.setStyle('display','none');
+			if (hideFirst && index != 0) slide.setStyle('display','none');
 		}, this);
 		return this;
 	},
@@ -79,6 +82,12 @@ var SlideShow = new Class({
 		return this;
 	},
 	
+	resetOptions: function(options){
+		this.options = $merge(this.options, options);
+		this.setupSlides(false);
+		return this;
+	},
+	
 	getTransition: function(slide){
 		return slide.retrieve('ssTransition');
 	},
@@ -87,18 +96,33 @@ var SlideShow = new Class({
 		return slide.retrieve('ssDuration');
 	},
 	
-	show: function(slide){
-		this.fireEvent('show');
+	show: function(slide, options){
 		slide = (typeof slide == 'number') ? this.slides[slide] : slide;
-		if(slide != this.current){
-			var transition = this.getTransition(slide);
-			var duration = this.getDuration(slide);
+		if (slide != this.current && !this.transitioning){
+			this.transitioning = true;
+			var transition = (options && options.transition) ? options.transition: this.getTransition(slide);
+			var duration = (options && options.duration) ? options.duration: this.getDuration(slide);
 			var previous = this.current.setStyle('z-index', 1);
 			var next = this.reset(slide);
+			var looped = this.slides.indexOf(next) == 0; // need to check previous slide too
+			if (looped) this.fireEvent('loop');
+			this.fireEvent('show', [
+				previous, 
+				this.slides.indexOf(previous), 
+				next, 
+				this.slides.indexOf(next)
+			]);
 			this.transitions[transition](previous, next, duration, this);
 			(function() { 
 				previous.setStyle('display','none');
-				this.fireEvent('showComplete');
+				this.fireEvent('showComplete', [
+					previous, 
+					this.slides.indexOf(previous), 
+					next, 
+					this.slides.indexOf(next)
+				]);
+				if (looped) this.fireEvent('loopShowComplete');
+				this.transitioning = false;
 			}).bind(this).delay(duration);
 			this.current = next;
 		}
@@ -125,13 +149,13 @@ var SlideShow = new Class({
 		return (previous) ? previous : this.slides.getLast();
 	},
 	
-	showNext: function(){
-		this.show(this.nextSlide());
+	showNext: function(options){
+		this.show(this.nextSlide(), options);
 		return this;
 	},
 	
-	showPrevious: function(){
-		this.show(this.previousSlide());
+	showPrevious: function(options){
+		this.show(this.previousSlide(), options);
 		return this;
 	},
 	
@@ -151,6 +175,43 @@ var SlideShow = new Class({
 		var fn = (this.loopMethod == this.showNext) ? this.showPrevious : this.showNext;
 		this.setLoop(fn, this.options.delay);
 		this.fireEvent('reverse');
+		return this;
+	},
+	
+	toElement: function(){
+		return this.element;
+	}
+	
+});
+
+Element.Properties.slideshow = {
+
+	set: function(options){
+		var slideshow = this.retrieve('slideshow');
+		if (slideshow) slideshow.pause();
+		return this.eliminate('slideshow').store('slideshow:options', options);
+	},
+
+	get: function(options){
+		if (options || !this.retrieve('slideshow')){
+			if (options || !this.retrieve('slideshow:options')) this.set('slideshow', options);
+			this.store('slideshow', new SlideShow(this, this.retrieve('slideshow:options')));
+		}
+		return this.retrieve('slideshow');
+	}
+
+};
+
+
+Element.implement({
+	
+	play: function(options){
+		this.get('slideshow', options).play();
+		return this;
+	},
+	
+	pause: function(options){
+		this.get('slideshow', options).pause();
 		return this;
 	}
 	
@@ -183,6 +244,31 @@ SlideShow.add('fade', function(previous, next, duration, instance){
 	return this;
 });
 
+(function(){
+
+var _moveElement = function(direction,instance){
+	
+};
+
+var _push = function(direction, previous, next, duration, instance){
+	var horizontal = (direction == 'left' || direction == 'right');
+	var	coordinate = (horizontal) ? 'x' : 'y';
+	var ops = {
+		style: (horizontal) ? 'left' : 'top',
+		invert: (direction == 'left' || direction == 'up'),
+		distance: instance.element.getSize()[coordinate]
+	};
+	next.setStyle(ops.style, (ops.invert) ? ops.distance : -ops.distance);
+	[next, previous].each(function(slide){
+		var start = slide.getStyle(ops.style).toInt();
+		var to = (ops.invert) ? start - ops.distance : start + ops.distance;
+		slide.set('tween',{duration: duration}).tween(ops.style, to);
+	});
+	
+};
+
+var _blind = function(direction)
+
 SlideShow.addAllThese([
 
 	['none', function(previous, next, duration, instance){
@@ -195,12 +281,10 @@ SlideShow.addAllThese([
 		next.set('tween',{duration: duration}).fade('in');
 		return this;
 	}],
-	
+
 	['fadeThroughBackground', function(previous, next, duration, instance){
 		var half = duration/2;
-		next.set('tween',{
-			duration: half
-		}).fade('hide');
+		next.set('tween',{ duration: half	}).fade('hide');
 		previous.set('tween',{
 			duration: half,
 			onComplete: function(){
@@ -209,48 +293,28 @@ SlideShow.addAllThese([
 		}).fade('out');
 	}],
 
-	['pushLeft', function(previous, next, duration, instance){
-		var distance = instance.element.getStyle('width').toInt();
-		next.setStyle('left', distance);
-		[next, previous].each(function(slide){
-			var to = slide.getStyle('left').toInt() - distance;
-			slide.set('tween',{duration: duration}).tween('left', to);
-		});
+	['pushLeft', function(p,n,d,i){
+		_push('left',p,n,d,i);
 		return this;
 	}],
-	
-	['pushRight', function(previous, next, duration, instance){
-		var distance = instance.element.getStyle('width').toInt();
-		next.setStyle('left', -distance);
-		[next, previous].each(function(slide){
-			var to = slide.getStyle('left').toInt() + distance;
-			slide.set('tween',{duration: duration}).tween('left', to);
-		});
+
+	['pushRight', function(p,n,d,i){
+		_push('right',p,n,d,i);
 		return this;
 	}],
-	
-	['pushDown', function(previous, next, duration, instance){
-		var distance = instance.element.getStyle('height').toInt();
-		next.setStyle('top', -distance);
-		[next, previous].each(function(slide){
-			var to = slide.getStyle('top').toInt() + distance;
-			slide.set('tween',{duration: duration}).tween('top', to);
-		});
+
+	['pushDown', function(p,n,d,i){
+		_push('down',p,n,d,i);
 		return this;
 	}],
-	
-	['pushUp', function(previous, next, duration, instance){
-		var distance = instance.element.getStyle('height').toInt();
-		next.setStyle('top', distance);
-		[next, previous].each(function(slide){
-			var to = slide.getStyle('top').toInt() - distance;
-			slide.set('tween',{duration: duration}).tween('top', to);
-		});
+
+	['pushUp', function(p,n,d,i){
+		_push('up',p,n,d,i);
 		return this;
 	}],
-	
+
 	['blindLeft', function(previous, next, duration, instance){
-		var distance = instance.element.getStyle('width').toInt();
+		var distance = instance.element.getSize().x;
 		next
 			.setStyles({
 				'left': distance,
@@ -262,7 +326,7 @@ SlideShow.addAllThese([
 	}],
 
 	['blindRight', function(previous, next, duration, instance){
-		var distance = instance.element.getStyle('width').toInt();
+		var distance = instance.element.getSize().x;
 		next
 			.setStyles({
 				'left': -distance,
@@ -272,9 +336,9 @@ SlideShow.addAllThese([
 			.tween('left', 0);
 		return this;
 	}],
-	
+
 	['blindUp', function(previous, next, duration, instance){
-		var distance = instance.element.getStyle('height').toInt();
+		var distance = instance.element.getSize().y;
 		next
 			.setStyles({
 				'top': distance,
@@ -284,9 +348,9 @@ SlideShow.addAllThese([
 			.tween('top', 0);
 		return this;
 	}],
-	
+
 	['blindDown', function(previous, next, duration, instance){
-		var distance = instance.element.getStyle('height').toInt();
+		var distance = instance.element.getSize().y;
 		next
 			.setStyles({
 				'top': -distance,
@@ -296,21 +360,24 @@ SlideShow.addAllThese([
 			.tween('top', 0);
 		return this;
 	}],
-	
+
 	['blindDownFade', function(p,n,d,i){
 		this.blindDown(p,n,d,i).fade(p,n,d,i);
 	}],
-	
+
 	['blindUpFade', function(p,n,d,i){
 		this.blindUp(p,n,d,i).fade(p,n,d,i);
 	}],
-	
+
 	['blindLeftFade', function(p,n,d,i){
 		this.blindLeft(p,n,d,i).fade(p,n,d,i);
 	}],
-	
+
 	['blindRightFade', function(p,n,d,i){
 		this.blindRight(p,n,d,i).fade(p,n,d,i);
 	}]
-	
+
 ]);
+	
+})();
+

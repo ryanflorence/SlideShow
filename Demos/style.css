@@ -14,6 +14,17 @@ div#slides div {
 	color: #fff;
 }
 
+ul#ticker {
+	height: 1.4em;
+	overflow: hidden;
+	border: solid 1px #aaa;
+	background: #ccc;
+}
+
+ul#ticker li {
+	padding: 0.2em 0;
+}
+
 /* @group global */
 
 body {

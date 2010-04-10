@@ -8,6 +8,7 @@
 	<title>SlideShow Demo</title>
 	<link rel="stylesheet" type="text/css" href="style.css" />
 	<script type="text/javascript" charset="utf-8" src="mootools-1.2.4-core-nc.js"></script>
+	<script type="text/javascript" charset="utf-8" src="Fx.Elements.js"></script>
 	<script type="text/javascript" charset="utf-8" src="Loop.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../Source/SlideShow.js"></script>
 	<script type="text/javascript" charset="utf-8" src="demo.js"></script>
@@ -18,10 +19,10 @@
 	<div id="slides">
 		<div class="red transition:crossFade duration:1000">1</div>
 		<div class="green">2</div>
-		<div class="blue transition:fadeThroughBackground duration:1000">3</div>
-		<div class="red transition:blindRightFade duration:1000">4</div>
-		<div class="green transition:pushUp duration:2000">5</div>
-		<div class="blue transition:pushDown duration:500">6</div>
+		<div class="blue">3</div>
+		<div class="red">4</div>
+		<div class="green">5</div>
+		<div class="blue">6</div>
 	</div>
 	<h2>Events</h2>
 	<p>
@@ -39,8 +40,21 @@
 		<button id="showNext" disabled="disabled">showNext</button>
 		<button id="showPrevious" disabled="disabled">showPrevious</button>
 		<button id="show" disabled="disabled">show slide 5</button>
-		<button id="showIndex" disabled="disabled">show slide 1</button>
+		<button id="showIndex" disabled="disabled">show slide 1</button> &nbsp;
+		<button id="toElement">Log Element</button>
 	</p>
+
+	<h1>Element Shortcuts</h1>
+	
+	<ul id="ticker">
+		<li>Lorem ipsum dolor sit amet, consectetur</li>
+		<li>adipisicing elit, sed do eiusmod tempor</li> 
+		<li>incididunt ut labore et dolore magna aliqua.</li> 
+		<li>Ut enim ad minim veniam, quis nostrud</li>
+		<li>exercitation ullamco laboris nisi ut aliquip</li>
+		<li>ex ea commodo consequat. Duis aute irure</li>
+	</ul>
+	
 	<p id="links">
 		SlideShow
 		<a href="http://moodocs.net/rpflo/mootools-rpflo/SlideShow">@moodocs.net</a> | 
