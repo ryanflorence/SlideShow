@@ -7,9 +7,7 @@ description: Easily extendable, class-based, slideshow widget. Use any element, 
 
 license: MIT-style license.
 
-authors: Ryan Florence www.clockfour.com
-
-
+authors: Ryan Florence <http://ryanflorence.com>
 
 requires:
   - Loop
@@ -31,8 +29,6 @@ var SlideShow = new Class({
 			onReverse: $empty,
 			onPlay: $empty,
 			onPause: $empty,
-			onLoop: $empty,
-			onLoopShowComplete: $empty
 			*/
 			delay: 7000,
 			transition: 'crossFade',
@@ -52,8 +48,7 @@ var SlideShow = new Class({
 	},
 	
 	setup: function(){
-	  this.setupElement();
-	  this.setupSlides(true);
+	  this.setupElement().setupSlides(true);
 		return this;
 	},
 	
@@ -77,8 +72,7 @@ var SlideShow = new Class({
 		var durationRegex = /duration:[0-9]+/;
 		var transition = (classes.match(transitionRegex)) ? classes.match(transitionRegex)[0].split(':')[1] : this.options.transition;
 		var duration = (classes.match(durationRegex)) ? classes.match(durationRegex)[0].split(':')[1] : this.options.duration;
-		slide.store('ssTransition', transition);
-		slide.store('ssDuration', duration);
+		slide.store('ssTransition', transition).store('ssDuration', duration);
 		return this;
 	},
 	
@@ -100,28 +94,21 @@ var SlideShow = new Class({
 		slide = (typeof slide == 'number') ? this.slides[slide] : slide;
 		if (slide != this.current && !this.transitioning){
 			this.transitioning = true;
-			var transition = (options && options.transition) ? options.transition: this.getTransition(slide);
-			var duration = (options && options.duration) ? options.duration: this.getDuration(slide);
-			var previous = this.current.setStyle('z-index', 1);
-			var next = this.reset(slide);
-			var looped = this.slides.indexOf(next) == 0; // need to check previous slide too
-			if (looped) this.fireEvent('loop');
-			this.fireEvent('show', [
-				previous, 
-				this.slides.indexOf(previous), 
-				next, 
-				this.slides.indexOf(next)
-			]);
+			var transition = (options && options.transition) ? options.transition: this.getTransition(slide),
+				duration = (options && options.duration) ? options.duration: this.getDuration(slide),
+				previous = this.current.setStyle('z-index', 1),
+				next = this.reset(slide);
+			var eventVars = {
+				previous: previous, 
+				previousIndex: this.slides.indexOf(previous), 
+				next: next, 
+				nextIndex: this.slides.indexOf(next)
+			};
+			this.fireEvent('show', eventVars);
 			this.transitions[transition](previous, next, duration, this);
 			(function() { 
 				previous.setStyle('display','none');
-				this.fireEvent('showComplete', [
-					previous, 
-					this.slides.indexOf(previous), 
-					next, 
-					this.slides.indexOf(next)
-				]);
-				if (looped) this.fireEvent('loopShowComplete');
+				this.fireEvent('showComplete', eventVars);
 				this.transitioning = false;
 			}).bind(this).delay(duration);
 			this.current = next;
@@ -205,12 +192,12 @@ Element.Properties.slideshow = {
 
 Element.implement({
 	
-	play: function(options){
+	playSlideShow: function(options){
 		this.get('slideshow', options).play();
 		return this;
 	},
 	
-	pause: function(options){
+	pauseSlideShow: function(options){
 		this.get('slideshow', options).pause();
 		return this;
 	}
@@ -244,34 +231,14 @@ SlideShow.add('fade', function(previous, next, duration, instance){
 	return this;
 });
 
-(function(){
+Fx.Elements.implement({
+	setTransition: function(elements){
+		this.elements = this.subject = $$(elements);
+		return this;
+	}
+});
 
-var moveElement = function(direction, element, instance){
-	var ops = {
-		horizontal: (direction == 'left' || direction == 'right'),
-		invert: (direction == 'left' || direction == 'up')
-	};
-	ops.coordinate = (ops.horizontal) ? 'x' : 'y';	
-	ops.style = (ops.horizontal) ? 'left' : 'top';
-	ops.distance = instance.element.getSize()[ops.coordinate];
-	element.setStyle(ops.style, (ops.invert) ? ops.distance : -ops.distance);
-	return ops;
-};
-
-var push = function(direction, previous, next, duration, instance){
-	var ops = moveElement(direction, next, instance);
-	[next, previous].each(function(slide){
-		var start = slide.getStyle(ops.style).toInt();
-		var to = (ops.invert) ? start - ops.distance : start + ops.distance;
-		slide.set('tween',{duration: duration}).tween(ops.style, to);
-	});
-};
-
-var blind = function(direction, previous, next, duration, instance){
-	var ops = moveElement(direction, next, instance);
-	next.setStyle('z-index',1).set('tween',{duration: duration}).tween(ops.style, 0);
-};
-
+SlideShow.helpers = {	fxElements: new Fx.Elements };
 
 SlideShow.addAllThese([
 
@@ -296,44 +263,80 @@ SlideShow.addAllThese([
 			}
 		}).fade('out');
 	}],
-
-	['pushLeft', function(p,n,d,i){
-		push('left',p,n,d,i);
+	
+	['pushLeft', function(previous, next, duration, instance){
+		var distance = instance.element.getStyle('width').toInt();
+		next.setStyle('left', distance);
+		new Fx.Elements([previous,next],{duration: duration}).start({
+			0: { left: [-distance] },
+			1: { left: [0] }
+		});
 		return this;
 	}],
 
 	['pushRight', function(p,n,d,i){
-		push('right',p,n,d,i);
-		return this;
-	}],
-
-	['pushDown', function(p,n,d,i){
-		push('down',p,n,d,i);
+		var distance = i.element.getStyle('width').toInt();
+		n.setStyle('left', -distance);
+		new Fx.Elements([p,n],{duration: d}).start({
+			0: { left: [distance] },
+			1: { left: [0] }
+		});
 		return this;
 	}],
 
 	['pushUp', function(p,n,d,i){
-		push('up',p,n,d,i);
+		var distance = i.element.getStyle('height').toInt();
+		n.setStyle('top', distance);
+		new Fx.Elements([p,n],{duration: d}).start({
+			0: { top: [-distance] },
+			1: { top: [0] }
+		});
 		return this;
 	}],
 
-	['blindLeft', function(p,n,d,i){
-		blind('left',p,n,d,i)
+	['pushDown', function(p,n,d,i){
+		var distance = i.element.getStyle('height').toInt();
+		n.setStyle('top', -distance);
+		new Fx.Elements([p,n],{duration: d}).start({
+			0: { top: [distance] },
+			1: { top: [0] }
+		});
 		return this;
 	}],
 
 	['blindRight', function(p,n,d,i){
-		blind('right',p,n,d,i);
+		var distance = i.element.getStyle('width').toInt();
+		n.setStyles({
+			left: -distance,
+			'z-index': 2
+		}).set('tween',{duration: d}).tween('left',0);
+		return this;
+	}],
+
+	['blindLeft', function(p,n,d,i){
+		var distance = i.element.getStyle('width').toInt();
+		n.setStyles({
+			left: distance,
+			'z-index': 2
+		}).set('tween',{duration: d}).tween('left',0);
 		return this;
 	}],
 
 	['blindUp', function(p,n,d,i){
-		blind('up',p,n,d,i)
+		var distance = i.element.getStyle('height').toInt();
+		n.setStyles({
+			top: distance,
+			'z-index': 2
+		}).set('tween',{duration: d}).tween('top',0);
 		return this;
 	}],
 
 	['blindDown', function(p,n,d,i){
-		blind('down',p,n,d,i);
+		var distance = i.element.getStyle('height').toInt();
+		n.setStyles({
+			top: -distance,
+			'z-index': 2
+		}).set('tween',{duration: d}).tween('top',0);
 		return this;
 	}],
 
@@ -354,6 +357,3 @@ SlideShow.addAllThese([
 	}]
 
 ]);
-	
-})();
-

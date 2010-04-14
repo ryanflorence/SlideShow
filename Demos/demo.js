@@ -1,23 +1,11 @@
 var mySlideShow;
 
-SlideShow.implement({
-	loop: function(times){
-		if(this.isLooping) this.pause();
-		var counter = 0;
-		this.play().addEvent('onShow',function(){
-			counter++;
-			if(counter == times) this.pause();
-		});
-		return this;
-	}
-});
-
 window.addEvent('domready',function(){
 	
 	// instance with a few options
 	mySlideShow = new SlideShow('slides',{
 		delay: 2000,
-		autoplay: false
+		autoplay: true
 	});
 	
 	// Event demonstration
@@ -58,7 +46,10 @@ window.addEvent('domready',function(){
 	});
 	
 	$('show').addEvent('click',function(){
-		mySlideShow.show(mySlideShow.slides[4]);
+		mySlideShow.show(mySlideShow.slides[4], {
+			duration: 3000,
+			transition: 'fadeThroughBackground'
+		});
 	});
 	
 	$('showIndex').addEvent('click',function(){
@@ -74,6 +65,6 @@ window.addEvent('domready',function(){
 	});
 	
 	// Element shortcuts
-//	$('ticker').play({delay: 1000, transition: 'pushDown'});
+	$('ticker').playSlideShow({delay: 1000, transition: 'pushDown'});
 
 });

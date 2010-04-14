@@ -17,12 +17,12 @@
 <body>
 	<h1>SlideShow Demo</h1>
 	<div id="slides">
-		<div class="red transition:crossFade duration:1000">1</div>
-		<div class="green">2</div>
-		<div class="blue">3</div>
-		<div class="red">4</div>
-		<div class="green">5</div>
-		<div class="blue">6</div>
+		<div class="transition:crossFade duration:1000 red">1</div>
+		<div class="transition:pushUp duration:2000 green">2</div>
+		<div class="transition:pushDown duration:250 blue">3</div>
+		<div class="transition:blindLeft duration:500 red">4</div>
+		<div class="transition:blindRight duration:500 green">5</div>
+		<div class="transition:blindRightFade duration:500 blue">6</div>
 	</div>
 	<h2>Events</h2>
 	<p>
@@ -39,7 +39,7 @@
 		<button id="reverse">reverse</button> &nbsp; 
 		<button id="showNext" disabled="disabled">showNext</button>
 		<button id="showPrevious" disabled="disabled">showPrevious</button>
-		<button id="show" disabled="disabled">show slide 5</button>
+		<button id="show" disabled="disabled">show slide 5 with options</button>
 		<button id="showIndex" disabled="disabled">show slide 1</button> &nbsp;
 		<button id="toElement">Log Element</button>
 	</p>
