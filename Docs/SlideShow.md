@@ -5,7 +5,7 @@ Class: SlideShow {#SlideShow}
 
 ### Demo
  
-
+<iframe src="http://jsfiddle.net/rpflorence/KaAAK/3/embedded/result,html,css,js/" style="height:450px; width: 100%"></iframe>
 
 ### Implements:
 
