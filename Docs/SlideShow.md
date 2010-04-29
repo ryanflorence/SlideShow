@@ -5,7 +5,7 @@ Class: SlideShow {#SlideShow}
 
 ### Demo
  
-<iframe src="http://jsfiddle.net/rpflorence/KkuRZ/embedded/result,js,html,css/" style="width: 100%; height:500px"></iframe>
+
 
 ### Implements:
 
@@ -179,11 +179,12 @@ SlideShow Method: show {#SlideShow:show}
 
 ### Syntax:
 
-    mySlideShow.show(slide);
+    mySlideShow.show(slide, options);
 
 ### Arguments:
 
 1. slide - (*mixed*) The index of the slide or an element reference to the slide.
+2. options - (*object*) An object literal containing a duration and transition to use instead of what's already defined for the element.
 
 ### Returns:
 
@@ -193,6 +194,12 @@ This SlideShow instance.
 
     mySlideShow.show(2); // index
     mySlideShow.show(mySlideShow.slides[2]); // element reference
+    
+    // change the duration and transition
+    mySlideShow.show(1, {
+      duration: '4000',
+      transition: 'pushLeft'
+    });
 
 SlideShow Method: showNext {#SlideShow:showNext}
 -------------------------------------------------
@@ -201,7 +208,11 @@ SlideShow Method: showNext {#SlideShow:showNext}
 
 ### Syntax:
 
-    mySlideShow.showNext();
+    mySlideShow.showNext(option);
+
+### Arguments:
+
+1. options - (*object*) An object literal containing a duration and transition to use instead of what's already defined for the element.
 
 ### Returns:
 
@@ -214,11 +225,37 @@ SlideShow Method: showPrevious {#SlideShow:showPrevious}
 
 ### Syntax:
 
-    mySlideShow.showPrevious();
+    mySlideShow.showPrevious(options);
+
+### Arguments:
+
+1. options - (*object*) An object literal containing a duration and transition to use instead of what's already defined for the element.
 
 ### Returns:
 
 This SlideShow instance.
+
+SlideShow Method: resetOptions {#SlideShow:resetOptions}
+--------------------------------------------------------
+
+<big>Allows you to change the options on the fly</big>
+
+### Syntax:
+
+    mySlideShow.resetOptions(obj);
+
+### Example:
+
+    mySlideShow.resetOption({
+      duration: 1000,
+      transition: 'fadeThroughBackground'
+    });
+
+### Returns:
+
+This SlideShow instance.
+
+
 
 SlideShow Method: reverse {#SlideShow:reverse}
 -----------------------------------------
@@ -239,3 +276,30 @@ SlideShow Method: reverse {#SlideShow:reverse}
 
 This SlideShow instance.
 
+Native: Element {#Element}
+===============
+
+<big>Custom Native to allow all of its methods to be used with any DOM element via the dollar function $.</big>
+
+
+Element method: playSlideShow {#Element:playSlideShow}
+------------------------------------------------------
+
+<big>Element shortcut method to create a slideshow instance with this element.</big>
+
+### Syntax:
+
+    $('slide-container').playSlideShow(options);
+
+### Arguments:
+
+1. options (*object*) - Same options as the constructor except `autoplay` will be ignored.
+
+Element method: pauseSlideShow {#Element:pauseSlideShow}
+------------------------------------------------------
+
+<big>Element shortcut method to pause a slideshow instance created with the `playSlideShow` method.</big>
+
+### Syntax:
+
+    $('slide-container').pauseSlideShow();

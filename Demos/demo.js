@@ -65,6 +65,6 @@ window.addEvent('domready',function(){
 	});
 	
 	// Element shortcuts
-	$('ticker').playSlideShow({delay: 1000, transition: 'pushDown'});
+	$('ticker').playSlideShow({delay: 2000, transition: 'pushDown'});
 
 });

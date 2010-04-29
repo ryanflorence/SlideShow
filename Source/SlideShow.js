@@ -98,17 +98,21 @@ var SlideShow = new Class({
 				duration = (options && options.duration) ? options.duration: this.getDuration(slide),
 				previous = this.current.setStyle('z-index', 1),
 				next = this.reset(slide);
-			var eventVars = {
-				previous: previous, 
-				previousIndex: this.slides.indexOf(previous), 
-				next: next, 
-				nextIndex: this.slides.indexOf(next)
+			var slideData = {
+				previous: {
+					element: previous,
+					index: this.slides.indexOf(previous)
+				}, 
+				next: {
+					element: next,
+					index: this.slides.indexOf(next)
+				}
 			};
-			this.fireEvent('show', eventVars);
+			this.fireEvent('show', slideData);
 			this.transitions[transition](previous, next, duration, this);
 			(function() { 
 				previous.setStyle('display','none');
-				this.fireEvent('showComplete', eventVars);
+				this.fireEvent('showComplete', slideData);
 				this.transitioning = false;
 			}).bind(this).delay(duration);
 			this.current = next;
