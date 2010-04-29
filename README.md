@@ -5,6 +5,8 @@ SlideShow
 
 Easily extendable, class-based, slideshow widget. Use any element, not just images. Comes with packaged transitions but is easy to extend and create your own transitions.  The class is built to handle the _basics_ of a slideshow, extend it to implement your own navigation piece and custom transitions.
 
+You can use this class to create slideshows, galleries, tabs, news tickers ... a lot of things.
+
 Features:
 ---------
 
@@ -17,6 +19,7 @@ Features:
 * Durations by slide
 * Default transitions
 * Default durations
+* On-the-fly transitions
 
 Packaged Transitions
 --------------------
