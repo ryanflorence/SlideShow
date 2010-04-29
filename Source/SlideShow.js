@@ -44,7 +44,7 @@ var SlideShow = new Class({
 		this.current = this.slides[0];
 		this.transitioning = false;
 		this.setup();
-		if (this.options.autoplay) this.startLoop();
+		if (this.options.autoplay) this.play();
 	},
 	
 	setup: function(){
