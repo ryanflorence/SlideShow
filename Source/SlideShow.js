@@ -10,8 +10,8 @@ license: MIT-style license.
 authors: Ryan Florence <http://ryanflorence.com>
 
 requires:
-  - Loop
-  - more:1.2.4.4:Fx.Elements
+- /Loop
+- more:1.2.4.4:Fx.Elements
 
 provides: [SlideShow]
 
