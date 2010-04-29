@@ -172,6 +172,42 @@ SlideShow Method: constructor {#SlideShow:constructor}
 * pause - (*function*) The function to execute when the slide show pauses.
 * reverse - (*function*) The function to execute when the slideshow is reversed.
 
+SlideShow Event: onShow {#SlideShow:onShow}
+-------------------------------------------
+
+* (*function*) Executes when a slide transition begins.
+
+### Signature
+
+    onShow(slideData)
+
+### Arguments
+
+*   slideData - (*object*) An object containing slide data that looks like
+
+### Example
+
+    mySlideShow.addEvent('show',function(slideData){
+      slideData.next.element; // the actual DOM element
+      slideData.next.index; // the index of the element in the slideshow
+      slideData.previous.element;
+      slideData.prevoius.index;
+    });
+
+SlideShow Event: onShowComplete {#SlideShow:onShowComplete}
+-------------------------------------------
+
+* (*function*) Executes when a slide transition ends.
+
+### Signature
+
+    onShowComplete(slideData)
+
+### Arguments
+
+*   slideData - (*object*) An object containing slide data that looks like, same as `onShow`.
+
+
 SlideShow Method: show {#SlideShow:show}
 -----------------------------------------
 
