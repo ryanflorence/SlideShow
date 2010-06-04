@@ -5,7 +5,7 @@ Class: SlideShow {#SlideShow}
 
 ### Demo
  
-<iframe src="http://jsfiddle.net/rpflorence/KaAAK/3/embedded/result,html,css,js/" style="height:450px; width: 100%"></iframe>
+* [jsfiddle](http://jsfiddle.net/rpflorence/KaAAK/3)
 
 ### Implements:
 
@@ -15,7 +15,7 @@ Options, Events, [Loop](http://moodocs.net/rpflo/mootools-rpflo/Loop)
 
 #### html
 
-SlideShow gets the transition information from the class attribute of your slide.  It will only grab the immediate children of the container (`slideshow` in this case).  You can put whatever element type you want as the slides, and put anything inside of the slides.
+SlideShow can get the transition information from the class attribute of your slide which will take precedence over what you've defined in your options.  It will only grab the immediate children of the container (`slideshow` in this case).  You can put whatever element type you want as the slides, and put anything inside of the slides.
 
     #HTML
     <div id="slideshow">
@@ -70,10 +70,9 @@ If you wanted a navigation piece you could do something like:
     var slideLabels = $$('some-elements-in-the-same-order-as-the-slides');
     
     slideLabels.each(function(el, index){
-      el.store('slide', mySlideShow.slides[index]);
-    
+	
       el.addEvent('click',function()
-        mySlideShow.show(el.retrieve('slide'));
+        mySlideShow.show(index);
       });
     
     });
@@ -93,54 +92,6 @@ SlideShow will set the position of your container to `relative` if it is not alr
       width: 500px
     	height: 280px;
     }    
-
-
-### Adding your own transitions
-
-Adding transitions is a snap.  The Class itself has an `add` function that takes two arguments: the name of the transition, and the function to control it.
-
-The function signature:
-
-  function(previous, next, duration, instance)
-
-* `previous` is the previous slide element reference
-* `next` is the next slide element reference
-* `duration` is how long the transition should last.
-* `instance` is the instance of SlideShow, handy to find the size of the container (`instance.element`) or any other information.
-
-When writing your own transitions there are a few things to note:
-
-1. The previous slide's `z-index` is `1` so it's on top.
-2. The next slide's `z-index` is `0` so it's behind.
-3. Both slides have `top: 0` and `left:0`, so you'll need to reposition `next` for any fancy movement.
-4. All other slides have `display:none`
-5. When the `duration` is met, the previous slide will be reset to `display: none`, `top:0`, `left:0`.
- 
-So here are a few examples:
-
-    SlideShow.add('fade', function(previous, next, duration, instance){
-    	previous.set('tween',{duration: duration}).fade('out');
-    	return this;
-    });
-
-Pretty simple.  Since the next slide is directly behind the previous, we can just fade out the previous slide and there's our new one.
-
-    SlideShow.add('blindLeft', function(previous, next, duration, instance){
-      var distance = instance.element.getStyle('width').toInt();
-      next.setStyles({
-        'left': distance,
-        'z-index': 2
-      }).set('tween',{duration: duration}).tween('left', 0);
-      return this;
-    });
-
-A bit more complicated.  First we have to measure the distance our slide needs to travel, then we set it's `left` style to be totally out of the slideshow view and change it's `z-index` from `0` to `2` so it's above the previous slides `z-index: 1`.  Once it's all setup we just tween left back to 0.  Our slide smoothly slides over the the previous slide.
-    
-    SlideShow.add('blindLeftFade',function(p, n, d, i){
-      this.blindLeft(p,n,d,i).fade(p,n,d,i);
-    });
-    
-`this` references the object containing all of the transitions _so you can chain effects_.
 
 
 SlideShow Method: constructor {#SlideShow:constructor}
@@ -339,3 +290,54 @@ Element method: pauseSlideShow {#Element:pauseSlideShow}
 ### Syntax:
 
     $('slide-container').pauseSlideShow();
+
+Adding Custom Transitions
+=========================
+
+Adding transitions is a snap.  The Class itself has an `add` function that takes two arguments: the name of the transition, and the function to control it.
+
+SlideShow Method: add {#SlideShow:add}
+--------------------------------------
+
+The add function signature:
+
+  function(previous, next, duration, instance)
+
+* `previous` is the previous slide element reference
+* `next` is the next slide element reference
+* `duration` is how long the transition should last.
+* `instance` is the instance of SlideShow, handy to find the size of the container (`instance.element`) or any other information.
+
+When writing your own transitions there are a few things to note:
+
+1. The previous slide's `z-index` is `1` so it's on top.
+2. The next slide's `z-index` is `0` so it's behind.
+3. Both slides have `top: 0` and `left:0`, so you'll need to reposition `next` for any fancy movement.
+4. All other slides have `display:none`
+5. When the `duration` is met, the previous slide will be reset to `display: none`, `top:0`, `left:0`.
+
+So here are a few examples:
+
+    SlideShow.add('fade', function(previous, next, duration, instance){
+    	previous.set('tween',{duration: duration}).fade('out');
+    	return this;
+    });
+
+Pretty simple.  Since the next slide is directly behind the previous, we can just fade out the previous slide and there's our new one.
+
+    SlideShow.add('blindLeft', function(previous, next, duration, instance){
+      var distance = instance.element.getStyle('width').toInt();
+      next.setStyles({
+        'left': distance,
+        'z-index': 2
+      }).set('tween',{duration: duration}).tween('left', 0);
+      return this;
+    });
+
+A bit more complicated.  First we have to measure the distance our slide needs to travel, then we set it's `left` style to be totally out of the slideshow view and change it's `z-index` from `0` to `2` so it's above the previous slides `z-index: 1`.  Once it's all setup we just tween left back to 0.  Our slide smoothly slides over the the previous slide.
+
+    SlideShow.add('blindLeftFade',function(p, n, d, i){
+      this.blindLeft(p,n,d,i).fade(p,n,d,i);
+    });
+
+`this` references the object containing all of the transitions _so you can chain effects_.
