@@ -263,7 +263,7 @@ SlideShow Method: reverse {#SlideShow:reverse}
 
 This SlideShow instance.
 
-Native: Element {#Element}
+Native: Element {#SlideShow:Element}
 ==========================
 
 <big>Custom Native to allow all of its methods to be used with any DOM element via the dollar function $.</big>
