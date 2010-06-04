@@ -291,13 +291,21 @@ Element method: pauseSlideShow {#Element:pauseSlideShow}
 
     $('slide-container').pauseSlideShow();
 
-SlideShow: Adding Custom Transitions {#Transitions}
-==================================================
+SlideShow: Custom Transitions {#Transitions}
+===============================================
 
 Adding transitions is a snap.  The Class itself has an `add` function that takes two arguments: the name of the transition, and the function to control it.
 
+Slideshow method: add {#Transitions:add}
+----------------------------------------
 
-The add function signature:
+### Syntax:
+
+	SlideShow.add(function(previous, next, duration, instance){
+		// do stuff
+	});
+
+### Signature:
 
   function(previous, next, duration, instance)
 
@@ -305,6 +313,8 @@ The add function signature:
 * `next` is the next slide element reference
 * `duration` is how long the transition should last.
 * `instance` is the instance of SlideShow, handy to find the size of the container (`instance.element`) or any other information.
+
+### Notes
 
 When writing your own transitions there are a few things to note:
 
@@ -314,7 +324,7 @@ When writing your own transitions there are a few things to note:
 4. All other slides have `display:none`
 5. When the `duration` is met, the previous slide will be reset to `display: none`, `top:0`, `left:0`.
 
-So here are a few examples:
+### Examples:
 
     SlideShow.add('fade', function(previous, next, duration, instance){
     	previous.set('tween',{duration: duration}).fade('out');
