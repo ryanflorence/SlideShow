@@ -13,7 +13,7 @@ requires:
 - /Loop
 - more:1.2.4.4:Fx.Elements
 
-provides: [SlideShow]
+provides: [SlideShow, Element.playSlideShow, Element.pauseSlideShow]
 
 ...
 */
@@ -261,7 +261,7 @@ SlideShow.addAllThese([
 	}],
 	
 	['pushLeft', function(previous, next, duration, instance){
-		var distance = instance.element.getStyle('width').toInt();
+		var distance = instance.element.getSize().x;
 		next.setStyle('left', distance);
 		new Fx.Elements([previous,next],{duration: duration}).start({
 			0: { left: [-distance] },
@@ -271,7 +271,7 @@ SlideShow.addAllThese([
 	}],
 
 	['pushRight', function(p,n,d,i){
-		var distance = i.element.getStyle('width').toInt();
+		var distance = i.element.getSize().x;
 		n.setStyle('left', -distance);
 		new Fx.Elements([p,n],{duration: d}).start({
 			0: { left: [distance] },
@@ -281,7 +281,7 @@ SlideShow.addAllThese([
 	}],
 
 	['pushUp', function(p,n,d,i){
-		var distance = i.element.getStyle('height').toInt();
+		var distance = i.element.getSize().y;
 		n.setStyle('top', distance);
 		new Fx.Elements([p,n],{duration: d}).start({
 			0: { top: [-distance] },
@@ -291,7 +291,7 @@ SlideShow.addAllThese([
 	}],
 
 	['pushDown', function(p,n,d,i){
-		var distance = i.element.getStyle('height').toInt();
+		var distance = i.element.getSize().y;
 		n.setStyle('top', -distance);
 		new Fx.Elements([p,n],{duration: d}).start({
 			0: { top: [distance] },
@@ -301,7 +301,7 @@ SlideShow.addAllThese([
 	}],
 
 	['blindRight', function(p,n,d,i){
-		var distance = i.element.getStyle('width').toInt();
+		var distance = i.element.getSize().x;
 		n.setStyles({
 			left: -distance,
 			'z-index': 2
@@ -310,7 +310,7 @@ SlideShow.addAllThese([
 	}],
 
 	['blindLeft', function(p,n,d,i){
-		var distance = i.element.getStyle('width').toInt();
+		var distance = i.element.getSize().x;
 		n.setStyles({
 			left: distance,
 			'z-index': 2
@@ -319,7 +319,7 @@ SlideShow.addAllThese([
 	}],
 
 	['blindUp', function(p,n,d,i){
-		var distance = i.element.getStyle('height').toInt();
+		var distance = i.element.getSize().y;
 		n.setStyles({
 			top: distance,
 			'z-index': 2
@@ -328,7 +328,7 @@ SlideShow.addAllThese([
 	}],
 
 	['blindDown', function(p,n,d,i){
-		var distance = i.element.getStyle('height').toInt();
+		var distance = i.element.getSize().y;
 		n.setStyles({
 			top: -distance,
 			'z-index': 2
