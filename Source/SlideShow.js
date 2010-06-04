@@ -236,15 +236,6 @@ SlideShow.add('fade', function(previous, next, duration, instance){
 	return this;
 });
 
-Fx.Elements.implement({
-	setTransition: function(elements){
-		this.elements = this.subject = $$(elements);
-		return this;
-	}
-});
-
-SlideShow.helpers = {	fxElements: new Fx.Elements };
-
 SlideShow.addAllThese([
 
 	['none', function(previous, next, duration, instance){
