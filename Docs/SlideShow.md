@@ -291,8 +291,8 @@ Element method: pauseSlideShow {#Element:pauseSlideShow}
 
     $('slide-container').pauseSlideShow();
 
-Adding Custom Transitions
-=========================
+Adding Custom Transitions {#AddingTransitions}
+==============================================
 
 Adding transitions is a snap.  The Class itself has an `add` function that takes two arguments: the name of the transition, and the function to control it.
 
