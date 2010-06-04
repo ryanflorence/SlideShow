@@ -2,7 +2,6 @@ div#slides {
 	width: 500px;
 	height: 280px;
 	overflow: hidden;
-	border: solid 50px #000;
 }
 
 div#slides div {
