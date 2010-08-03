@@ -39,8 +39,11 @@ var SlideShow = new Class({
 	
 	initialize: function(element, options){
 		this.setOptions(options);
-		this.setLoop(this.showNext, this.options.delay);
 		this.element = document.id(element);
+		this.readOptions(this.element);
+		this.setLoop(this.showNext, this.element.retrieve('ssDelay'));
+		this.options.duration = this.element.retrieve('ssDuration');
+		this.options.transition = this.element.retrieve('ssTransition');
 		this.slides = this.element.getChildren();
 		this.current = this.slides[0];
 		this.transitioning = false;
@@ -74,6 +77,15 @@ var SlideShow = new Class({
 		var transition = (classes.match(transitionRegex)) ? classes.match(transitionRegex)[0].split(':')[1] : this.options.transition;
 		var duration = (classes.match(durationRegex)) ? classes.match(durationRegex)[0].split(':')[1] : this.options.duration;
 		slide.store('ssTransition', transition).store('ssDuration', duration);
+		return this;
+	},
+	
+	readOptions: function(slide){
+		this.storeTransition(slide);
+		var classes = slide.get('class');
+		var delayRegex = /delay:[0-9]+/;
+		var delay = (classes.match(delayRegex)) ? classes.match(delayRegex)[0].split(':')[1] : this.options.delay;
+		slide.store('ssDelay', delay);
 		return this;
 	},
 	
