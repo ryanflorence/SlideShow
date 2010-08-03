@@ -23,19 +23,19 @@ var SlideShow = new Class({
 	
 	Implements: [Options, Events, Loop],
 		
-		options: {
-			/*
-			onShow: $empty,
-			onShowComplete: $empty,
-			onReverse: $empty,
-			onPlay: $empty,
-			onPause: $empty,
-			*/
-			delay: 7000,
-			transition: 'crossFade',
-			duration: '500',
-			autoplay: false
-		},
+	options: {
+		/*
+		onShow: $empty,
+		onShowComplete: $empty,
+		onReverse: $empty,
+		onPlay: $empty,
+		onPause: $empty,
+		*/
+		delay: 7000,
+		transition: 'crossFade',
+		duration: '500',
+		autoplay: false
+	},
 	
 	initialize: function(element, options){
 		this.setOptions(options);
@@ -49,20 +49,20 @@ var SlideShow = new Class({
 	},
 	
 	setup: function(){
-	  this.setupElement().setupSlides(true);
+		this.setupElement().setupSlides(true);
 		return this;
 	},
 	
 	setupElement: function(){
 		var el = this.element;
-		if (el.getStyle('position') != 'absolute' && el != document.body) el.setStyle('position','relative');
+		if (el.getStyle('position') != 'absolute' && el != document.body) el.setStyle('position', 'relative');
 		return this;
 	},
 	
 	setupSlides: function(hideFirst){
 		this.slides.each(function(slide, index){
 			this.storeTransition(slide).reset(slide);
-			if (hideFirst && index != 0) slide.setStyle('display','none');
+			if (hideFirst && index != 0) slide.setStyle('display', 'none');
 		}, this);
 		return this;
 	},
@@ -111,8 +111,8 @@ var SlideShow = new Class({
 			};
 			this.fireEvent('show', slideData);
 			this.transitions[transition](previous, next, duration, this);
-			(function() { 
-				previous.setStyle('display','none');
+			(function(){ 
+				previous.setStyle('display', 'none');
 				this.fireEvent('showComplete', slideData);
 				this.transitioning = false;
 			}).bind(this).delay(duration);
@@ -232,26 +232,26 @@ $extend(SlideShow, SlideShow.adders);
 SlideShow.implement(SlideShow.adders);
 
 SlideShow.add('fade', function(previous, next, duration, instance){
-	previous.set('tween',{duration: duration}).fade('out');
+	previous.set('tween', {duration: duration}).fade('out');
 	return this;
 });
 
 SlideShow.addAllThese([
 
 	['none', function(previous, next, duration, instance){
-		previous.setStyle('display','none');
+		previous.setStyle('display', 'none');
 		return this;
 	}],
 
 	['crossFade', function(previous, next, duration, instance){
-		previous.set('tween',{duration: duration}).fade('out');
-		next.set('tween',{duration: duration}).fade('in');
+		previous.set('tween', {duration: duration}).fade('out');
+		next.set('tween', {duration: duration}).fade('in');
 		return this;
 	}],
 
 	['fadeThroughBackground', function(previous, next, duration, instance){
-		var half = duration/2;
-		next.set('tween',{ duration: half	}).fade('hide');
+		var half = duration / 2;
+		next.set('tween', {duration: half}).fade('hide');
 		previous.set('tween',{
 			duration: half,
 			onComplete: function(){
@@ -263,93 +263,93 @@ SlideShow.addAllThese([
 	['pushLeft', function(previous, next, duration, instance){
 		var distance = instance.element.getSize().x;
 		next.setStyle('left', distance);
-		new Fx.Elements([previous,next],{duration: duration}).start({
+		new Fx.Elements([previous,next], {duration: duration}).start({
 			0: { left: [-distance] },
 			1: { left: [0] }
 		});
 		return this;
 	}],
 
-	['pushRight', function(p,n,d,i){
+	['pushRight', function(p, n, d, i){
 		var distance = i.element.getSize().x;
 		n.setStyle('left', -distance);
-		new Fx.Elements([p,n],{duration: d}).start({
+		new Fx.Elements([p, n], {duration: d}).start({
 			0: { left: [distance] },
 			1: { left: [0] }
 		});
 		return this;
 	}],
 
-	['pushUp', function(p,n,d,i){
+	['pushUp', function(p, n, d, i){
 		var distance = i.element.getSize().y;
 		n.setStyle('top', distance);
-		new Fx.Elements([p,n],{duration: d}).start({
+		new Fx.Elements([p, n], {duration: d}).start({
 			0: { top: [-distance] },
 			1: { top: [0] }
 		});
 		return this;
 	}],
 
-	['pushDown', function(p,n,d,i){
+	['pushDown', function(p, n, d, i){
 		var distance = i.element.getSize().y;
 		n.setStyle('top', -distance);
-		new Fx.Elements([p,n],{duration: d}).start({
+		new Fx.Elements([p, n],{duration: d}).start({
 			0: { top: [distance] },
 			1: { top: [0] }
 		});
 		return this;
 	}],
 
-	['blindRight', function(p,n,d,i){
+	['blindRight', function(p, n, d, i){
 		var distance = i.element.getSize().x;
 		n.setStyles({
 			left: -distance,
 			'z-index': 2
-		}).set('tween',{duration: d}).tween('left',0);
+		}).set('tween', {duration: d}).tween('left', 0);
 		return this;
 	}],
 
-	['blindLeft', function(p,n,d,i){
+	['blindLeft', function(p, n, d, i){
 		var distance = i.element.getSize().x;
 		n.setStyles({
 			left: distance,
 			'z-index': 2
-		}).set('tween',{duration: d}).tween('left',0);
+		}).set('tween', {duration: d}).tween('left', 0);
 		return this;
 	}],
 
-	['blindUp', function(p,n,d,i){
+	['blindUp', function(p, n, d, i){
 		var distance = i.element.getSize().y;
 		n.setStyles({
 			top: distance,
 			'z-index': 2
-		}).set('tween',{duration: d}).tween('top',0);
+		}).set('tween', {duration: d}).tween('top', 0);
 		return this;
 	}],
 
-	['blindDown', function(p,n,d,i){
+	['blindDown', function(p, n, d, i){
 		var distance = i.element.getSize().y;
 		n.setStyles({
 			top: -distance,
 			'z-index': 2
-		}).set('tween',{duration: d}).tween('top',0);
+		}).set('tween', {duration: d}).tween('top', 0);
 		return this;
 	}],
 
-	['blindDownFade', function(p,n,d,i){
-		this.blindDown(p,n,d,i).fade(p,n,d,i);
+	['blindDownFade', function(p, n, d, i){
+		this.blindDown(p, n, d, i).fade(p, n, d, i);
 	}],
 
-	['blindUpFade', function(p,n,d,i){
-		this.blindUp(p,n,d,i).fade(p,n,d,i);
+	['blindUpFade', function(p, n, d, i){
+		this.blindUp(p, n, d, i).fade(p, n, d, i);
 	}],
 
-	['blindLeftFade', function(p,n,d,i){
-		this.blindLeft(p,n,d,i).fade(p,n,d,i);
+	['blindLeftFade', function(p, n, d, i){
+		this.blindLeft(p, n, d, i).fade(p, n, d, i);
 	}],
 
-	['blindRightFade', function(p,n,d,i){
-		this.blindRight(p,n,d,i).fade(p,n,d,i);
+	['blindRightFade', function(p, n, d, i){
+		this.blindRight(p, n, d, i).fade(p, n, d, i);
 	}]
 
 ]);

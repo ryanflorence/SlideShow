@@ -1,9 +1,9 @@
 var mySlideShow;
 
-window.addEvent('domready',function(){
+window.addEvent('domready', function(){
 	
 	// instance with a few options
-	mySlideShow = new SlideShow('slides',{
+	mySlideShow = new SlideShow('slides', {
 		delay: 3000,
 		autoplay: true
 	});
@@ -20,17 +20,17 @@ window.addEvent('domready',function(){
 	// the rest of the demo showing how to control the instance
 	var toggled = [$('show'), $('showNext'), $('showPrevious'), $('showIndex')];
 	
-	$('pause').addEvent('click',function(){
+	$('pause').addEvent('click', function(){
 		
 		mySlideShow.pause();
 		
-		toggled.each(function(button){ button.set('disabled', false);	});
+		toggled.each(function(button){ button.set('disabled', false); });
 		this.set('disabled', true);
 		$('play').set('disabled', false);
 		$('reverse').set('disabled', true);
 	});
 	
-	$('play').addEvent('click',function(){
+	$('play').addEvent('click', function(){
 		mySlideShow.play();
 		
 		toggled.each(function(button){
@@ -41,26 +41,26 @@ window.addEvent('domready',function(){
 		$('reverse').set('disabled', false);
 	});
 	
-	$('reverse').addEvent('click',function(){
+	$('reverse').addEvent('click', function(){
 		mySlideShow.reverse();
 	});
 	
-	$('show').addEvent('click',function(){
+	$('show').addEvent('click', function(){
 		mySlideShow.show(mySlideShow.slides[4], {
 			duration: 3000,
 			transition: 'fadeThroughBackground'
 		});
 	});
 	
-	$('showIndex').addEvent('click',function(){
+	$('showIndex').addEvent('click', function(){
 		mySlideShow.show(0);
 	});
 	
-	$('showNext').addEvent('click',function(){
+	$('showNext').addEvent('click', function(){
 		mySlideShow.showNext();
 	});
 	
-	$('showPrevious').addEvent('click',function(){
+	$('showPrevious').addEvent('click', function(){
 		mySlideShow.showPrevious();
 	});
 	

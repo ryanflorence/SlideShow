@@ -38,7 +38,7 @@ Just pass in the slideshow container element to the constructor (and a few optio
     
     // or
 
-    mySlideShow = new SlideShow('slideshow',{
+    mySlideShow = new SlideShow('slideshow', {
     	delay: 2000,
     	transition: 'fade',
     	duration: 500,
@@ -71,7 +71,7 @@ If you wanted a navigation piece you could do something like:
     
     slideLabels.each(function(el, index){
 	
-      el.addEvent('click',function()
+      el.addEvent('click', function(){
         mySlideShow.show(index);
       });
     
@@ -89,7 +89,7 @@ SlideShow will set the position of your container to `relative` if it is not alr
     }
 
     div#slideshow div {
-      width: 500px
+    	width: 500px;
     	height: 280px;
     }    
 
@@ -138,7 +138,7 @@ SlideShow Event: onShow {#SlideShow:onShow}
 
 ### Example
 
-    mySlideShow.addEvent('show',function(slideData){
+    mySlideShow.addEvent('show', function(slideData){
       slideData.next.element; // the actual DOM element
       slideData.next.index; // the index of the element in the slideshow
       slideData.previous.element;
@@ -327,7 +327,7 @@ When writing your own transitions there are a few things to note:
 ### Examples:
 
     SlideShow.add('fade', function(previous, next, duration, instance){
-    	previous.set('tween',{duration: duration}).fade('out');
+    	previous.set('tween', {duration: duration}).fade('out');
     	return this;
     });
 
@@ -338,14 +338,14 @@ Pretty simple.  Since the next slide is directly behind the previous, we can jus
       next.setStyles({
         'left': distance,
         'z-index': 2
-      }).set('tween',{duration: duration}).tween('left', 0);
+      }).set('tween', {duration: duration}).tween('left', 0);
       return this;
     });
 
 A bit more complicated.  First we have to measure the distance our slide needs to travel, then we set it's `left` style to be totally out of the slideshow view and change it's `z-index` from `0` to `2` so it's above the previous slides `z-index: 1`.  Once it's all setup we just tween left back to 0.  Our slide smoothly slides over the the previous slide.
 
-    SlideShow.add('blindLeftFade',function(p, n, d, i){
-      this.blindLeft(p,n,d,i).fade(p,n,d,i);
+    SlideShow.add('blindLeftFade', function(p, n, d, i){
+      this.blindLeft(p, n, d, i).fade(p, n, d, i);
     });
 
 `this` references the object containing all of the transitions _so you can chain effects_.
