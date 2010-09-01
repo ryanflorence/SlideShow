@@ -33,7 +33,7 @@ var SlideShow = new Class({
 		*/
 		delay: 7000,
 		transition: 'crossFade',
-		duration: '500',
+		duration: 500,
 		autoplay: false
 	},
 	
