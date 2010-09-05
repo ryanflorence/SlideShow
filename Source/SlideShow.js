@@ -33,15 +33,15 @@ var SlideShow = new Class({
 		*/
 		delay: 7000,
 		transition: 'crossFade',
-		duration: '500',
+		duration: 500,
 		autoplay: false
 	},
 	
 	initialize: function(element, options){
 		this.setOptions(options);
 		this.element = document.id(element);
-		this.readOptions(this.element);
-		this.setLoop(this.showNext, this.element.retrieve('ssDelay'));
+		this.parseDelay(this.element);
+		this.setLoop(this.showNext, this.options.delay);
 		this.options.duration = this.element.retrieve('ssDuration');
 		this.options.transition = this.element.retrieve('ssTransition');
 		this.slides = this.element.getChildren();
@@ -80,18 +80,20 @@ var SlideShow = new Class({
 		return this;
 	},
 	
-	readOptions: function(slide){
+	parseDelay: function(slide){
 		this.storeTransition(slide);
 		var classes = slide.get('class');
 		var delayRegex = /delay:[0-9]+/;
-		var delay = (classes.match(delayRegex)) ? classes.match(delayRegex)[0].split(':')[1] : this.options.delay;
-		slide.store('ssDelay', delay);
+		if (classes.match(delayRegex)) {
+			this.options.delay = classes.match(delayRegex)[0].split(':')[1];
+		}
 		return this;
 	},
 	
-	resetOptions: function(options){
-		this.options = $merge(this.options, options);
-		this.setupSlides(false);
+	resetOptions: function(options, hideFirst){
+		this.options = Object.merge(this.options, options);
+		this.loopDelay = this.options.delay;
+		this.setupSlides(hideFirst);
 		return this;
 	},
 	
@@ -190,18 +192,18 @@ var SlideShow = new Class({
 
 Element.Properties.slideshow = {
 
-	set: function(options){
-		var slideshow = this.retrieve('slideshow');
-		if (slideshow) slideshow.pause();
-		return this.eliminate('slideshow').store('slideshow:options', options);
+	set: function(){
+		this.get('slideshow');
+		return this;
 	},
 
-	get: function(options){
-		if (options || !this.retrieve('slideshow')){
-			if (options || !this.retrieve('slideshow:options')) this.set('slideshow', options);
-			this.store('slideshow', new SlideShow(this, this.retrieve('slideshow:options')));
+	get: function(){
+		var instance = this.retrieve('slideshow');
+		if (!instance){
+			instance = new SlideShow(this);
+			this.store('slideshow', instance);
 		}
-		return this.retrieve('slideshow');
+		return instance;
 	}
 
 };
@@ -210,13 +212,12 @@ Element.Properties.slideshow = {
 Element.implement({
 	
 	playSlideShow: function(options){
-		this.get('slideshow', options).play();
+		this.get('slideshow').resetOptions(options, true).play();
 		return this;
 	},
 	
-	pauseSlideShow: function(options){
-		this.get('slideshow', options).pause();
-		return this;
+	pauseSlideShow: function(){
+		this.get('slideshow').pause();
 	}
 	
 });
@@ -233,14 +234,14 @@ SlideShow.adders = {
 	},
 	
 	addAllThese : function(transitions){
-		$A(transitions).each(function(transition){
+		Array.clone(transitions).each(function(transition){
 			this.add(transition[0], transition[1]);
 		}, this);
 	}
 	
 }
 
-$extend(SlideShow, SlideShow.adders);
+Object.append(SlideShow, SlideShow.adders);
 SlideShow.implement(SlideShow.adders);
 
 SlideShow.add('fade', function(previous, next, duration, instance){

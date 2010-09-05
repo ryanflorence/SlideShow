@@ -63,6 +63,10 @@ window.addEvent('domready', function(){
 		mySlideShow.showPrevious();
 	});
 	
+	$('toElement').addEvent('click', function(){
+		console.log($(mySlideShow));
+	});
+	
 	// Element shortcuts
 	$('ticker').playSlideShow({delay: 2000, transition: 'pushDown'});
 
