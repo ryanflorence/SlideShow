@@ -37,6 +37,8 @@ var SlideShow = new Class({
 		autoplay: false
 	},
 	
+	transitioning: false,
+	
 	initialize: function(element, options){
 		this.setOptions(options);
 		this.element = document.id(element);		
@@ -186,8 +188,8 @@ var SlideShow = new Class({
 
 Element.Properties.slideshow = {
 
-	set: function(){
-		this.get('slideshow');
+	set: function(options){
+		this.get('slideshow').resetOptions(options, true);
 		return this;
 	},
 
