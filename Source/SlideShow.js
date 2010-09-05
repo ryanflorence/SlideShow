@@ -39,15 +39,12 @@ var SlideShow = new Class({
 	
 	initialize: function(element, options){
 		this.setOptions(options);
-		this.element = document.id(element);
-		this.parseDelay(this.element);
-		this.setLoop(this.showNext, this.options.delay);
-		this.options.duration = this.element.retrieve('ssDuration');
-		this.options.transition = this.element.retrieve('ssTransition');
+		this.element = document.id(element);		
 		this.slides = this.element.getChildren();
 		this.current = this.slides[0];
 		this.transitioning = false;
 		this.setup();
+		this.setLoop(this.showNext, this.options.delay);
 		if (this.options.autoplay) this.play();
 	},
 	
@@ -57,8 +54,15 @@ var SlideShow = new Class({
 	},
 	
 	setupElement: function(){
-		var el = this.element;
-		if (el.getStyle('position') != 'absolute' && el != document.body) el.setStyle('position', 'relative');
+		if (this.element.getStyle('position') != 'absolute' && this.element != document.body) this.element.setStyle('position', 'relative');
+		this.storeTransition(this.element);
+		this.options.duration = this.element.retrieve('ssDuration');
+		this.options.transition = this.element.retrieve('ssTransition');
+		var classes = this.element.get('class');
+		var delayRegex = /delay:[0-9]+/;
+		if (classes.match(delayRegex)) {
+			this.options.delay = classes.match(delayRegex)[0].split(':')[1];
+		}
 		return this;
 	},
 	
@@ -77,16 +81,6 @@ var SlideShow = new Class({
 		var transition = (classes.match(transitionRegex)) ? classes.match(transitionRegex)[0].split(':')[1] : this.options.transition;
 		var duration = (classes.match(durationRegex)) ? classes.match(durationRegex)[0].split(':')[1] : this.options.duration;
 		slide.store('ssTransition', transition).store('ssDuration', duration);
-		return this;
-	},
-	
-	parseDelay: function(slide){
-		this.storeTransition(slide);
-		var classes = slide.get('class');
-		var delayRegex = /delay:[0-9]+/;
-		if (classes.match(delayRegex)) {
-			this.options.delay = classes.match(delayRegex)[0].split(':')[1];
-		}
 		return this;
 	},
 	
