@@ -25,11 +25,11 @@ var SlideShow = new Class({
 		
 	options: {
 		/*
-		onShow: $empty,
-		onShowComplete: $empty,
-		onReverse: $empty,
-		onPlay: $empty,
-		onPause: $empty,
+		onShow: function(){},
+		onShowComplete: function(){},
+		onReverse: function(){},
+		onPlay: function(){},
+		onPause: function(){},
 		*/
 		delay: 7000,
 		transition: 'crossFade',
@@ -62,7 +62,7 @@ var SlideShow = new Class({
 		this.options.transition = this.element.retrieve('ssTransition');
 		var classes = this.element.get('class');
 		var delayRegex = /delay:[0-9]+/;
-		if (classes.match(delayRegex)) {
+		if (classes.match(delayRegex)){
 			this.options.delay = classes.match(delayRegex)[0].split(':')[1];
 		}
 		return this;
@@ -133,11 +133,11 @@ var SlideShow = new Class({
 	
 	reset: function(slide){
 		return slide.setStyles({
-			'position': 'absolute',
+			position: 'absolute',
 			'z-index': 0,
-			'display': 'block',
-			'left': 0,
-			'top': 0
+			display: 'block',
+			left: 0,
+			top: 0
 		}).fade('show');
 	},
 	
@@ -229,7 +229,7 @@ SlideShow.adders = {
 		});
 	},
 	
-	addAllThese : function(transitions){
+	addAllThese: function(transitions){
 		Array.clone(transitions).each(function(transition){
 			this.add(transition[0], transition[1]);
 		}, this);
