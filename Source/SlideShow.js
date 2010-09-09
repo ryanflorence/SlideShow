@@ -119,11 +119,11 @@ var SlideShow = new Class({
 					index: this.slides.indexOf(next)
 				}
 			};
-			this.fireEvent('show', slideData);
+			this.triggerEvent('show', slideData);
 			this.transitions[transition](previous, next, duration, this);
 			(function(){ 
 				previous.setStyle('display', 'none');
-				this.fireEvent('showComplete', slideData);
+				this.triggerEvent('showComplete', slideData);
 				this.transitioning = false;
 			}).bind(this).delay(duration);
 			this.current = next;
@@ -163,20 +163,20 @@ var SlideShow = new Class({
 	
 	play: function(){
 		this.startLoop();
-		this.fireEvent('play');
+		this.triggerEvent('play');
 		return this;
 	},
 	
 	pause: function(){
 		this.stopLoop();
-		this.fireEvent('pause');
+		this.triggerEvent('pause');
 		return this;
 	},
 	
 	reverse: function(){
 		var fn = (this.loopMethod == this.showNext) ? this.showPrevious : this.showNext;
 		this.setLoop(fn, this.options.delay);
-		this.fireEvent('reverse');
+		this.triggerEvent('reverse');
 		return this;
 	},
 	
