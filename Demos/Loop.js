@@ -1,6 +1,8 @@
 /*
 ---
 
+name: Loop
+
 script: Loop.js
 
 description: Runs a class method on a periodical
@@ -12,7 +14,7 @@ authors: Ryan Florence <http://ryanflorence.com>
 docs: http://moodocs.net/rpflo/mootools-rpflo/Loop
 
 requires:
-- core:1.2.4/'*'
+- Core:1.3/Class
 
 provides: [Loop]
 
@@ -24,7 +26,7 @@ var Loop = new Class({
 	loopCount: 0,
 	isStopped: true,
 	isLooping: false,
-	loopMethod: $empty,
+	loopMethod: function(){},
 
 	setLoop: function(fn, delay){
 		if (this.isLooping){
@@ -42,7 +44,7 @@ var Loop = new Class({
 	stopLoop: function(){
 		this.isStopped = true;
 		this.isLooping = false;
-		$clear(this.periodical);
+		clearInterval(this.periodical);
 		return this;
 	},
 
