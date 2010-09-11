@@ -10,7 +10,7 @@ license: MIT-style license.
 authors: Ryan Florence <http://ryanflorence.com>
 
 requires:
-- /Loop
+  - /Loop
 
 provides: [SlideShow, Element.playSlideShow, Element.pauseSlideShow]
 
