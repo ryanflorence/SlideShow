@@ -56,7 +56,7 @@ var SlideShow = new Class({
 	},
 	
 	setupElement: function(){
-		if (this.element.getStyle('position') != 'absolute' && this.element != document.body) this.element.setStyle('position', 'relative');
+		if (this.element.getStyle('position') == 'static' && this.element != document.body) this.element.setStyle('position', 'relative');
 		this.storeTransition(this.element);
 		this.options.duration = this.element.retrieve('ssDuration');
 		this.options.transition = this.element.retrieve('ssTransition');
