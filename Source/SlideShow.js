@@ -10,8 +10,7 @@ license: MIT-style license.
 authors: Ryan Florence <http://ryanflorence.com>
 
 requires:
-- /Loop
-- more:1.2.4.4:Fx.Elements
+  - /Loop
 
 provides: [SlideShow, Element.playSlideShow, Element.pauseSlideShow]
 
@@ -271,41 +270,29 @@ SlideShow.addAllThese([
 	
 	['pushLeft', function(previous, next, duration, instance){
 		var distance = instance.element.getSize().x;
-		next.setStyle('left', distance);
-		new Fx.Elements([previous,next], {duration: duration}).start({
-			0: { left: [-distance] },
-			1: { left: [0] }
-		});
+		next.setStyle('left', distance).set('tween', {duration: duration}).tween('left', 0);;
+		previous.set('tween', {duration: duration}).tween('left', -distance);
 		return this;
 	}],
 
 	['pushRight', function(p, n, d, i){
 		var distance = i.element.getSize().x;
-		n.setStyle('left', -distance);
-		new Fx.Elements([p, n], {duration: d}).start({
-			0: { left: [distance] },
-			1: { left: [0] }
-		});
+		n.setStyle('left', -distance).set('tween', {duration: d}).tween('left', 0);
+		p.set('tween', {duration: d}).tween('left', distance);
 		return this;
 	}],
 
 	['pushUp', function(p, n, d, i){
 		var distance = i.element.getSize().y;
-		n.setStyle('top', distance);
-		new Fx.Elements([p, n], {duration: d}).start({
-			0: { top: [-distance] },
-			1: { top: [0] }
-		});
+		n.setStyle('top', distance).set('tween', {duration: d}).tween('top', 0);
+		p.set('tween', {duration: d}).tween('top', -distance);
 		return this;
 	}],
 
 	['pushDown', function(p, n, d, i){
 		var distance = i.element.getSize().y;
-		n.setStyle('top', -distance);
-		new Fx.Elements([p, n],{duration: d}).start({
-			0: { top: [distance] },
-			1: { top: [0] }
-		});
+		n.setStyle('top', -distance).set('tween', {duration: d}).tween('top', 0);
+		p.set('tween', {duration: d}).tween('top', distance);
 		return this;
 	}],
 
