@@ -118,11 +118,11 @@ var SlideShow = new Class({
 					index: this.slides.indexOf(next)
 				}
 			};
-			this.triggerEvent('show', slideData);
+			this.fireEvent('show', slideData);
 			this.transitions[transition](previous, next, duration, this);
 			(function(){ 
 				previous.setStyle('display', 'none');
-				this.triggerEvent('showComplete', slideData);
+				this.fireEvent('showComplete', slideData);
 				this.transitioning = false;
 			}).bind(this).delay(duration);
 			this.current = next;
@@ -162,20 +162,20 @@ var SlideShow = new Class({
 	
 	play: function(){
 		this.startLoop();
-		this.triggerEvent('play');
+		this.fireEvent('play');
 		return this;
 	},
 	
 	pause: function(){
 		this.stopLoop();
-		this.triggerEvent('pause');
+		this.fireEvent('pause');
 		return this;
 	},
 	
 	reverse: function(){
 		var fn = (this.loopMethod == this.showNext) ? this.showPrevious : this.showNext;
 		this.setLoop(fn, this.options.delay);
-		this.triggerEvent('reverse');
+		this.fireEvent('reverse');
 		return this;
 	},
 	
