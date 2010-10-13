@@ -24,9 +24,9 @@ provides:
 
 
 var SlideShow = new Class({
-	
+
 	Implements: [Options, Events, Loop],
-		
+
 	options: {
 		/*
 		onShow: function(){},
@@ -40,13 +40,13 @@ var SlideShow = new Class({
 		duration: 500,
 		autoplay: false
 	},
-	
+
 	transitioning: false,
 	reversed: false,
-	
+
 	initialize: function(element, options){
 		this.setOptions(options);
-		this.element = document.id(element);		
+		this.element = document.id(element);
 		this.slides = this.element.getChildren();
 		this.current = this.slides[0];
 		this.transitioning = false;
@@ -54,12 +54,12 @@ var SlideShow = new Class({
 		this.setLoop(this.show.pass('next', this), this.options.delay);
 		if (this.options.autoplay) this.play();
 	},
-	
+
 	setup: function(){
 		this.setupElement().setupSlides(true);
 		return this;
 	},
-	
+
 	setupElement: function(){
 		if (this.element.getStyle('position') == 'static' && this.element != document.body) this.element.setStyle('position', 'relative');
 		var classes = this.element.get('class')
@@ -71,7 +71,7 @@ var SlideShow = new Class({
 		if (match) this.options.delay = match[0].split(':')[1];
 		return this;
 	},
-	
+
 	setupSlides: function(hideFirst){
 		this.slides.each(function(slide, index){
 			this.storeTransition(slide).reset(slide);
@@ -79,7 +79,7 @@ var SlideShow = new Class({
 		}, this);
 		return this;
 	},
-	
+
 	storeTransition: function(slide){
 		var classes = slide.get('class')
 		, transitionMatch = classes.match(/transition:[a-zA-Z]+/)
@@ -89,14 +89,14 @@ var SlideShow = new Class({
 		slide.store('slideshow-transition', transition).store('slideshow-duration', duration)
 		return this;
 	},
-	
+
 	resetOptions: function(options, hideFirst){
 		this.options = Object.merge(this.options, options);
 		this.loopDelay = this.options.delay;
 		this.setupSlides(hideFirst);
 		return this;
 	},
-	
+
 	show: function(slide, options){
 		if (slide == 'next') slide = this.nextSlide();
 		if (slide == 'previous') slide = this.previousSlide();
@@ -113,7 +113,7 @@ var SlideShow = new Class({
 			};
 		this.fireEvent('show', slideData);
 		this.transitions[transition]({previous: previous, next: next, duration: duration, instance: this});
-		(function(){ 
+		(function(){
 			previous.setStyle('display', 'none');
 			this.fireEvent('showComplete', slideData);
 			this.transitioning = false;
@@ -121,7 +121,7 @@ var SlideShow = new Class({
 		this.current = next;
 		return this;
 	},
-	
+
 	reset: function(slide){
 		return slide.setStyles({
 			position: 'absolute',
@@ -131,7 +131,7 @@ var SlideShow = new Class({
 			top: 0
 		}).fade('show');
 	},
-	
+
 	nextSlide: function(){
 		var next = this.current.getNext();
 		return (next) ? next : this.slides[0];
@@ -141,30 +141,30 @@ var SlideShow = new Class({
 		var previous = this.current.getPrevious();
 		return (previous) ? previous : this.slides.getLast();
 	},
-	
+
 	play: function(){
 		this.startLoop();
 		this.fireEvent('play');
 		return this;
 	},
-	
+
 	pause: function(){
 		this.stopLoop();
 		this.fireEvent('pause');
 		return this;
 	},
-	
+
 	reverse: function(){
 		this.setLoop(this.show.pass(this.reversed ? 'next' : 'previous', this), this.options.delay);
 		this.reversed = !this.reversed;
 		this.fireEvent('reverse');
 		return this;
 	},
-	
+
 	toElement: function(){
 		return this.element;
 	}
-	
+
 });
 
 Element.Properties.slideshow = {
@@ -187,16 +187,16 @@ Element.Properties.slideshow = {
 
 
 Element.implement({
-	
+
 	playSlideShow: function(options){
 		this.get('slideshow').resetOptions(options, true).play();
 		return this;
 	},
-	
+
 	pauseSlideShow: function(){
 		this.get('slideshow').pause();
 	}
-	
+
 });
 
 SlideShow.plugins = {
@@ -240,10 +240,10 @@ SlideShow.plugin('transition', {
 	};
 
 	['left', 'right', 'up', 'down'].each(function(direction){
-		
+
 		var capitalized = direction.capitalize()
 		, blindName = 'blind' + capitalized;
-		
+
 		SlideShow.plugin('transition', {
 			name: 'push' + capitalized,
 			effect: function(data){
@@ -251,7 +251,7 @@ SlideShow.plugin('transition', {
 				return this;
 			}
 		});
-		
+
 		SlideShow.plugin('transition', {
 			name: blindName,
 			effect: function(data){
@@ -259,7 +259,7 @@ SlideShow.plugin('transition', {
 				return this;
 			}
 		});
-		
+
 		SlideShow.plugin('transition', {
 			name: blindName + 'Fade',
 			effect: function(data){
@@ -267,7 +267,7 @@ SlideShow.plugin('transition', {
 				return this;
 			}
 		});
-		
+
 	});
 
 })(SlideShow);
