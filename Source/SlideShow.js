@@ -272,7 +272,7 @@ SlideShow.plugin('transition', {
 
 })(SlideShow);
 
-Array.clone([
+[
 	['none', function(data){
 		data.previous.setStyle('display', 'none');
 		return this;
@@ -291,6 +291,6 @@ Array.clone([
 		}).fade('out');
 		return this;
 	}]
-]).each(function(transition){
+].each(function(transition){
 	SlideShow.plugin('transition', {name: transition[0], effect: transition[1]});
 });
