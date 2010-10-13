@@ -272,32 +272,24 @@ SlideShow.plugin('transition', {
 })(SlideShow);
 
 Array.clone([
-
 	['none', function(data){
 		data.previous.setStyle('display', 'none');
 		return this;
 	}],
-
 	['crossFade', function(data){
 		data.previous.set('tween', {duration: data.duration}).fade('out');
 		data.next.set('tween', {duration: data.duration}).fade('in');
 		return this;
 	}],
-
 	['fadeThroughBackground', function(data){
 		var half = data.duration / 2;
 		data.next.set('tween', {duration: half}).fade('hide');
 		data.previous.set('tween',{
 			duration: half,
-			onComplete: function(){
-				data.next.fade('in');
-			}
+			onComplete: function(){ data.next.fade('in'); }
 		}).fade('out');
+		return this;
 	}]
-
 ]).each(function(transition){
-	SlideShow.plugin('transition', {
-		name: transition[0],
-		effect: transition[1]
-	});
+	SlideShow.plugin('transition', {name: transition[0], effect: transition[1]});
 });
