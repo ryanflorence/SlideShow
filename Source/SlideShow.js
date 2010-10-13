@@ -1,7 +1,7 @@
 /*
 ---
 
-script: SlideShow.js
+name: SlideShow
 
 description: Easily extendable, class-based, slideshow widget. Use any element, not just images. Comes with packaged transitions but is easy to extend and create your own transitions.  The class is built to handle the basics of a slideshow, extend it to implement your own navigation piece and custom transitions.
 
@@ -10,9 +10,14 @@ license: MIT-style license.
 authors: Ryan Florence <http://ryanflorence.com>
 
 requires:
-  - /Loop
+  - Core/Fx.Tween
+  - Core/Fx.Morph
+  - Loop/Loop
 
-provides: [SlideShow, Element.playSlideShow, Element.pauseSlideShow]
+provides:
+  - SlideShow
+  - Element.playSlideShow
+  - Element.pauseSlideShow
 
 ...
 */
@@ -45,7 +50,7 @@ var SlideShow = new Class({
 		this.current = this.slides[0];
 		this.transitioning = false;
 		this.setup();
-		this.setLoop(this.showNext, this.options.delay);
+		this.setLoop(this.show.pass('next', this), this.options.delay);
 		if (this.options.autoplay) this.play();
 	},
 	
@@ -56,14 +61,13 @@ var SlideShow = new Class({
 	
 	setupElement: function(){
 		if (this.element.getStyle('position') == 'static' && this.element != document.body) this.element.setStyle('position', 'relative');
+		var classes = this.element.get('class')
+		, delayRegex = /delay:[0-9]+/
+		, match = classes.match(delayRegex);
 		this.storeTransition(this.element);
-		this.options.duration = this.element.retrieve('ssDuration');
-		this.options.transition = this.element.retrieve('ssTransition');
-		var classes = this.element.get('class');
-		var delayRegex = /delay:[0-9]+/;
-		if (classes.match(delayRegex)){
-			this.options.delay = classes.match(delayRegex)[0].split(':')[1];
-		}
+		this.options.duration = this.element.retrieve('slideshow-duration');
+		this.options.transition = this.element.retrieve('slideshow-transition');
+		if (match) this.options.delay = match[0].split(':')[1];
 		return this;
 	},
 	
