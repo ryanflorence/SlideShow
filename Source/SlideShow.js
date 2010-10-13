@@ -221,135 +221,106 @@ Element.implement({
 	
 });
 
-SlideShow.adders = {
-	
+SlideShow.plugins = {
 	transitions:{},
-	
-	add: function(className, fn){
-		this.transitions[className] = fn;
-		this.implement({
-			transitions: this.transitions
-		});
-	},
-	
-	addAllThese: function(transitions){
-		Array.clone(transitions).each(function(transition){
-			this.add(transition[0], transition[1]);
-		}, this);
+	plugin: function(){
+		var kind = Array.shift(arguments);
+		if (kind == 'transition'){
+			var transition = arguments[0];
+			this.transitions[transition.name] = transition.effect;
+			this.implement({
+				transitions: this.transitions
+			});
+			return;
+		}
 	}
-	
-}
+};
 
-Object.append(SlideShow, SlideShow.adders);
-SlideShow.implement(SlideShow.adders);
+Object.append(SlideShow, SlideShow.plugins);
+SlideShow.implement(SlideShow.plugins);
 
-SlideShow.add('fade', function(previous, next, duration, instance){
-	previous.set('tween', {duration: duration}).fade('out');
-	return this;
+SlideShow.plugin('transition', {
+	name: 'fade',
+	effect: function(data){
+		data.previous.set('tween', {duration: data.duration}).fade('out');
+		return this;
+	}
 });
 
-SlideShow.addAllThese([
 
-	['none', function(previous, next, duration, instance){
-		previous.setStyle('display', 'none');
+(function(SlideShow){
+
+	var pushOrBlind = function(type, direction, data){
+		var isHorizontal = ['left', 'right'].contains(direction)
+		, property = (isHorizontal) ? 'left' : 'top'
+		, inverted = (['left', 'up'].contains(direction)) ? 1 : -1
+		, distance = data.instance.element.getSize()[(isHorizontal) ? 'x' : 'y']
+		, tweenOptions = {duration: data.duration};
+		if (type == 'push') data.previous.set('tween', tweenOptions).tween(property, -(distance * inverted));
+		if (type == 'blind') data.next.setStyle('z-index', 2);
+		data.next.set('tween', tweenOptions).setStyle(property, distance * inverted).tween(property, 0);
+	};
+
+	['left', 'right', 'up', 'down'].each(function(direction){
+		
+		var capitalized = direction.capitalize()
+		, blindName = 'blind' + capitalized;
+		
+		SlideShow.plugin('transition', {
+			name: 'push' + capitalized,
+			effect: function(data){
+				pushOrBlind('push', direction, data);
+				return this;
+			}
+		});
+		
+		SlideShow.plugin('transition', {
+			name: blindName,
+			effect: function(data){
+				pushOrBlind('blind', direction, data);
+				return this;
+			}
+		});
+		
+		SlideShow.plugin('transition', {
+			name: blindName + 'Fade',
+			effect: function(data){
+				this[blindName](data).fade(data);
+				return this;
+			}
+		});
+		
+	});
+
+})(SlideShow);
+
+Array.clone([
+
+	['none', function(data){
+		data.previous.setStyle('display', 'none');
 		return this;
 	}],
 
-	['crossFade', function(previous, next, duration, instance){
-		previous.set('tween', {duration: duration}).fade('out');
-		next.set('tween', {duration: duration}).fade('in');
+	['crossFade', function(data){
+		data.previous.set('tween', {duration: data.duration}).fade('out');
+		data.next.set('tween', {duration: data.duration}).fade('in');
 		return this;
 	}],
 
-	['fadeThroughBackground', function(previous, next, duration, instance){
-		var half = duration / 2;
-		next.set('tween', {duration: half}).fade('hide');
-		previous.set('tween',{
+	['fadeThroughBackground', function(data){
+		var half = data.duration / 2;
+		data.next.set('tween', {duration: half}).fade('hide');
+		data.previous.set('tween',{
 			duration: half,
 			onComplete: function(){
-				next.fade('in');
+				data.next.fade('in');
 			}
 		}).fade('out');
-	}],
-	
-	['pushLeft', function(previous, next, duration, instance){
-		var distance = instance.element.getSize().x;
-		next.setStyle('left', distance).set('tween', {duration: duration}).tween('left', 0);;
-		previous.set('tween', {duration: duration}).tween('left', -distance);
-		return this;
-	}],
-
-	['pushRight', function(p, n, d, i){
-		var distance = i.element.getSize().x;
-		n.setStyle('left', -distance).set('tween', {duration: d}).tween('left', 0);
-		p.set('tween', {duration: d}).tween('left', distance);
-		return this;
-	}],
-
-	['pushUp', function(p, n, d, i){
-		var distance = i.element.getSize().y;
-		n.setStyle('top', distance).set('tween', {duration: d}).tween('top', 0);
-		p.set('tween', {duration: d}).tween('top', -distance);
-		return this;
-	}],
-
-	['pushDown', function(p, n, d, i){
-		var distance = i.element.getSize().y;
-		n.setStyle('top', -distance).set('tween', {duration: d}).tween('top', 0);
-		p.set('tween', {duration: d}).tween('top', distance);
-		return this;
-	}],
-
-	['blindRight', function(p, n, d, i){
-		var distance = i.element.getSize().x;
-		n.setStyles({
-			left: -distance,
-			'z-index': 2
-		}).set('tween', {duration: d}).tween('left', 0);
-		return this;
-	}],
-
-	['blindLeft', function(p, n, d, i){
-		var distance = i.element.getSize().x;
-		n.setStyles({
-			left: distance,
-			'z-index': 2
-		}).set('tween', {duration: d}).tween('left', 0);
-		return this;
-	}],
-
-	['blindUp', function(p, n, d, i){
-		var distance = i.element.getSize().y;
-		n.setStyles({
-			top: distance,
-			'z-index': 2
-		}).set('tween', {duration: d}).tween('top', 0);
-		return this;
-	}],
-
-	['blindDown', function(p, n, d, i){
-		var distance = i.element.getSize().y;
-		n.setStyles({
-			top: -distance,
-			'z-index': 2
-		}).set('tween', {duration: d}).tween('top', 0);
-		return this;
-	}],
-
-	['blindDownFade', function(p, n, d, i){
-		this.blindDown(p, n, d, i).fade(p, n, d, i);
-	}],
-
-	['blindUpFade', function(p, n, d, i){
-		this.blindUp(p, n, d, i).fade(p, n, d, i);
-	}],
-
-	['blindLeftFade', function(p, n, d, i){
-		this.blindLeft(p, n, d, i).fade(p, n, d, i);
-	}],
-
-	['blindRightFade', function(p, n, d, i){
-		this.blindRight(p, n, d, i).fade(p, n, d, i);
 	}]
 
-]);
+]).each(function(transition){
+	SlideShow.plugin('transition', {
+		name: transition[0],
+		effect: transition[1]
+	});
+});
