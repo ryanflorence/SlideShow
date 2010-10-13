@@ -80,12 +80,12 @@ var SlideShow = new Class({
 	},
 	
 	storeTransition: function(slide){
-		var classes = slide.get('class');
-		var transitionRegex = /transition:[a-zA-Z]+/;
-		var durationRegex = /duration:[0-9]+/;
-		var transition = (classes.match(transitionRegex)) ? classes.match(transitionRegex)[0].split(':')[1] : this.options.transition;
-		var duration = (classes.match(durationRegex)) ? classes.match(durationRegex)[0].split(':')[1] : this.options.duration;
-		slide.store('ssTransition', transition).store('ssDuration', duration);
+		var classes = slide.get('class')
+		, transitionMatch = classes.match(/transition:[a-zA-Z]+/)
+		, durationMatch = classes.match(/duration:[0-9]+/)
+		, transition = (transitionMatch) ? transitionMatch[0].split(':')[1] : this.options.transition
+		, duration = (durationMatch) ? durationMatch[0].split(':')[1] : this.options.duration
+		slide.store('slideshow-transition', transition).store('slideshow-duration', duration)
 		return this;
 	},
 	
@@ -96,41 +96,28 @@ var SlideShow = new Class({
 		return this;
 	},
 	
-	getTransition: function(slide){
-		return slide.retrieve('ssTransition');
-	},
-	
-	getDuration: function(slide){
-		return slide.retrieve('ssDuration');
-	},
-	
 	show: function(slide, options){
-		slide = (typeof slide == 'number') ? this.slides[slide] : slide;
-		if (slide != this.current && !this.transitioning){
-			this.transitioning = true;
-			var transition = (options && options.transition) ? options.transition: this.getTransition(slide),
-				duration = (options && options.duration) ? options.duration: this.getDuration(slide),
-				previous = this.current.setStyle('z-index', 1),
-				next = this.reset(slide);
-			var slideData = {
-				previous: {
-					element: previous,
-					index: this.slides.indexOf(previous)
-				}, 
-				next: {
-					element: next,
-					index: this.slides.indexOf(next)
-				}
+		if (slide == 'next') slide = this.nextSlide();
+		if (slide == 'previous') slide = this.previousSlide();
+		if (typeof slide == 'number') slide = this.slides[slide];
+		if (slide == this.current || this.transitioning) return;
+		this.transitioning = true;
+		var transition = (options && options.transition) ? options.transition : slide.retrieve('slideshow-transition')
+		, duration = (options && options.duration) ? options.duration : slide.retrieve('slideshow-duration')
+		, previous = this.current.setStyle('z-index', 1)
+		, next = this.reset(slide)
+		, slideData = {
+				previous: { element: previous, index: this.slides.indexOf(previous) },
+				next: { element: next, index: this.slides.indexOf(next)}
 			};
-			this.fireEvent('show', slideData);
-			this.transitions[transition](previous, next, duration, this);
-			(function(){ 
-				previous.setStyle('display', 'none');
-				this.fireEvent('showComplete', slideData);
-				this.transitioning = false;
-			}).bind(this).delay(duration);
-			this.current = next;
-		}
+		this.fireEvent('show', slideData);
+		this.transitions[transition]({previous: previous, next: next, duration: duration, instance: this});
+		(function(){ 
+			previous.setStyle('display', 'none');
+			this.fireEvent('showComplete', slideData);
+			this.transitioning = false;
+		}).bind(this).delay(duration);
+		this.current = next;
 		return this;
 	},
 	
@@ -152,16 +139,6 @@ var SlideShow = new Class({
 	previousSlide: function(){
 		var previous = this.current.getPrevious();
 		return (previous) ? previous : this.slides.getLast();
-	},
-	
-	showNext: function(options){
-		this.show(this.nextSlide(), options);
-		return this;
-	},
-	
-	showPrevious: function(options){
-		this.show(this.previousSlide(), options);
-		return this;
 	},
 	
 	play: function(){
