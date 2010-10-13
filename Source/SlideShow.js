@@ -42,6 +42,7 @@ var SlideShow = new Class({
 	},
 	
 	transitioning: false,
+	reversed: false,
 	
 	initialize: function(element, options){
 		this.setOptions(options);
@@ -154,8 +155,8 @@ var SlideShow = new Class({
 	},
 	
 	reverse: function(){
-		var fn = (this.loopMethod == this.showNext) ? this.showPrevious : this.showNext;
-		this.setLoop(fn, this.options.delay);
+		this.setLoop(this.show.pass(this.reversed ? 'next' : 'previous', this), this.options.delay);
+		this.reversed = !this.reversed;
 		this.fireEvent('reverse');
 		return this;
 	},
