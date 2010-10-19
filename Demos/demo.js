@@ -56,11 +56,11 @@ window.addEvent('domready', function(){
 	});
 	
 	$('showNext').addEvent('click', function(){
-		mySlideShow.showNext();
+		mySlideShow.show('next');
 	});
 	
 	$('showPrevious').addEvent('click', function(){
-		mySlideShow.showPrevious();
+		mySlideShow.show('previous');
 	});
 	
 	$('toElement').addEvent('click', function(){

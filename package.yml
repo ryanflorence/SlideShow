@@ -1,7 +1,25 @@
 name: SlideShow
+
 author: rpflo
+
+copyright: "&copy; [Ryan Florence](http://ryanflorence.com)"
+
 category: Widgets
+
+description: "Mid-level class that manages tranitions of elements that share the same space, typicall for slideshows."
+
 tags: [slideshow, gallery, tabs, ticker]
-docs: http://moodocs.net/rpflo/mootools-rpflo/SlideShow
+
+docs: http://ryanflorence.com/slideshow
+
+web: "[ryanflorence.com/slideshow](http://ryanflorence.com/slideshow)"
+
 demo: http://ryanflorence.com/slideshow
+
 current: 1.0
+
+license: MIT-style license.
+
+sources:
+  - "Source/Core/SlideShow.js"
+  - "Source/Mixins/SlideShow.Nav.js"
