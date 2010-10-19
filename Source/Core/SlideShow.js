@@ -12,6 +12,7 @@ authors: Ryan Florence <http://ryanflorence.com>
 requires:
   - Core/Fx.Tween
   - Core/Fx.Morph
+  - Core/Element.Dimensions
   - Loop/Loop
 
 provides:
@@ -45,30 +46,27 @@ var SlideShow = new Class({
 	reversed: false,
 
 	initialize: function(element, options){
-		this.setOptions(options);
 		this.element = document.id(element);
-		this.slides = this.element.getChildren();
-		this.current = this.slides[0];
-		this.transitioning = false;
+		this.setOptions(options);
 		this.setup();
-		this.setLoop(this.show.pass('next', this), this.options.delay);
-		if (this.options.autoplay) this.play();
 	},
 
 	setup: function(){
+		this.slides = this.element.getChildren();
+		this.current = this.slides[0];
+		if (this.options.autoplay) this.play();
 		this.setupElement().setupSlides(true);
+		this.setLoop(this.show.pass('next', this), this.options.delay);
 		return this;
 	},
 
 	setupElement: function(){
-		if (this.element.getStyle('position') == 'static' && this.element != document.body) this.element.setStyle('position', 'relative');
 		var classes = this.element.get('class')
-		, delayRegex = /delay:[0-9]+/
-		, match = classes.match(delayRegex);
+		, match = classes.match(/delay:[0-9]+/);
+		if (match) this.options.delay = match[0].split(':')[1];
 		this.storeTransition(this.element);
 		this.options.duration = this.element.retrieve('slideshow-duration');
 		this.options.transition = this.element.retrieve('slideshow-transition');
-		if (match) this.options.delay = match[0].split(':')[1];
 		return this;
 	},
 
@@ -85,7 +83,7 @@ var SlideShow = new Class({
 		, transitionMatch = classes.match(/transition:[a-zA-Z]+/)
 		, durationMatch = classes.match(/duration:[0-9]+/)
 		, transition = (transitionMatch) ? transitionMatch[0].split(':')[1] : this.options.transition
-		, duration = (durationMatch) ? durationMatch[0].split(':')[1] : this.options.duration
+		, duration = (durationMatch) ? durationMatch[0].split(':')[1] : this.options.duration;
 		slide.store('slideshow-transition', transition).store('slideshow-duration', duration)
 		return this;
 	},
@@ -163,6 +161,13 @@ var SlideShow = new Class({
 
 	toElement: function(){
 		return this.element;
+	},
+	
+	mixin: function(klass, args){
+		if (klass.prototype.options) Object.merge(klass.prototype.options, this.options);
+		Object.append(this, klass.prototype);
+		klass.mix.apply(this, args);
+		return this;
 	}
 
 });
@@ -195,36 +200,21 @@ Element.implement({
 
 	pauseSlideShow: function(){
 		this.get('slideshow').pause();
-	}
-
-});
-
-SlideShow.plugins = {
-	transitions:{},
-	plugin: function(){
-		var kind = Array.shift(arguments);
-		if (kind == 'transition'){
-			var transition = arguments[0];
-			this.transitions[transition.name] = transition.effect;
-			this.implement({
-				transitions: this.transitions
-			});
-			return;
-		}
-	}
-};
-
-Object.append(SlideShow, SlideShow.plugins);
-SlideShow.implement(SlideShow.plugins);
-
-SlideShow.plugin('transition', {
-	name: 'fade',
-	effect: function(data){
-		data.previous.set('tween', {duration: data.duration}).fade('out');
 		return this;
 	}
+
 });
 
+SlideShow.transitions = {};
+SlideShow.addTransition = function(name, fn){
+	SlideShow.transitions[name] = fn;
+	SlideShow.implement({ transitions: SlideShow.transitions });
+};
+
+SlideShow.addTransition('fade', function(data){
+	data.previous.set('tween', {duration: data.duration}).fade('out');
+	return this;
+});
 
 (function(SlideShow){
 
@@ -234,39 +224,38 @@ SlideShow.plugin('transition', {
 		, inverted = (['left', 'up'].contains(direction)) ? 1 : -1
 		, distance = data.instance.element.getSize()[(isHorizontal) ? 'x' : 'y']
 		, tweenOptions = {duration: data.duration};
-		if (type == 'push') data.previous.set('tween', tweenOptions).tween(property, -(distance * inverted));
 		if (type == 'blind') data.next.setStyle('z-index', 2);
-		data.next.set('tween', tweenOptions).setStyle(property, distance * inverted).tween(property, 0);
+		if (type != 'slide') {
+			data.next.set('tween', tweenOptions).setStyle(property, distance * inverted);
+			data.next.tween(property, 0);
+		}
+		if (type != 'blind') data.previous.set('tween', tweenOptions).tween(property, -(distance * inverted));
 	};
 
 	['left', 'right', 'up', 'down'].each(function(direction){
 
 		var capitalized = direction.capitalize()
-		, blindName = 'blind' + capitalized;
+		, blindName = 'blind' + capitalized
+		, slideName = 'slide' + capitalized;
 
-		SlideShow.plugin('transition', {
-			name: 'push' + capitalized,
-			effect: function(data){
+		[
+			['push' + capitalized, function(data){
 				pushOrBlind('push', direction, data);
 				return this;
-			}
-		});
-
-		SlideShow.plugin('transition', {
-			name: blindName,
-			effect: function(data){
+			}],
+			[blindName, function(data){
 				pushOrBlind('blind', direction, data);
 				return this;
-			}
-		});
-
-		SlideShow.plugin('transition', {
-			name: blindName + 'Fade',
-			effect: function(data){
+			}],
+			[slideName, function(data){
+				pushOrBlind('slide', direction, data);
+				return this;
+			}],
+			[blindName + 'Fade', function(data){
 				this[blindName](data).fade(data);
 				return this;
-			}
-		});
+			}]
+		].each(function(transition){ SlideShow.addTransition(transition[0], transition[1]); });
 
 	});
 
@@ -291,6 +280,4 @@ SlideShow.plugin('transition', {
 		}).fade('out');
 		return this;
 	}]
-].each(function(transition){
-	SlideShow.plugin('transition', {name: transition[0], effect: transition[1]});
-});
+].each(function(transition){ SlideShow.addTransition(transition[0], transition[1]); });

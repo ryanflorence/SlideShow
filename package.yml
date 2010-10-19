@@ -21,4 +21,5 @@ current: 1.0
 license: MIT-style license.
 
 sources:
-  - "Source/SlideShow.js"
+  - "Source/Core/SlideShow.js"
+  - "Source/Mixins/SlideShow.Nav.js"
