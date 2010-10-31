@@ -61,8 +61,8 @@ var SlideShow = new Class({
 	},
 
 	setupElement: function(){
-		var classes = this.element.get('class')
-		, match = classes.match(/delay:[0-9]+/);
+		var classes = this.element.get('class'),
+		 	match = classes.match(/delay:[0-9]+/);
 		if (match) this.options.delay = match[0].split(':')[1];
 		this.storeTransition(this.element);
 		this.options.duration = this.element.retrieve('slideshow-duration');
@@ -72,6 +72,7 @@ var SlideShow = new Class({
 
 	setupSlides: function(hideFirst){
 		this.slides.each(function(slide, index){
+			slide.store('slideshow-index', index);
 			this.storeTransition(slide).reset(slide);
 			if (hideFirst && index != 0) slide.setStyle('display', 'none');
 		}, this);
@@ -79,11 +80,11 @@ var SlideShow = new Class({
 	},
 
 	storeTransition: function(slide){
-		var classes = slide.get('class')
-		, transitionMatch = classes.match(/transition:[a-zA-Z]+/)
-		, durationMatch = classes.match(/duration:[0-9]+/)
-		, transition = (transitionMatch) ? transitionMatch[0].split(':')[1] : this.options.transition
-		, duration = (durationMatch) ? durationMatch[0].split(':')[1] : this.options.duration;
+		var classes = slide.get('class'),
+			transitionMatch = classes.match(/transition:[a-zA-Z]+/),
+			durationMatch = classes.match(/duration:[0-9]+/),
+			transition = (transitionMatch) ? transitionMatch[0].split(':')[1] : this.options.transition,
+			duration = (durationMatch) ? durationMatch[0].split(':')[1] : this.options.duration;
 		slide.store('slideshow-transition', transition).store('slideshow-duration', duration)
 		return this;
 	},
@@ -99,16 +100,19 @@ var SlideShow = new Class({
 		if (slide == 'next') slide = this.nextSlide();
 		if (slide == 'previous') slide = this.previousSlide();
 		if (typeof slide == 'number') slide = this.slides[slide];
+
 		if (slide == this.current || this.transitioning) return;
+
 		this.transitioning = true;
-		var transition = (options && options.transition) ? options.transition : slide.retrieve('slideshow-transition')
-		, duration = (options && options.duration) ? options.duration : slide.retrieve('slideshow-duration')
-		, previous = this.current.setStyle('z-index', 1)
-		, next = this.reset(slide)
-		, slideData = {
-				previous: { element: previous, index: this.slides.indexOf(previous) },
-				next: { element: next, index: this.slides.indexOf(next)}
+		var transition = (options && options.transition) ? options.transition : slide.retrieve('slideshow-transition'),
+			duration = (options && options.duration) ? options.duration : slide.retrieve('slideshow-duration'),
+			previous = this.current.setStyle('z-index', 1),
+			next = this.reset(slide),
+			slideData = {
+				previous: { element: previous, index: previous.retrieve('slideshow-index') },
+				next:     { element: next,     index: next.retrieve('slideshow-index') }
 			};
+
 		this.fireEvent('show', slideData);
 		this.transitions[transition]({previous: previous, next: next, duration: duration, instance: this});
 		(function(){
@@ -116,18 +120,21 @@ var SlideShow = new Class({
 			this.fireEvent('showComplete', slideData);
 			this.transitioning = false;
 		}).bind(this).delay(duration);
+
 		this.current = next;
 		return this;
 	},
 
+	resetStyles: {
+		position: 'absolute',
+		'z-index': 0,
+		display: 'block',
+		left: 0,
+		top: 0
+	},
+
 	reset: function(slide){
-		return slide.setStyles({
-			position: 'absolute',
-			'z-index': 0,
-			display: 'block',
-			left: 0,
-			top: 0
-		}).fade('show');
+		return slide.setStyles(this.resetStyles).fade('show');
 	},
 
 	nextSlide: function(){
@@ -218,12 +225,13 @@ SlideShow.addTransition('fade', function(data){
 
 (function(SlideShow){
 
+	// todo: init branching so all this checking doesn't happen every transition
 	var pushOrBlind = function(type, direction, data){
-		var isHorizontal = ['left', 'right'].contains(direction)
-		, property = (isHorizontal) ? 'left' : 'top'
-		, inverted = (['left', 'up'].contains(direction)) ? 1 : -1
-		, distance = data.instance.element.getSize()[(isHorizontal) ? 'x' : 'y']
-		, tweenOptions = {duration: data.duration};
+		var isHorizontal = ['left', 'right'].contains(direction),
+			property = (isHorizontal) ? 'left' : 'top',
+			inverted = (['left', 'up'].contains(direction)) ? 1 : -1,
+			distance = data.instance.element.getSize()[(isHorizontal) ? 'x' : 'y'],
+			tweenOptions = {duration: data.duration};
 		if (type == 'blind') data.next.setStyle('z-index', 2);
 		if (type != 'slide') {
 			data.next.set('tween', tweenOptions).setStyle(property, distance * inverted);
@@ -234,9 +242,9 @@ SlideShow.addTransition('fade', function(data){
 
 	['left', 'right', 'up', 'down'].each(function(direction){
 
-		var capitalized = direction.capitalize()
-		, blindName = 'blind' + capitalized
-		, slideName = 'slide' + capitalized;
+		var capitalized = direction.capitalize(),
+			blindName = 'blind' + capitalized,
+			slideName = 'slide' + capitalized;
 
 		[
 			['push' + capitalized, function(data){
