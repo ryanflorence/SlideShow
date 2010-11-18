@@ -96,11 +96,9 @@ var SlideShow = new Class({
 		return this;
 	},
 
-	show: function(slide, options){
-		if (slide == 'next') slide = this.nextSlide();
-		if (slide == 'previous') slide = this.previousSlide();
+	show: function(slide, options){]
+		if (slide == 'next' || slide == 'previous') slide = this[slide + 'Slide']();
 		if (typeof slide == 'number') slide = this.slides[slide];
-
 		if (slide == this.current || this.transitioning) return;
 
 		this.transitioning = true;
