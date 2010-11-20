@@ -3,7 +3,7 @@
 
 name: SlideShow
 
-description: Easily extendable, class-based, slideshow widget. Use any element, not just images. Comes with packaged transitions but is easy to extend and create your own transitions.  The class is built to handle the basics of a slideshow, extend it to implement your own navigation piece and custom transitions.
+description: "Extensible mid-level class that manages tranitions of elements that share the same space, typically for slideshows and galleries."
 
 license: MIT-style license.
 
@@ -113,6 +113,7 @@ var SlideShow = new Class({
 				previous: { element: previous, index: previous.retrieve('slideshow-index') },
 				next:     { element: next,     index: nextIndex }
 			};
+
 		this.fireEvent('show', slideData);
 		this.transitions[transition]({previous: previous, next: next, duration: duration, instance: this});
 		(function(){
