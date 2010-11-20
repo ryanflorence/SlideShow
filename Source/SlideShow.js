@@ -13,6 +13,7 @@ requires:
   - Core/Fx.Tween
   - Core/Fx.Morph
   - Core/Element.Dimensions
+  - Core/Slick.Parser
   - Loop/Loop
 
 provides:
@@ -39,7 +40,8 @@ var SlideShow = new Class({
 		delay: 7000,
 		transition: 'crossFade',
 		duration: 500,
-		autoplay: false
+		autoplay: false,
+		dataAttribute: 'data-slideshow'
 	},
 
 	transitioning: false,
@@ -54,17 +56,14 @@ var SlideShow = new Class({
 	setup: function(){
 		this.slides = this.element.getChildren();
 		this.current = this.current || this.slides[0];
-		if (this.options.autoplay) this.play();
 		this.setupElement().setupSlides(true);
 		this.setLoop(this.show.pass('next', this), this.options.delay);
+		if (this.options.autoplay) this.play();
 		return this;
 	},
 
 	setupElement: function(){
-		var classes = this.element.get('class'),
-		 	match = classes.match(/delay:[0-9]+/);
-		if (match) this.options.delay = match[0].split(':')[1];
-		this.storeTransition(this.element);
+		this.storeData(this.element);
 		this.options.duration = this.element.retrieve('slideshow-duration');
 		this.options.transition = this.element.retrieve('slideshow-transition');
 		return this;
@@ -73,19 +72,25 @@ var SlideShow = new Class({
 	setupSlides: function(hideFirst){
 		this.slides.each(function(slide, index){
 			slide.store('slideshow-index', index);
-			this.storeTransition(slide).reset(slide);
+			this.storeData(slide).reset(slide);
 			if (hideFirst && index != 0) slide.setStyle('display', 'none');
 		}, this);
 		return this;
 	},
 
-	storeTransition: function(slide){
-		var classes = slide.get('class'),
-			transitionMatch = classes.match(/transition:[a-zA-Z]+/),
-			durationMatch = classes.match(/duration:[0-9]+/),
-			transition = (transitionMatch) ? transitionMatch[0].split(':')[1] : this.options.transition,
-			duration = (durationMatch) ? durationMatch[0].split(':')[1] : this.options.duration;
-		slide.store('slideshow-transition', transition).store('slideshow-duration', duration)
+	storeData: function(element){
+		var ops = this.options;
+		// default options
+		element.store('slideshow-transition', ops.transition);
+		element.store('slideshow-duration', ops.duration);
+		if (element == this.element) element.store('slideshow-delay', ops.delay);
+		// override from data attribute
+		var data = element.get(this.options.dataAttribute);
+		if (data){
+			Slick.parse(data).expressions.each(function(expression){
+				element.store('slideshow-' + expression[0].tag, expression[0].pseudos[0].key);
+			});
+		}
 		return this;
 	},
 
