@@ -22,4 +22,4 @@ license: MIT-style license.
 
 sources:
   - "Source/SlideShow.js"
-  - "Source/SlideShow.Nav.js"
+  #- "Source/SlideShow.Nav.js"
