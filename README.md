@@ -10,7 +10,7 @@ You can use this class to create slideshows, galleries, tabs, news tickers ... a
 About this Repository
 ---------------------
 
-The develop branch is the tracking branch, **which is not guaranteed to be stable**.  Please download a tagged release from the download button.
+The develop branch is the tracking branch, **which is not guaranteed to be stable** and the documentation is bound to have inaccuracies.  Please download a tagged release from the download button.
 
 Features:
 ---------
