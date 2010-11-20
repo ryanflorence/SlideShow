@@ -79,18 +79,22 @@ If you wanted a navigation piece you could do something like:
     
 #### css
 
-SlideShow will set the position of your container to `relative` if it is not already positioned `absolute`.  It will also set all of your slides to `position: absolute`, `display: block`, and `z-index: 0`.  Because they are positioned absolutely you'll need to give them a width.  Also, you'll usually want to set the container overflow to hidden in your CSS.
+SlideShow doesn't mess too much with the CSS, keeping it incredibly flexible.  For most transitions to work your container needs to be position `relative`, `absolute`, or `fixed` and your slides with position `absolute`.
 
     #CSS
     div#slideshow {
-    	width: 500px;
-    	height: 280px;
-    	overflow: hidden;
+      position: relative;
+      overflow: hidden;
+      width: 500px;
+      height: 280px;
     }
 
     div#slideshow div {
-    	width: 500px;
-    	height: 280px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 500px;
+      height: 280px;
     }    
 
 
