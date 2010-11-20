@@ -53,7 +53,7 @@ var SlideShow = new Class({
 
 	setup: function(){
 		this.slides = this.element.getChildren();
-		this.current = this.slides[0];
+		this.current = this.current || this.slides[0];
 		if (this.options.autoplay) this.play();
 		this.setupElement().setupSlides(true);
 		this.setLoop(this.show.pass('next', this), this.options.delay);
