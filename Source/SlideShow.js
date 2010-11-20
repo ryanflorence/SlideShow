@@ -49,16 +49,16 @@ var SlideShow = new Class({
 
 	initialize: function(element, options){
 		this.element = document.id(element);
-		this.setOptions(options);
-		this.setup();
+		this.setup(options);
 	},
 
-	setup: function(){
+	setup: function(options){
+		this.setOptions(options);
 		this.slides = this.element.getChildren();
-		this.setupElement().setupSlides(true);
+		this.setupElement().setupSlides();
 		this.current = this.current || this.slides[0];
 		this.currentIndex = this.current.retrieve('slideshow-index');
-		this.setLoop(this.show.pass('next', this), this.options.delay);
+		this.setLoop(this.show.pass(this.reversed ? 'previous' : 'next', this), this.options.delay);
 		if (this.options.autoplay) this.play();
 		return this;
 	},
@@ -71,11 +71,13 @@ var SlideShow = new Class({
 		return this;
 	},
 
-	setupSlides: function(hideFirst){
+	setupSlides: function(){
 		this.slides.each(function(slide, index){
 			slide.store('slideshow-index', index);
-			this.storeData(slide).reset(slide);
-			if (hideFirst && index != 0) slide.setStyle('display', 'none');
+			this.storeData(slide);
+			if (this.current || index == 0) return;
+			this.reset(slide);
+			slide.setStyle('display', 'none');
 		}, this);
 		return this;
 	},
@@ -93,13 +95,6 @@ var SlideShow = new Class({
 				element.store('slideshow-' + expression[0].tag, expression[0].pseudos[0].key);
 			});
 		}
-		return this;
-	},
-
-	resetOptions: function(options, hideFirst){
-		this.options = Object.merge(this.options, options);
-		this.loopDelay = this.options.delay;
-		this.setupSlides(hideFirst);
 		return this;
 	},
 
@@ -179,7 +174,7 @@ var SlideShow = new Class({
 Element.Properties.slideshow = {
 
 	set: function(options){
-		this.get('slideshow').resetOptions(options, true);
+		this.get('slideshow').setup(options);
 		return this;
 	},
 
@@ -198,7 +193,7 @@ Element.Properties.slideshow = {
 Element.implement({
 
 	playSlideShow: function(options){
-		this.get('slideshow').resetOptions(options, true).play();
+		this.get('slideshow').setup(options).play();
 		return this;
 	},
 

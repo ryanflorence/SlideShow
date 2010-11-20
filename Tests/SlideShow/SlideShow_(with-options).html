@@ -1,0 +1,76 @@
+<style>
+div#slides {
+	width: 500px;
+	height: 280px;
+	overflow: hidden;
+	position: absolute;
+	left: 450px;
+	top: 22px;
+}
+
+div#slides div {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 200px;
+	width: 500px;
+	font-size: 40px;
+	padding-top: 80px;
+	text-align: center;
+	color: #fff;
+}
+
+.red {background: #e40053;}
+.blue {background: #0094d5;}
+.green {background: #43aa38;}
+
+#events {
+	position: absolute;
+	top: 320px;
+	left: 450px;
+}
+
+</style>
+
+<div id="slides">
+	<div class=green>0</div>
+	<div class=blue>1</div>
+	<div class=red>2</div>
+	<div data-slideshow="transition:blindDown" class=blue>3 <br>blindDown Always</div>
+</div>
+
+
+<script src="/depender/build?require=SlideShow/SlideShow,Core/Element.Event"></script>
+
+<script>
+
+var slideshow = new SlideShow('slides', {
+	transition: 'blindUp',
+	delay: 2000,
+	duration: 500,
+	autoplay: true
+});
+
+makeActions([
+	{
+		fn: function(){
+			slideshow.setup({
+				transition: 'blindLeft',
+				delay: 500,
+				duration: 250
+			});
+		},
+		title: 'call setup method',
+		description: 'Should be able to reset all the options.  Everything should be faster. The slides should all blind left, instead of up, except one.'
+	},
+	{
+		fn: function(){
+			new Element('div.red', {html: 'added later'}).inject('slides');
+			slideshow.setup();
+		},
+		title: 'setup after injecting a new element',
+		description: 'Should be able to add elements to the container and then call `setup` to get things working.'
+	}
+]);
+
+</script>
