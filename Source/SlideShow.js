@@ -123,16 +123,8 @@ var SlideShow = new Class({
 		return this;
 	},
 
-	resetStyles: {
-		position: 'absolute',
-		'z-index': 0,
-		display: 'block',
-		left: 0,
-		top: 0
-	},
-
 	reset: function(slide){
-		return slide.setStyles(this.resetStyles).fade('show');
+		return slide.set('style', '');
 	},
 
 	nextSlide: function(){
