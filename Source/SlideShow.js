@@ -67,6 +67,7 @@ var SlideShow = new Class({
 		this.storeData(this.element);
 		this.options.duration = this.element.retrieve('slideshow-duration');
 		this.options.transition = this.element.retrieve('slideshow-transition');
+		this.options.delay = this.element.retrieve('slideshow-delay');
 		return this;
 	},
 
