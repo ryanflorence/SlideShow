@@ -6,3 +6,4 @@ API from 1.0 -> 2.0
 - `showNext` -> `show('next')`
 - `showPrevious` -> `show('previous')`
 - reset method clears all styles
+- Slides now have `slideshow-index` stored with them
