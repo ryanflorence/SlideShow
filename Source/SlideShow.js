@@ -55,8 +55,9 @@ var SlideShow = new Class({
 
 	setup: function(){
 		this.slides = this.element.getChildren();
-		this.current = this.current || this.slides[0];
 		this.setupElement().setupSlides(true);
+		this.current = this.current || this.slides[0];
+		this.currentIndex = this.current.retrieve('slideshow-index');
 		this.setLoop(this.show.pass('next', this), this.options.delay);
 		if (this.options.autoplay) this.play();
 		return this;
@@ -111,11 +112,11 @@ var SlideShow = new Class({
 			duration = (options && options.duration) ? options.duration : slide.retrieve('slideshow-duration'),
 			previous = this.current.setStyle('z-index', 1),
 			next = this.reset(slide),
+			nextIndex = this.currentIndex = next.retrieve('slideshow-index')
 			slideData = {
 				previous: { element: previous, index: previous.retrieve('slideshow-index') },
-				next:     { element: next,     index: next.retrieve('slideshow-index') }
+				next:     { element: next,     index: nextIndex }
 			};
-
 		this.fireEvent('show', slideData);
 		this.transitions[transition]({previous: previous, next: next, duration: duration, instance: this});
 		(function(){
