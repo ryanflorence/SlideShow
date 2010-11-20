@@ -96,7 +96,7 @@ var SlideShow = new Class({
 		return this;
 	},
 
-	show: function(slide, options){]
+	show: function(slide, options){
 		if (slide == 'next' || slide == 'previous') slide = this[slide + 'Slide']();
 		if (typeof slide == 'number') slide = this.slides[slide];
 		if (slide == this.current || this.transitioning) return;
