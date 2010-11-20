@@ -7,6 +7,11 @@ Easily extendable, class-based, slideshow widget. Use any element, not just imag
 
 You can use this class to create slideshows, galleries, tabs, news tickers ... a lot of things.
 
+About this Repository
+---------------------
+
+The develop branch is the tracking branch, **which is not guaranteed to be stable**.  Please download a tagged release from the download button.
+
 Features:
 ---------
 
