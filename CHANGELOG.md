@@ -7,3 +7,6 @@ API from 1.0 -> 2.0
 - `showPrevious` -> `show('previous')`
 - reset method clears all styles
 - Slides now have `slideshow-index` stored with them
+- new option for which attribute to parse
+	- Slick now parses that attribute :D
+	- ie: `data-slideshow="transition:fade, duration:500"`
