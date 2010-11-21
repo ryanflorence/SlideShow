@@ -11,3 +11,4 @@ API from 1.0 -> 2.0
 	- Slick now parses that attribute :D
 	- ie: `data-slideshow="transition:fade, duration:500"`
 - new `index` property containing index of `current`
+- `setup` method initializes everything, reinitialize on demand
