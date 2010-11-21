@@ -3,7 +3,7 @@
 
 name: SlideShow
 
-description: "Extensible mid-level class that manages tranitions of elements that share the same space, typically for slideshows and galleries."
+description: "Extensible mid-level class that manages transitions of elements that share the same space, typically for slideshows, tabs, and galleries."
 
 license: MIT-style license.
 
