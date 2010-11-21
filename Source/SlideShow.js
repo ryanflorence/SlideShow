@@ -90,11 +90,10 @@ var SlideShow = new Class({
 		if (element == this.element) element.store('slideshow-delay', ops.delay);
 		// override from data attribute
 		var data = element.get(this.options.dataAttribute);
-		if (data){
-			Slick.parse(data).expressions.each(function(expression){
-				element.store('slideshow-' + expression[0].tag, expression[0].pseudos[0].key);
-			});
-		}
+		if (!data) return this;
+		Slick.parse(data).expressions.each(function(expression){
+			element.store('slideshow-' + expression[0].tag, expression[0].pseudos[0].key);
+		});
 		return this;
 	},
 
