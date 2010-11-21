@@ -10,3 +10,4 @@ API from 1.0 -> 2.0
 - new option for which attribute to parse
 	- Slick now parses that attribute :D
 	- ie: `data-slideshow="transition:fade, duration:500"`
+- new `index` property containing index of `current`
