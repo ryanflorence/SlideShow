@@ -57,7 +57,7 @@ var SlideShow = new Class({
 		this.slides = this.element.getChildren();
 		this.setupElement().setupSlides();
 		this.current = this.current || this.slides[0];
-		this.currentIndex = this.current.retrieve('slideshow-index');
+		this.index = this.current.retrieve('slideshow-index');
 		this.setLoop(this.show.pass(this.reversed ? 'previous' : 'next', this), this.options.delay);
 		if (this.options.autoplay) this.play();
 		return this;
@@ -101,14 +101,14 @@ var SlideShow = new Class({
 	show: function(slide, options){
 		if (slide == 'next' || slide == 'previous') slide = this[slide + 'Slide']();
 		if (typeof slide == 'number') slide = this.slides[slide];
-		if (slide == this.current || this.transitioning) return;
+		if (slide == this.current || this.transitioning) return this;
 
 		this.transitioning = true;
 		var transition = (options && options.transition) ? options.transition : slide.retrieve('slideshow-transition'),
 			duration = (options && options.duration) ? options.duration : slide.retrieve('slideshow-duration'),
 			previous = this.current.setStyle('z-index', 1),
 			next = this.reset(slide),
-			nextIndex = this.currentIndex = next.retrieve('slideshow-index')
+			nextIndex = this.index = next.retrieve('slideshow-index')
 			slideData = {
 				previous: { element: previous, index: previous.retrieve('slideshow-index') },
 				next:     { element: next,     index: nextIndex }
@@ -131,13 +131,11 @@ var SlideShow = new Class({
 	},
 
 	nextSlide: function(){
-		var next = this.current.getNext();
-		return (next) ? next : this.slides[0];
+		return this.slides[this.index + 1] || this.slides[0];
 	},
 
 	previousSlide: function(){
-		var previous = this.current.getPrevious();
-		return (previous) ? previous : this.slides.getLast();
+		return this.slides[this.index - 1] || this.slides.getLast();
 	},
 
 	play: function(){
