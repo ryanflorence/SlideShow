@@ -30,6 +30,14 @@ div#slides div {
 	left: 450px;
 }
 
+#slides p {
+	position: absolute;
+	top: 4px;
+	right: 4px;
+	z-index: 3;
+	color: white;
+}
+
 </style>
 
 <div id="slides" data-slideshow="delay:2000, duration:1000, transition:fade">
@@ -54,6 +62,8 @@ div#slides div {
 	<div data-slideshow="transition:fade"                  class=green>18<br> fade</div>
 	<div data-slideshow="transition:fadeThroughBackground" class=red>19<br> fadeThroughBackground</div>
 	<div data-slideshow="transition:blinkFade"             class=blue>20<br> custom</div>
+	
+	<p>I'm not really a part of this</p>
 </div>
 
 <p id=events>
@@ -79,7 +89,7 @@ SlideShow.addTransition('blinkFade', function(data){
 })
 
 // tests element methods in the background
-var mySlideShow = $('slides').playSlideShow().pauseSlideShow().get('slideshow');
+var mySlideShow = $('slides').playSlideShow({selector: '> div'}).pauseSlideShow().get('slideshow');
 
 mySlideShow.addEvents({
 	onShow: function(){ $('onShow').highlight(); },

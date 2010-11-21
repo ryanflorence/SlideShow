@@ -41,20 +41,21 @@ var SlideShow = new Class({
 		transition: 'crossFade',
 		duration: 500,
 		autoplay: false,
-		dataAttribute: 'data-slideshow'
+		dataAttribute: 'data-slideshow',
+		selector: '> *'
 	},
 
 	transitioning: false,
 	reversed: false,
 
-	initialize: function(element, options){
+	initialize: function(element, options, noSetup){
 		this.element = document.id(element);
-		this.setup(options);
+		if (!noSetup) this.setup(options);
 	},
 
 	setup: function(options){
 		this.setOptions(options);
-		this.slides = this.element.getChildren();
+		this.slides = this.element.getElements(this.options.selector);
 		this.setupElement().setupSlides();
 		this.current = this.current || this.slides[0];
 		this.index = this.current.retrieve('slideshow-index');
@@ -179,7 +180,7 @@ Element.Properties.slideshow = {
 	get: function(){
 		var instance = this.retrieve('slideshow');
 		if (!instance){
-			instance = new SlideShow(this);
+			instance = new SlideShow(this, {}, true);
 			this.store('slideshow', instance);
 		}
 		return instance;
