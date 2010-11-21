@@ -218,9 +218,9 @@ SlideShow.addTransition('fade', function(data){
 
 	// todo: init branching so all this checking doesn't happen every transition
 	var pushOrBlind = function(type, direction, data){
-		var isHorizontal = ['left', 'right'].contains(direction),
+		var isHorizontal = (direction == 'left' || direction == 'right'),
 			property = (isHorizontal) ? 'left' : 'top',
-			inverted = (['left', 'up'].contains(direction)) ? 1 : -1,
+			inverted = (direction == 'left' || direction == 'up') ? 1 : -1,
 			distance = data.instance.element.getSize()[(isHorizontal) ? 'x' : 'y'],
 			tweenOptions = {duration: data.duration};
 		if (type == 'blind') data.next.setStyle('z-index', 2);
