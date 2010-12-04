@@ -216,19 +216,18 @@ SlideShow.addTransition('fade', function(data){
 
 (function(SlideShow){
 
-	// todo: init branching so all this checking doesn't happen every transition
+	// todo: branch this so all this checking doesn't happen every transition
 	var pushOrBlind = function(type, direction, data){
 		var isHorizontal = (direction == 'left' || direction == 'right'),
 			property = (isHorizontal) ? 'left' : 'top',
 			inverted = (direction == 'left' || direction == 'up') ? 1 : -1,
-			distance = data.instance.element.getSize()[(isHorizontal) ? 'x' : 'y'],
-			tweenOptions = {duration: data.duration};
+			tweenOptions = {duration: data.duration, unit: '%'};
 		if (type == 'blind') data.next.setStyle('z-index', 2);
 		if (type != 'slide') {
-			data.next.set('tween', tweenOptions).setStyle(property, distance * inverted);
+			data.next.set('tween', tweenOptions).setStyle(property, 100 * inverted + '%');
 			data.next.tween(property, 0);
 		}
-		if (type != 'blind') data.previous.set('tween', tweenOptions).tween(property, -(distance * inverted));
+		if (type != 'blind') data.previous.set('tween', tweenOptions).tween(property, -(100 * inverted));
 	};
 
 	['left', 'right', 'up', 'down'].each(function(direction){
