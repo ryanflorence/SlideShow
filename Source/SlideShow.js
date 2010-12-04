@@ -214,21 +214,29 @@ SlideShow.addTransition('fade', function(data){
 	return this;
 });
 
-(function(SlideShow){
+(function(){
 
-	// todo: branch this so all this checking doesn't happen every transition
-	var pushOrBlind = function(type, direction, data){
-		var isHorizontal = (direction == 'left' || direction == 'right'),
-			property = (isHorizontal) ? 'left' : 'top',
-			inverted = (direction == 'left' || direction == 'up') ? 1 : -1,
-			tweenOptions = {duration: data.duration, unit: '%'};
-		if (type == 'blind') data.next.setStyle('z-index', 2);
-		if (type != 'slide') {
-			data.next.set('tween', tweenOptions).setStyle(property, 100 * inverted + '%');
-			data.next.tween(property, 0);
-		}
-		if (type != 'blind') data.previous.set('tween', tweenOptions).tween(property, -(100 * inverted));
-	};
+	var getStyles = function(direction){
+			return {
+				property: (direction == 'left' || direction == 'right') ? 'left' : 'top',
+				inverted: (direction == 'left' || direction == 'up') ? 1 : -1
+			};
+		},
+		go = function(type, styles, data){
+			var tweenOptions = {duration: data.duration, unit: '%'},
+			if (type == 'blind') {
+				data.next.setStyle('z-index', 2);
+			}
+			if (type != 'slide') {
+				data.next.set('tween', tweenOptions)
+					.setStyle(styles.property, 100 * styles.inverted + '%');
+				data.next.tween(styles.property, 0);
+			}
+			if (type != 'blind'){
+				data.previous.set('tween', tweenOptions)
+					.tween(styles.property, -(100 * styles.inverted));
+			}
+		};
 
 	['left', 'right', 'up', 'down'].each(function(direction){
 
@@ -237,27 +245,28 @@ SlideShow.addTransition('fade', function(data){
 			slideName = 'slide' + capitalized;
 
 		[
-			['push' + capitalized, function(data){
-				pushOrBlind('push', direction, data);
-				return this;
-			}],
-			[blindName, function(data){
-				pushOrBlind('blind', direction, data);
-				return this;
-			}],
-			[slideName, function(data){
-				pushOrBlind('slide', direction, data);
-				return this;
-			}],
+			['push' + capitalized, (function(){
+				var styles = getStyles(direction);
+				return function(data){ go('push', styles, data); }
+			}())],
+			[blindName, (function(){
+				var styles = getStyles(direction);
+				return function(data){ go('blind', styles, data); }
+			}())],
+			[slideName, (function(){
+				var styles = getStyles(direction);
+				return function(data){ go('slide', styles, data); }
+			}())],
 			[blindName + 'Fade', function(data){
-				this[blindName](data).fade(data);
+				this.fade(data)[blindName](data);
 				return this;
 			}]
-		].each(function(transition){ SlideShow.addTransition(transition[0], transition[1]); });
-
+		].each(function(transition){
+			SlideShow.addTransition(transition[0], transition[1]);
+		});
 	});
 
-})(SlideShow);
+})();
 
 [
 	['none', function(data){
@@ -278,4 +287,6 @@ SlideShow.addTransition('fade', function(data){
 		}).fade('out');
 		return this;
 	}]
-].each(function(transition){ SlideShow.addTransition(transition[0], transition[1]); });
+].each(function(transition){
+	SlideShow.addTransition(transition[0], transition[1]);
+});
