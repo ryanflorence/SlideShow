@@ -223,7 +223,7 @@ SlideShow.addTransition('fade', function(data){
 			};
 		},
 		go = function(type, styles, data){
-			var tweenOptions = {duration: data.duration, unit: '%'},
+			var tweenOptions = {duration: data.duration, unit: '%'};
 			if (type == 'blind') {
 				data.next.setStyle('z-index', 2);
 			}
