@@ -1,7 +1,7 @@
 SlideShow
 =========
 
-![SlideShow](http://github.com/rpflorence/SlideShow/raw/master/logo.png)
+![SlideShow](https://github.com/rpflorence/SlideShow/raw/master/logo.png)
 
 Extensible mid-level class that manages transitions of elements that share the same space, typically for slideshows, tabs, and galleries.
 
