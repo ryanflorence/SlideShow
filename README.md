@@ -5,6 +5,8 @@ SlideShow
 
 Extensible mid-level class that manages transitions of elements that share the same space, typically for slideshows, tabs, and galleries.
 
+View the [Docs](http://raflorence.net:8888/slideshow/) for all methods and details.
+
 About this Repository
 ---------------------
 
@@ -17,6 +19,7 @@ I was sloppy in the beginning, but plan to have the master branch only contain t
 Features:
 ---------
 
+- Custom transitions
 - Autoplay
 - Reverse
 - Show next slide
@@ -39,6 +42,10 @@ Features:
 - slideLeft, slideRight, slideUp, slideDown
 - blindLeftFade, blindRightFade, blindUpFade, blindDownFade
 
+CSS Transitions!
+----------------
+
+New in 2.0, `SlideShow.CSS` sub-class has the option to override JS animations with CSS3 animations.
 
 How to use
 ----------
@@ -101,15 +108,25 @@ _JavaScript_
     #JS
     var slideshow = new SlideShow('slideshow');
 
-Controlling a SlideShow
------------------------
+### CSS Transitions
+
+You'll first want to verify if the browser supports CSS transitions and transforms, I typically use Modernizr:
+
+    #JS
+    new SlideShow.CSS('slideshow', {
+      useCSS: (Modernizr.csstransitions && Modernizr.csstransforms)
+    });
+
+Browsers that support transitions and transforms will use the new CSS transitions instead of JavaScript.
+
+### Controlling a SlideShow
 
     slideshow.show('next');
     slideshow.show('previous');
     slideshow.show(2); // shows the third slide
     slideshow.play();
 
-Creating a navigation interface becomes trivial:
+### Creating a navigation interface
 
     $$('.some-elements-in-the-order-of-the-slides').each(function(item, index){
       item.addEvent('click', function(){
@@ -117,8 +134,7 @@ Creating a navigation interface becomes trivial:
       });
     });
 
-Extending SlideShow with your own transitions
----------------------------------------------
+### Extending SlideShow with your own transitions
 
 You can create whatever transitions you need with the SlideShow `addTransition` function.
 
@@ -130,6 +146,3 @@ You can create whatever transitions you need with the SlideShow `addTransition` 
         property: 'opacity'
       }).start(1);
     });
-
-View the [Docs](http://raflorence.net:8888/slideshow/) for all methods and details.
-
