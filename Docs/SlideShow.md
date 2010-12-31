@@ -1,7 +1,7 @@
 Class: SlideShow {#SlideShow}
 =============================
 
-<big>Easily extendable, class-based, slideshow widget. Use any element, not just images. Comes with packaged transitions but is easy to extend and create your own transitions.  The class is built to handle the _basics_ of a slideshow, extend it to implement your own navigation piece and custom transitions.</big>
+Extensible mid-level class that manages transitions of elements that share the same space, typically for slideshows, tabs, and galleries.
 
 ### Demo
  
@@ -9,98 +9,11 @@ Class: SlideShow {#SlideShow}
 
 ### Implements:
 
-Options, Events, [Loop](http://moodocs.net/rpflo/mootools-rpflo/Loop)
-
-### Example
-
-#### html
-
-SlideShow can get the transition information from the class attribute of your slide which will take precedence over what you've defined in your options.  It will only grab the immediate children of the container (`slideshow` in this case).  You can put whatever element type you want as the slides, and put anything inside of the slides.
-
-    #HTML
-    <div id="slideshow">
-    	<div class="transition:crossFade duration:1000">1</div>
-    	<div>2</div> <!-- gets default transition/duration -->
-    	<div class="transition:blindRightFade duration:400">3</div>
-    	<div class="transition:fade duration:1000">4</div>
-    	<div class="transition:pushUp duration:2000">5</div>
-    	<div class="transition:pushDown duration:500">6</div>
-    </div>
-
-#### javascript
-
-###### constructor
-
-Just pass in the slideshow container element to the constructor (and a few options, if you'd like) and you're set.
-
-    #JS
-    mySlideShow2 = new SlideShow('slideshow');
-    
-    // or
-
-    mySlideShow = new SlideShow('slideshow', {
-    	delay: 2000,
-    	transition: 'fade',
-    	duration: 500,
-    	autoplay: true
-    });
-    
-##### Controlling the slideshow
-
-By default, `autoplay` is false and you can control the slide show.
-
-    // show the 4th slide (pass it the index if you know it)
-    mySlideShow.show(3);
-    
-    // or pass it an element
-    mySlideShow.show(mySlideShow.slides[3]);
-    
-    var el = $('someSlide');
-    mySlideShow.show(el);
-    
-SlideShow implements [Loop](http://mootools.net/forge/p/loop) (also on the forge) so it inherits `startLoop` and `stopLoop`.  SlideShow creates aliases for these as `play` and `pause`.
-
-    mySlideShow.play();
-    
-    // later
-    mySlideShow.pause();
-    
-If you wanted a navigation piece you could do something like:
-
-    var slideLabels = $$('some-elements-in-the-same-order-as-the-slides');
-    
-    slideLabels.each(function(el, index){
-	
-      el.addEvent('click', function(){
-        mySlideShow.show(index);
-      });
-    
-    });
-    
-#### css
-
-SlideShow doesn't mess too much with the CSS, keeping it incredibly flexible.  For most transitions to work your container needs to be position `relative`, `absolute`, or `fixed` and your slides with position `absolute`.
-
-    #CSS
-    div#slideshow {
-      position: relative;
-      overflow: hidden;
-      width: 500px;
-      height: 280px;
-    }
-
-    div#slideshow div {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 500px;
-      height: 280px;
-    }    
+Options, Events, [Loop](https://github.com/rpflorence/Loop)
 
 
 SlideShow Method: constructor {#SlideShow:constructor}
 -------------------------------------------------------
-
 
 ### Syntax:
 
@@ -109,15 +22,16 @@ SlideShow Method: constructor {#SlideShow:constructor}
 ### Arguments:
 
 1. element - (element) The string for an id of an element of an element reference.
-2. options - (object) See below,
-
+2. options - (object) See below
 
 ### Options:
 
-* delay - (*number*: defaults to `7000`) Milliseconds between slide transitions
-* transition - (*string*: defaults to `crossfade`) Default transition for slides with none specified in the `class` attribute.
-* duration - (*number*: defaults to `7000`) Default transisition duration for slides with none specified in the `class` attribute.
-* autoplay - (*boolean*: defaults to `false`) Calls `play` method in the contructor if false.
+* delay - (*number*: defaults to `7000`) Milliseconds between slide transitions.
+* transition - (*string*: defaults to `crossfade`) The transition animation for all slides.
+* duration - (*number*: defaults to `7000`) Duration of the transition animation.
+* autoplay - (*boolean*: defaults to `false`) Calls `play` upon initialization.
+* dataAttribute - (*string*: defaults to `data-slideshow`) The element attribute from which to pull transition options.
+* selector - (*CSS string*: defaults to `> *`) The selector used to find the slides relative to the slideshow element.
 
 ### Events:
 
@@ -162,20 +76,23 @@ SlideShow Event: onShowComplete {#SlideShow:onShowComplete}
 
 *   slideData - (*object*) An object containing slide data that looks like, same as `onShow`.
 
-
 SlideShow Method: show {#SlideShow:show}
 -----------------------------------------
 
-<big>Shows the slide passed in as an argument</big>
+Transitions from one slide to another.
 
 ### Syntax:
 
-    mySlideShow.show(slide, options);
+    mySlideShow.show(what, [options]);
 
 ### Arguments:
 
-1. slide - (*mixed*) The index of the slide or an element reference to the slide.
-2. options - (*object*) An object literal containing a duration and transition to use instead of what's already defined for the element.
+1. what - (*mixed*) Accepts the following arguments:
+  - *string* `next` - shows the next slide
+  - *string* `previous` - shows the previous slide
+  - *number* - the index of a slide to show
+  - *element* - slide element to show
+2. options - (*object*) An object literal containing a duration and transition to use instead of what's already defined for the element, same format as the class options.
 
 ### Returns:
 
@@ -183,11 +100,13 @@ This SlideShow instance.
 
 ### Examples:
 
+    mySlideShow.show('next');
+    mySlideShow.show('previous');
     mySlideShow.show(2); // index
-    mySlideShow.show(mySlideShow.slides[2]); // element reference
+    mySlideShow.show($('some-slide')); // element reference
     
     // change the duration and transition
-    mySlideShow.show(1, {
+    mySlideShow.show('next', {
       duration: '4000',
       transition: 'pushLeft'
     });
@@ -195,63 +114,23 @@ This SlideShow instance.
 SlideShow Method: showNext {#SlideShow:showNext}
 -------------------------------------------------
 
-<big>Shows the next slide</big>
-
-### Syntax:
-
-    mySlideShow.showNext(option);
-
-### Arguments:
-
-1. options - (*object*) An object literal containing a duration and transition to use instead of what's already defined for the element.
-
-### Returns:
-
-This SlideShow instance.
+Deprecated, use `show('next')`.
 
 SlideShow Method: showPrevious {#SlideShow:showPrevious}
 -------------------------------------------------
 
-<big>Shows the previous slide</big>
-
-### Syntax:
-
-    mySlideShow.showPrevious(options);
-
-### Arguments:
-
-1. options - (*object*) An object literal containing a duration and transition to use instead of what's already defined for the element.
-
-### Returns:
-
-This SlideShow instance.
+Deprecated, use `show('previous')`.
 
 SlideShow Method: resetOptions {#SlideShow:resetOptions}
 --------------------------------------------------------
 
-<big>Allows you to change the options on the fly</big>
-
-### Syntax:
-
-    mySlideShow.resetOptions(obj);
-
-### Example:
-
-    mySlideShow.resetOption({
-      duration: 1000,
-      transition: 'fadeThroughBackground'
-    });
-
-### Returns:
-
-This SlideShow instance.
-
+Deprecated, use `setup(options)`.
 
 
 SlideShow Method: reverse {#SlideShow:reverse}
 -----------------------------------------
 
-<big>Reverses the autoplay.</big>
+Reverses slideshows that are playing.
 
 ### Syntax:
 
@@ -260,7 +139,7 @@ SlideShow Method: reverse {#SlideShow:reverse}
 ### Example:
 
     mySlideShow.play();
-    mySlideShow.reverse(); // going backwards now
+    mySlideShow.reverse(); // going backward now
     mySlideShow.reverse(); // going forward now
 
 ### Returns:
@@ -270,13 +149,13 @@ This SlideShow instance.
 Native: Element {#Element}
 ==========================
 
-<big>Custom Native to allow all of its methods to be used with any DOM element via the dollar function $.</big>
+Custom Native to allow all of its methods to be used with any DOM element via the dollar function $.
 
 
 Element method: playSlideShow {#Element:playSlideShow}
 ------------------------------------------------------
 
-<big>Element shortcut method to create a slideshow instance with this element.</big>
+Element shortcut method to create a slideshow instance with this element.
 
 ### Syntax:
 
@@ -289,67 +168,56 @@ Element method: playSlideShow {#Element:playSlideShow}
 Element method: pauseSlideShow {#Element:pauseSlideShow}
 ------------------------------------------------------
 
-<big>Element shortcut method to pause a slideshow instance created with the `playSlideShow` method.</big>
+Element shortcut method to pause a slideshow instance created with the `playSlideShow` method.
 
 ### Syntax:
 
     $('slide-container').pauseSlideShow();
 
-SlideShow: Custom Transitions {#Transitions}
-===============================================
 
-Adding transitions is a snap.  The Class itself has an `add` function that takes two arguments: the name of the transition, and the function to control it.
 
-Slideshow method: add {#Transitions:add}
+Slideshow function: add {#SlideShow:add}
 ----------------------------------------
+
+Deprecated, use `addTransition`
+
+SlideShow function: addTransition {#SlideShow:addTransition}
+------------------------------------------------------------
+
+Adds a custom transition to the SlideShow class to be used in any instances.
 
 ### Syntax:
 
-	SlideShow.add(function(previous, next, duration, instance){
-		// do stuff
+	SlideShow.addTransition(function(data){
+    data.next;
+    data.previous;
+    data.duration;
+    data.instance;
 	});
 
 ### Signature:
 
-  function(previous, next, duration, instance)
+  function(data)
 
-* `previous` is the previous slide element reference
-* `next` is the next slide element reference
-* `duration` is how long the transition should last.
-* `instance` is the instance of SlideShow, handy to find the size of the container (`instance.element`) or any other information.
+* `data.previous` the previous slide element
+* `data.next` the next slide element
+* `data.duration` how long the transition should last
+* `data.instance` the instance of SlideShow
+
+### Example:
+
+    SlideShow.addTransition('flash', function(data){
+      data.previous.setStyle('display', 'none');
+      data.next.setStyle('opacity', 0);
+      new Fx.Tween(data.next, {
+        duration: data.duration,
+        property: 'opacity'
+      }).start(1);
+    });
 
 ### Notes
 
-When writing your own transitions there are a few things to note:
-
 1. The previous slide's `z-index` is `1` so it's on top.
 2. The next slide's `z-index` is `0` so it's behind.
-3. Both slides have `top: 0` and `left:0`, so you'll need to reposition `next` for any fancy movement.
-4. All other slides have `display:none`
-5. When the `duration` is met, the previous slide will be reset to `display: none`, `top:0`, `left:0`.
-
-### Examples:
-
-    SlideShow.add('fade', function(previous, next, duration, instance){
-    	previous.set('tween', {duration: duration}).fade('out');
-    	return this;
-    });
-
-Pretty simple.  Since the next slide is directly behind the previous, we can just fade out the previous slide and there's our new one.
-
-    SlideShow.add('blindLeft', function(previous, next, duration, instance){
-      var distance = instance.element.getStyle('width').toInt();
-      next.setStyles({
-        'left': distance,
-        'z-index': 2
-      }).set('tween', {duration: duration}).tween('left', 0);
-      return this;
-    });
-
-A bit more complicated.  First we have to measure the distance our slide needs to travel, then we set it's `left` style to be totally out of the slideshow view and change it's `z-index` from `0` to `2` so it's above the previous slides `z-index: 1`.  Once it's all setup we just tween left back to 0.  Our slide smoothly slides over the the previous slide.
-
-    SlideShow.add('blindLeftFade', function(p, n, d, i){
-      this.blindLeft(p, n, d, i).fade(p, n, d, i);
-    });
-
-`this` references the object containing all of the transitions _so you can chain effects_.
+3. All other slides have `display:none`
+4. When the `duration` is met, the previous slide will be reset to `display: none`, and all other styles wiped out, so you don't need to worry about removing styles you've changed during the transition.
