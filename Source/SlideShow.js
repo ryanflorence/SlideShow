@@ -92,8 +92,8 @@ var SlideShow = new Class({
 		// override from data attribute
 		var data = element.get(this.options.dataAttribute);
 		if (!data) return this;
-		Slick.parse(data).expressions.each(function(expression){
-			element.store('slideshow-' + expression[0].tag, expression[0].pseudos[0].key);
+		Slick.parse(data).expressions[0].each(function(option){
+			element.store('slideshow-' + option.tag, option.pseudos[0].key);
 		});
 		return this;
 	},
