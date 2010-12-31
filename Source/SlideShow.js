@@ -48,9 +48,9 @@ var SlideShow = new Class({
 	transitioning: false,
 	reversed: false,
 
-	initialize: function(element, options, noSetup){
+	initialize: function(element, options){
 		this.element = document.id(element);
-		if (!noSetup) this.setup(options);
+		if (!options || !options.noSetup) this.setup(options);
 	},
 
 	setup: function(options){
@@ -184,7 +184,7 @@ Element.Properties.slideshow = {
 	get: function(){
 		var instance = this.retrieve('slideshow');
 		if (!instance){
-			instance = new SlideShow(this, {}, true);
+			instance = new SlideShow(this, {noSetup: true});
 			this.store('slideshow', instance);
 		}
 		return instance;
