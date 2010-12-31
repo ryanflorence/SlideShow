@@ -1,13 +1,13 @@
 /*
 ---
 
-name: SlideShow
+name: "SlideShow"
 
 description: "Extensible mid-level class that manages transitions of elements that share the same space, typically for slideshows, tabs, and galleries."
 
-license: MIT-style license.
+license: "MIT-style license."
 
-authors: Ryan Florence <http://ryanflorence.com>
+author: "Ryan Florence <http://ryanflorence.com>"
 
 requires:
   - Core/Fx.Tween
