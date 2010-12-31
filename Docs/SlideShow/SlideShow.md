@@ -114,7 +114,7 @@ This SlideShow instance.
 SlideShow Method: setup {#SlideShow:setup}
 -----------------------------------------
 
-Initializes the slideshow, you can reinitialize on demand.  Mostly useful when slides are dynamically added.
+Called automatically in the constructor, unless a `noSetup` option is provided.  Initializes the slideshow, you can reinitialize on demand.  Mostly useful when slides are dynamically added.
 
 ### Syntax:
 
@@ -134,10 +134,55 @@ This SlideShow instance.
       delay: 5000
     });
 
-SlideShow function: add {#SlideShow:add}
-----------------------------------------
 
-Deprecated, use `addTransition`
+
+SlideShow Method: play {#SlideShow:play}
+-----------------------------------------
+
+Auto-plays the slideshow on the `options.delay`.
+
+### Syntax:
+
+    mySlideShow.play();
+
+### Returns:
+
+This SlideShow instance.
+
+
+
+SlideShow Method: pause {#SlideShow:pause}
+-----------------------------------------
+
+Pauses the auto-play.
+
+### Syntax:
+
+    mySlideShow.pause();
+
+### Returns:
+
+This SlideShow instance.
+
+
+
+SlideShow Method: reverse {#SlideShow:reverse}
+-----------------------------------------
+
+Reverses the slideshow auto-play direction.
+
+### Example:
+
+    mySlideShow.play();
+    mySlideShow.reverse(); // going backward now
+    mySlideShow.reverse(); // going forward now
+
+### Returns:
+
+This SlideShow instance.
+
+
+
 
 SlideShow function: addTransition {#SlideShow:addTransition}
 ------------------------------------------------------------
@@ -179,26 +224,6 @@ Adds a custom transition to the SlideShow class to be used in any instances.
 2. The next slide's `z-index` is `0` so it's behind.
 3. All other slides have `display:none`
 4. When the `duration` is met, the previous slide will be reset to `display: none`, and all other styles wiped out, so you don't need to worry about removing styles you've changed during the transition.
-
-
-SlideShow Method: reverse {#SlideShow:reverse}
------------------------------------------
-
-Reverses slideshows that are playing.
-
-### Syntax:
-
-    mySlideShow.reverse();
-
-### Example:
-
-    mySlideShow.play();
-    mySlideShow.reverse(); // going backward now
-    mySlideShow.reverse(); // going forward now
-
-### Returns:
-
-This SlideShow instance.
 
 
 SlideShow property: current {#SlideShow:current}
@@ -282,3 +307,8 @@ SlideShow Method: resetOptions {#Deprecated:resetOptions}
 --------------------------------------------------------
 
 Deprecated, use `setup(options)`.
+
+SlideShow function: add {#SlideShow:add}
+----------------------------------------
+
+Deprecated, use `addTransition`
