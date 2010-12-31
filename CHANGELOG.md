@@ -1,14 +1,15 @@
-API from 1.0 -> 2.0
+API from 1.x -> 2.0
 -------------------
 
-- Add transitions with `SlideShow.addTransition`, instead of `add`.
-- `data` object is passed to `addTransition` instead of several args
 - `showNext` -> `show('next')`
 - `showPrevious` -> `show('previous')`
-- reset method clears all styles
-- Slides now have `slideshow-index` stored with them
-- new option for which attribute to parse
-	- Slick now parses that attribute :D
-	- ie: `data-slideshow="transition:fade, duration:500"`
-- new `index` property containing index of `current`
+- `SlideShow.add` -> `SlideShow.addTransition`
+- reset method clears all styles, then sets only a few 
 - `setup` method initializes everything, reinitialize on demand
+- constructor takes a `noSetup` option to prevent initializing everything
+- new option for which element attribute to parse
+	- Slick now parses that attribute :D
+	- ie: `data-slideshow="transition:fade duration:500"`
+- `data` object is passed to `addTransition` instead of several args
+- Slides now have `slideshow-index` stored with them
+- new `index` property containing index of the current slide
