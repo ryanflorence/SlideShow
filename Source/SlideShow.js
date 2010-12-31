@@ -69,6 +69,7 @@ var SlideShow = new Class({
 		this.options.duration = this.element.retrieve('slideshow-duration');
 		this.options.transition = this.element.retrieve('slideshow-transition');
 		this.options.delay = this.element.retrieve('slideshow-delay');
+		if (this.element.getStyle('position') == 'static') this.element.setStyle('position', 'relative');
 		return this;
 	},
 
@@ -76,9 +77,8 @@ var SlideShow = new Class({
 		this.slides.each(function(slide, index){
 			slide.store('slideshow-index', index);
 			this.storeData(slide);
-			if (this.current || index == 0) return;
 			this.reset(slide);
-			slide.setStyle('display', 'none');
+			slide.setStyle('display', (this.current || index == 0) ? '' : 'none');
 		}, this);
 		return this;
 	},
@@ -127,7 +127,11 @@ var SlideShow = new Class({
 	},
 
 	reset: function(slide){
-		return slide.set('style', '');
+		return slide.set('style', '').setStyles({
+			position: 'absolute',
+			top: 0,
+			left: 0
+		});
 	},
 
 	nextSlide: function(){
