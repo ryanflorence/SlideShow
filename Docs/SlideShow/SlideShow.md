@@ -111,20 +111,74 @@ This SlideShow instance.
       transition: 'pushLeft'
     });
 
-SlideShow Method: showNext {#SlideShow:showNext}
--------------------------------------------------
+SlideShow Method: setup {#SlideShow:setup}
+-----------------------------------------
 
-Deprecated, use `show('next')`.
+Initializes the slideshow, you can reinitialize on demand.  Mostly useful when slides are dynamically added.
 
-SlideShow Method: showPrevious {#SlideShow:showPrevious}
--------------------------------------------------
+### Syntax:
 
-Deprecated, use `show('previous')`.
+    mySlideShow.setup([options]);
 
-SlideShow Method: resetOptions {#SlideShow:resetOptions}
---------------------------------------------------------
+### Arguments:
 
-Deprecated, use `setup(options)`.
+1. options - (*object*) Same options as the constructor.
+
+### Returns:
+
+This SlideShow instance.
+
+### Example:
+
+    mySlideShow.setup({
+      delay: 5000
+    });
+
+SlideShow function: add {#SlideShow:add}
+----------------------------------------
+
+Deprecated, use `addTransition`
+
+SlideShow function: addTransition {#SlideShow:addTransition}
+------------------------------------------------------------
+
+Adds a custom transition to the SlideShow class to be used in any instances.
+
+### Syntax:
+
+	SlideShow.addTransition(function(data){
+    data.next;
+    data.previous;
+    data.duration;
+    data.instance;
+	});
+
+### Signature:
+
+    function(data)
+
+* `data.previous` the previous slide element
+* `data.next` the next slide element
+* `data.duration` how long the transition should last
+* `data.instance` the instance of SlideShow
+
+### Example:
+
+    SlideShow.addTransition('flash', function(data){
+      data.previous.setStyle('display', 'none');
+      data.next.setStyle('opacity', 0);
+      new Fx.Tween(data.next, {
+        duration: data.duration,
+        property: 'opacity'
+      }).start(1);
+    });
+
+### Notes
+
+1. The previous slide's `z-index` is `1` so it's on top.
+2. The next slide's `z-index` is `0` so it's behind.
+3. All other slides have `display:none`
+4. When the `duration` is met, the previous slide will be reset to `display: none`, and all other styles wiped out, so you don't need to worry about removing styles you've changed during the transition.
 
 
 SlideShow Method: reverse {#SlideShow:reverse}
@@ -145,6 +199,34 @@ Reverses slideshows that are playing.
 ### Returns:
 
 This SlideShow instance.
+
+
+SlideShow property: current {#SlideShow:current}
+------------------------------------------------
+
+Contains an element reference to the current slide.
+
+### Syntax:
+
+    slideshow.current
+
+SlideShow property: index {#SlideShow:index}
+--------------------------------------------
+
+Contains the index of the current slide.  Useful when varying transitions dependent upon the current slide.
+
+### Syntax:
+
+    slideshow.index
+
+SlideShow property: slides {#SlideShow:slides}
+----------------------------------------------
+
+A collection of element references of all slides.
+
+### Syntax
+
+    slideshow.slides
 
 Native: Element {#Element}
 ==========================
@@ -174,50 +256,29 @@ Element shortcut method to pause a slideshow instance created with the `playSlid
 
     $('slide-container').pauseSlideShow();
 
+Element storage: slideshow-index #{Element:slideshow-index}
+-----------------------------------------------------------
 
+Each slide has its index stored with it.
 
-Slideshow function: add {#SlideShow:add}
-----------------------------------------
+### Syntax
 
-Deprecated, use `addTransition`
+    element.retrieve('slideshow-index');
 
-SlideShow function: addTransition {#SlideShow:addTransition}
-------------------------------------------------------------
+Deprecated
+==========
 
-Adds a custom transition to the SlideShow class to be used in any instances.
+SlideShow Method: showNext {#Deprecated:showNext}
+-------------------------------------------------
 
-### Syntax:
+Deprecated, use `show('next')`.
 
-	SlideShow.addTransition(function(data){
-    data.next;
-    data.previous;
-    data.duration;
-    data.instance;
-	});
+SlideShow Method: showPrevious {#Deprecated:showPrevious}
+-------------------------------------------------
 
-### Signature:
+Deprecated, use `show('previous')`.
 
-  function(data)
+SlideShow Method: resetOptions {#Deprecated:resetOptions}
+--------------------------------------------------------
 
-* `data.previous` the previous slide element
-* `data.next` the next slide element
-* `data.duration` how long the transition should last
-* `data.instance` the instance of SlideShow
-
-### Example:
-
-    SlideShow.addTransition('flash', function(data){
-      data.previous.setStyle('display', 'none');
-      data.next.setStyle('opacity', 0);
-      new Fx.Tween(data.next, {
-        duration: data.duration,
-        property: 'opacity'
-      }).start(1);
-    });
-
-### Notes
-
-1. The previous slide's `z-index` is `1` so it's on top.
-2. The next slide's `z-index` is `0` so it's behind.
-3. All other slides have `display:none`
-4. When the `duration` is met, the previous slide will be reset to `display: none`, and all other styles wiped out, so you don't need to worry about removing styles you've changed during the transition.
+Deprecated, use `setup(options)`.
