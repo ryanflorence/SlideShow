@@ -1,13 +1,13 @@
 /*
 ---
 
-name: SlideShow.CSS
+name: "SlideShow.CSS"
 
-description: Adds CSS transform transitions.
+description: "Adds CSS transform transitions."
 
-license: MIT-style license.
+license: "MIT-style license."
 
-authors: Ryan Florence <http://ryanflorence.com>
+authors: "Ryan Florence <http://ryanflorence.com>"
 
 requires:
   - SlideShow
