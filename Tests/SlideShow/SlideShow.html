@@ -58,7 +58,7 @@ div#slides div {
 	<div data-slideshow="transition:crossFade"             class=red>17<br> crossFade</div>
 	<div data-slideshow="transition:fade"                  class=green>18<br> fade</div>
 	<div data-slideshow="transition:fadeThroughBackground" class=red>19<br> fadeThroughBackground</div>
-	<div data-slideshow="transition:blinkFade"             class=blue>20<br> custom</div>
+	<div data-slideshow="transition:flash"                 class=blue>20<br> custom</div>
 	
 	<p>I'm not really a part of this</p>
 </div>
@@ -76,14 +76,14 @@ div#slides div {
 
 <script>
 // behind the scenes tests
-SlideShow.addTransition('blinkFade', function(data){
+SlideShow.addTransition('flash', function(data){
 	data.previous.setStyle('display', 'none');
 	data.next.setStyle('opacity', 0);
 	new Fx.Tween(data.next, {
 		duration: data.duration,
 		property: 'opacity'
 	}).start(1);
-})
+});
 
 // tests element methods in the background
 var mySlideShow = $('slides').playSlideShow({selector: '> div'}).pauseSlideShow().get('slideshow');
