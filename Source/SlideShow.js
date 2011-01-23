@@ -220,46 +220,54 @@ SlideShow.addTransition('fade', function(data){
 
 (function(){
 
-	var getStyles = function(direction){
-			return {
-				property: (direction == 'left' || direction == 'right') ? 'left' : 'top',
-				inverted: (direction == 'left' || direction == 'up') ? 1 : -1
-			};
-		},
-		go = function(type, styles, data){
-			var tweenOptions = {duration: data.duration, unit: '%'};
-			if (type == 'blind') {
-				data.next.setStyle('z-index', 2);
-			}
-			if (type != 'slide') {
-				data.next.set('tween', tweenOptions)
-					.setStyle(styles.property, 100 * styles.inverted + '%');
-				data.next.tween(styles.property, 0);
-			}
-			if (type != 'blind'){
-				data.previous.set('tween', tweenOptions)
-					.tween(styles.property, -(100 * styles.inverted));
-			}
+	function getStyles(direction){
+		return {
+			property: (direction == 'left' || direction == 'right') ? 'left' : 'top',
+			inverted: (direction == 'left' || direction == 'up') ? 1 : -1
 		};
+	}
+	function go(type, styles, data){
+		var tweenOptions = {duration: data.duration, unit: '%'};
+		if (type == 'blind') {
+			data.next.setStyle('z-index', 2);
+		}
+		if (type != 'slide') {
+			data.next
+			    .set('tween', tweenOptions)
+			    .setStyle(styles.property, 100 * styles.inverted + '%');
+			data.next.tween(styles.property, 0);
+		}
+		if (type != 'blind'){
+			data.previous
+			    .set('tween', tweenOptions)
+			    .tween(styles.property, -(100 * styles.inverted));
+		}
+	}
 
 	['left', 'right', 'up', 'down'].each(function(direction){
 
 		var capitalized = direction.capitalize(),
-			blindName = 'blind' + capitalized,
-			slideName = 'slide' + capitalized;
+		    blindName = 'blind' + capitalized,
+		    slideName = 'slide' + capitalized;
 
 		[
 			['push' + capitalized, (function(){
 				var styles = getStyles(direction);
-				return function(data){ go('push', styles, data); }
+				return function(data){
+					go('push', styles, data);
+				}
 			}())],
 			[blindName, (function(){
 				var styles = getStyles(direction);
-				return function(data){ go('blind', styles, data); }
+				return function(data){
+					go('blind', styles, data);
+				}
 			}())],
 			[slideName, (function(){
 				var styles = getStyles(direction);
-				return function(data){ go('slide', styles, data); }
+				return function(data){
+					go('slide', styles, data);
+				}
 			}())],
 			[blindName + 'Fade', function(data){
 				this.fade(data)[blindName](data);
