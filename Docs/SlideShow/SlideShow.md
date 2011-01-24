@@ -184,19 +184,16 @@ This SlideShow instance.
 
 
 
-SlideShow function: addTransition {#SlideShow:addTransition}
+SlideShow function: defineTransition {#SlideShow:defineTransition}
 ------------------------------------------------------------
 
 Adds a custom transition to the SlideShow class to be used in any instances.
 
 ### Syntax:
 
-	SlideShow.addTransition(function(data){
-    data.next;
-    data.previous;
-    data.duration;
-    data.instance;
-	});
+    SlideShow.defineTransition(function(data){
+      // code
+    });
 
 ### Signature:
 
@@ -209,9 +206,14 @@ Adds a custom transition to the SlideShow class to be used in any instances.
 
 ### Example:
 
-    SlideShow.addTransition('flash', function(data){
+    SlideShow.defineTransition('flash', function(data){
+      // hide the "current" slide immediately
       data.previous.setStyle('display', 'none');
+
+      // fade out the next slide immediately
       data.next.setStyle('opacity', 0);
+
+      // fade the next slide in, creating a "flash" effect
       new Fx.Tween(data.next, {
         duration: data.duration,
         property: 'opacity'
@@ -219,6 +221,8 @@ Adds a custom transition to the SlideShow class to be used in any instances.
     });
 
 ### Notes
+
+When a transition starts:
 
 1. The previous slide's `z-index` is `1` so it's on top.
 2. The next slide's `z-index` is `0` so it's behind.
@@ -320,11 +324,11 @@ SlideShow changelog {#SlideShow:changelog}
 
 This release brings with it lots of new features, better performance, and less code, what more could you ask for?
 
-- [New] SlideShow.CSS class using CSS3 transitions
+- [New] SlideShow.CSS, transitions and method to use CSS3 transitions
 - [Changed] `showNext` -> `show('next')`
 - [Changed] `showPrevious` -> `show('previous')`
-- [Changed] `SlideShow.add` -> `SlideShow.addTransition`
-- [Changed] reset method clears all styles, then sets only a few 
+- [Changed] `SlideShow.add` -> `SlideShow.defineTransition`
+- [Changed] reset method clears all styles, then sets only a few
 - [New] `setup` method initializes everything, reinitialize on demand
 - [New] constructor takes a `noSetup` option to prevent initializing everything
 - [New] option for which element attribute to parse

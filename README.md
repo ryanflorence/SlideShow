@@ -45,7 +45,7 @@ Features:
 CSS Transitions!
 ----------------
 
-New in 2.0, `SlideShow.CSS` sub-class has the option to override JS animations with CSS3 animations.
+New in 2.0, `SlideShow.CSS` has a method to override JS animations with CSS3 animations.
 
 How to use
 ----------
@@ -110,12 +110,13 @@ _JavaScript_
 
 ### CSS Transitions
 
-You'll first want to verify if the browser supports CSS transitions and transforms, I typically use Modernizr:
+First include the `SlideShow.CSS.js` file.  You'll then want to verify if the browser supports CSS transitions and transforms, I typically use Modernizr:
 
     #JS
-    new SlideShow.CSS('slideshow', {
-      useCSS: (Modernizr.csstransitions && Modernizr.csstransforms)
-    });
+    var slideshow = new SlideShow('slideshow');
+    if (Modernizr.csstransitions && Modernizr.csstransforms){
+        slideshow.useCSS();
+    }
 
 Browsers that support transitions and transforms will use the new CSS transitions instead of JavaScript.
 
@@ -136,9 +137,9 @@ Browsers that support transitions and transforms will use the new CSS transition
 
 ### Extending SlideShow with your own transitions
 
-You can create whatever transitions you need with the SlideShow `addTransition` function.
+You can create whatever transitions you need with the SlideShow `defineTransition` function.
 
-    SlideShow.addTransition('flash', function(data){
+    SlideShow.defineTransition('flash', function(data){
       data.previous.setStyle('display', 'none');
       data.next.setStyle('opacity', 0);
       new Fx.Tween(data.next, {

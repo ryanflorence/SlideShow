@@ -2,11 +2,11 @@
 
 This release brings with it lots of new features, better performance, and less code, what more could you ask for?
 
-- [New] SlideShow.CSS class using CSS3 transitions
+- [New] SlideShow.CSS, transitions and method to use CSS3 transitions
 - [Changed] `showNext` -> `show('next')`
 - [Changed] `showPrevious` -> `show('previous')`
-- [Changed] `SlideShow.add` -> `SlideShow.addTransition`
-- [Changed] reset method clears all styles, then sets only a few 
+- [Changed] `SlideShow.add` -> `SlideShow.defineTransition`
+- [Changed] reset method clears all styles, then sets only a few
 - [New] `setup` method initializes everything, reinitialize on demand
 - [New] constructor takes a `noSetup` option to prevent initializing everything
 - [New] option for which element attribute to parse
