@@ -1,26 +1,25 @@
-name: SlideShow
+name: "SlideShow"
 
-author: rpflo
+author: "rpflo"
 
 copyright: "&copy; [Ryan Florence](http://ryanflorence.com)"
 
-category: Widgets
+category: "Widgets"
 
 description: "Extensible mid-level class that manages transitions of elements that share the same space, typically for slideshows, tabs, and galleries."
 
 tags: [slideshow, gallery, tabs, ticker]
 
-docs: http://ryanflorence.com/slideshow
+docs: "http://ryanflorence.com/slideshow"
 
 web: "[ryanflorence.com/slideshow](http://ryanflorence.com/slideshow)"
 
-demo: http://ryanflorence.com/slideshow
+demo: "http://ryanflorence.com/slideshow"
 
 current: 1.0
 
-license: MIT-style license.
+license: "MIT-style license"
 
 sources:
   - "Source/SlideShow.js"
   - "Source/SlideShow.CSS.js"
-  #- "Source/SlideShow.Nav.js"
