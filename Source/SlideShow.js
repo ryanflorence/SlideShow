@@ -179,7 +179,6 @@ SlideShow.defineTransition = function(name, fn){
 	transitions[name] = fn;
 };
 
-
 })();
 
 // element extensions
