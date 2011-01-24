@@ -21,8 +21,11 @@ provides:
 ...
 */
 
+;(function(){
 
-var SlideShow = new Class({
+var transitions = {};
+
+var SlideShow = this.SlideShow = new Class({
 
 	Implements: [Options, Events, Loop],
 
@@ -79,7 +82,13 @@ var SlideShow = new Class({
 			};
 
 		this.fireEvent('show', slideData);
-		this.transitions[transition]({previous: previous, next: next, duration: duration, instance: this});
+
+		transitions[transition]({
+			previous: previous,
+			next: next,
+			duration: duration,
+			instance: this
+		});
 
 		(function(){
 			previous.setStyle('display', 'none');
@@ -166,6 +175,15 @@ var SlideShow = new Class({
 
 });
 
+SlideShow.defineTransition = function(name, fn){
+	transitions[name] = fn;
+};
+
+
+})();
+
+// element extensions
+
 Element.Properties.slideshow = {
 
 	set: function(options){
@@ -184,7 +202,6 @@ Element.Properties.slideshow = {
 
 };
 
-
 Element.implement({
 
 	playSlideShow: function(options){
@@ -199,11 +216,7 @@ Element.implement({
 
 });
 
-SlideShow.transitions = {};
-SlideShow.defineTransition = function(name, fn){
-	SlideShow.transitions[name] = fn;
-	SlideShow.implement({ transitions: SlideShow.transitions });
-};
+// 19 transitions :D
 
 SlideShow.defineTransition('fade', function(data){
 	data.previous.set('tween', {duration: data.duration}).fade('out');

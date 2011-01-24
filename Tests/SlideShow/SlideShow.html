@@ -76,7 +76,7 @@ div#slides div {
 
 <script>
 // behind the scenes tests
-SlideShow.addTransition('flash', function(data){
+SlideShow.defineTransition('flash', function(data){
 	data.previous.setStyle('display', 'none');
 	data.next.setStyle('opacity', 0);
 	new Fx.Tween(data.next, {
