@@ -11,15 +11,12 @@ author: "Ryan Florence <http://ryanflorence.com>"
 
 requires:
   - Core/Fx.Tween
-  - Core/Fx.Morph
   - Core/Element.Dimensions
   - Core/Slick.Parser
   - Loop/Loop
 
 provides:
   - SlideShow
-  - Element.playSlideShow
-  - Element.pauseSlideShow
 
 ...
 */
@@ -64,6 +61,55 @@ var SlideShow = new Class({
 		return this;
 	},
 
+	show: function(slide, options){
+		if (slide == 'next' || slide == 'previous') slide = this[slide + 'Slide']();
+		if (typeof slide == 'number') slide = this.slides[slide];
+		if (slide == this.current || this.transitioning) return this;
+
+		this.transitioning = true;
+
+		var transition = (options && options.transition) ? options.transition : slide.retrieve('slideshow-transition'),
+			duration = (options && options.duration) ? options.duration : slide.retrieve('slideshow-duration'),
+			previous = this.current.setStyle('z-index', 1),
+			next = this.reset(slide),
+			nextIndex = this.index = next.retrieve('slideshow-index')
+			slideData = {
+				previous: { element: previous, index: previous.retrieve('slideshow-index') },
+				next:     { element: next,     index: nextIndex }
+			};
+
+		this.fireEvent('show', slideData);
+		this.transitions[transition]({previous: previous, next: next, duration: duration, instance: this});
+
+		(function(){
+			previous.setStyle('display', 'none');
+			this.fireEvent('showComplete', slideData);
+			this.transitioning = false;
+		}).bind(this).delay(duration);
+
+		this.current = next;
+		return this;
+	},
+
+	play: function(){
+		this.startLoop();
+		this.fireEvent('play');
+		return this;
+	},
+
+	pause: function(){
+		this.stopLoop();
+		this.fireEvent('pause');
+		return this;
+	},
+
+	reverse: function(){
+		this.setLoop(this.show.pass(this.reversed ? 'next' : 'previous', this), this.options.delay);
+		this.reversed = !this.reversed;
+		this.fireEvent('reverse');
+		return this;
+	},
+
 	setupElement: function(){
 		this.storeData(this.element);
 		this.options.duration = this.element.retrieve('slideshow-duration');
@@ -98,34 +144,6 @@ var SlideShow = new Class({
 		return this;
 	},
 
-	show: function(slide, options){
-		if (slide == 'next' || slide == 'previous') slide = this[slide + 'Slide']();
-		if (typeof slide == 'number') slide = this.slides[slide];
-		if (slide == this.current || this.transitioning) return this;
-
-		this.transitioning = true;
-		var transition = (options && options.transition) ? options.transition : slide.retrieve('slideshow-transition'),
-			duration = (options && options.duration) ? options.duration : slide.retrieve('slideshow-duration'),
-			previous = this.current.setStyle('z-index', 1),
-			next = this.reset(slide),
-			nextIndex = this.index = next.retrieve('slideshow-index')
-			slideData = {
-				previous: { element: previous, index: previous.retrieve('slideshow-index') },
-				next:     { element: next,     index: nextIndex }
-			};
-
-		this.fireEvent('show', slideData);
-		this.transitions[transition]({previous: previous, next: next, duration: duration, instance: this});
-		(function(){
-			previous.setStyle('display', 'none');
-			this.fireEvent('showComplete', slideData);
-			this.transitioning = false;
-		}).bind(this).delay(duration);
-
-		this.current = next;
-		return this;
-	},
-
 	reset: function(slide){
 		return slide.set('style', '').setStyles({
 			position: 'absolute',
@@ -142,34 +160,8 @@ var SlideShow = new Class({
 		return this.slides[this.index - 1] || this.slides.getLast();
 	},
 
-	play: function(){
-		this.startLoop();
-		this.fireEvent('play');
-		return this;
-	},
-
-	pause: function(){
-		this.stopLoop();
-		this.fireEvent('pause');
-		return this;
-	},
-
-	reverse: function(){
-		this.setLoop(this.show.pass(this.reversed ? 'next' : 'previous', this), this.options.delay);
-		this.reversed = !this.reversed;
-		this.fireEvent('reverse');
-		return this;
-	},
-
 	toElement: function(){
 		return this.element;
-	},
-	
-	mixin: function(klass, args){
-		if (klass.prototype.options) Object.merge(klass.prototype.options, this.options);
-		Object.append(this, klass.prototype);
-		klass.mix.apply(this, args);
-		return this;
 	}
 
 });
@@ -208,12 +200,12 @@ Element.implement({
 });
 
 SlideShow.transitions = {};
-SlideShow.addTransition = function(name, fn){
+SlideShow.defineTransition = function(name, fn){
 	SlideShow.transitions[name] = fn;
 	SlideShow.implement({ transitions: SlideShow.transitions });
 };
 
-SlideShow.addTransition('fade', function(data){
+SlideShow.defineTransition('fade', function(data){
 	data.previous.set('tween', {duration: data.duration}).fade('out');
 	return this;
 });
@@ -226,6 +218,7 @@ SlideShow.addTransition('fade', function(data){
 			inverted: (direction == 'left' || direction == 'up') ? 1 : -1
 		};
 	}
+
 	function go(type, styles, data){
 		var tweenOptions = {duration: data.duration, unit: '%'};
 		if (type == 'blind') {
@@ -274,7 +267,7 @@ SlideShow.addTransition('fade', function(data){
 				return this;
 			}]
 		].each(function(transition){
-			SlideShow.addTransition(transition[0], transition[1]);
+			SlideShow.defineTransition(transition[0], transition[1]);
 		});
 	});
 
@@ -300,5 +293,5 @@ SlideShow.addTransition('fade', function(data){
 		return this;
 	}]
 ].each(function(transition){
-	SlideShow.addTransition(transition[0], transition[1]);
+	SlideShow.defineTransition(transition[0], transition[1]);
 });
