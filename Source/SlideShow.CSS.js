@@ -80,7 +80,7 @@ provides:
 			}())]
 
 		].each(function(transition){
-			SlideShow.addTransition(transition[0], transition[1]);
+			SlideShow.defineTransition(transition[0], transition[1]);
 		});
 	});
 
