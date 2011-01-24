@@ -64,14 +64,14 @@ div#slides div {
 	<span id="onReverse">reverse</span>
 </p>
 
-<script src="/depender/build?require=SlideShow/SlideShow.CSS,Core/Element.Event"></script>
+<script src="/depender/build?require=SlideShow/CSS,Core/Element.Event"></script>
 
 <script>
 
-// tests element methods in the background
-var mySlideShow = new SlideShow.CSS('slides', {
-	useCSS: true
-});
+var mySlideShow = new SlideShow('slides');
+
+var supportsCSS = true;
+if (supportsCSS) mySlideShow.useCSS();
 
 mySlideShow.addEvents({
 	onShow: function(){ $('onShow').highlight(); },

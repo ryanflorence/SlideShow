@@ -14,7 +14,7 @@ requires:
   - CSSAnimation/MooTools
 
 provides:
-  - SlideShow.CSS
+  - CSS
 
 ...
 */
@@ -88,7 +88,7 @@ provides:
 
 SlideShow.implement({
 
-	overrideWithCSS: function(){
+	useCSS: function(){
 		['left', 'right', 'up', 'down'].each(function(direction){
 			var capitalized = direction.capitalize(),
 				blindName = 'blind' + capitalized,
