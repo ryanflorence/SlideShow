@@ -19,7 +19,7 @@ provides:
 ...
 */
 
-(function(){
+;(function(){
 
 	function getAxis(direction){
 		return {
