@@ -67,6 +67,7 @@ var SlideShow = this.SlideShow = new Class({
 		if (slide == this.current || this.transitioning) return this;
 
 		this.transitioning = true;
+		this.current.store('slideshow:oldStyles', this.current.get('style'));
 
 		var transition = (options && options.transition) ? options.transition : slide.retrieve('slideshow-transition'),
 			duration = (options && options.duration) ? options.duration : slide.retrieve('slideshow-duration'),
@@ -127,7 +128,7 @@ var SlideShow = this.SlideShow = new Class({
 
 	setupSlides: function(){
 		this.slides.each(function(slide, index){
-			slide.store('slideshow-index', index);
+			slide.store('slideshow-index', index).store('slideshow:oldStyles', slide.get('style'));
 			this.storeData(slide);
 			this.reset(slide);
 			slide.setStyle('display', (this.current || index == 0) ? '' : 'none');
@@ -151,7 +152,7 @@ var SlideShow = this.SlideShow = new Class({
 	},
 
 	reset: function(slide){
-		return slide.set('style', '').setStyles({
+		return slide.set('style', slide.retrieve('slideshow:oldStyles')).setStyles({
 			position: 'absolute',
 			top: 0,
 			left: 0
