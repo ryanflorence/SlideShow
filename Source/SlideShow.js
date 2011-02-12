@@ -178,6 +178,12 @@ SlideShow.defineTransition = function(name, fn){
 	transitions[name] = fn;
 };
 
+SlideShow.defineTransitions = function(transitions){
+	Object.each(transitions, function(item, index){
+		SlideShow.defineTransition(index, item);
+	});
+};
+
 })();
 
 // element extensions
@@ -215,10 +221,34 @@ Element.implement({
 });
 
 // 19 transitions :D
+SlideShow.defineTransitions({
 
-SlideShow.defineTransition('fade', function(data){
-	data.previous.set('tween', {duration: data.duration}).fade('out');
-	return this;
+	none: function(data){
+		data.previous.setStyle('display', 'none');
+		return this;
+	},
+
+	fade: function(data){
+		data.previous.set('tween', {duration: data.duration}).fade('out');
+		return this;
+	},
+
+	crossFade: function(data){
+		data.previous.set('tween', {duration: data.duration}).fade('out');
+		data.next.set('tween', {duration: data.duration}).fade('in');
+		return this;
+	},
+
+	fadeThroughBackground: function(data){
+		var half = data.duration / 2;
+		data.next.set('tween', {duration: half}).fade('hide');
+		data.previous.set('tween',{
+			duration: half,
+			onComplete: function(){ data.next.fade('in'); }
+		}).fade('out');
+		return this;
+	}
+
 });
 
 (function(){
@@ -261,18 +291,21 @@ SlideShow.defineTransition('fade', function(data){
 					go('push', styles, data);
 				}
 			}())],
+
 			[blindName, (function(){
 				var styles = getStyles(direction);
 				return function(data){
 					go('blind', styles, data);
 				}
 			}())],
+
 			[slideName, (function(){
 				var styles = getStyles(direction);
 				return function(data){
 					go('slide', styles, data);
 				}
 			}())],
+
 			[blindName + 'Fade', function(data){
 				this.fade(data)[blindName](data);
 				return this;
@@ -283,26 +316,3 @@ SlideShow.defineTransition('fade', function(data){
 	});
 
 })();
-
-[
-	['none', function(data){
-		data.previous.setStyle('display', 'none');
-		return this;
-	}],
-	['crossFade', function(data){
-		data.previous.set('tween', {duration: data.duration}).fade('out');
-		data.next.set('tween', {duration: data.duration}).fade('in');
-		return this;
-	}],
-	['fadeThroughBackground', function(data){
-		var half = data.duration / 2;
-		data.next.set('tween', {duration: half}).fade('hide');
-		data.previous.set('tween',{
-			duration: half,
-			onComplete: function(){ data.next.fade('in'); }
-		}).fade('out');
-		return this;
-	}]
-].each(function(transition){
-	SlideShow.defineTransition(transition[0], transition[1]);
-});
