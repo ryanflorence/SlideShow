@@ -93,11 +93,11 @@ SlideShow.implement({
 			var capitalized = direction.capitalize(),
 				blindName = 'blind' + capitalized,
 				slideName = 'slide' + capitalized;
-			this.transitions[blindName] = this.transitions[blindName + 'CSS'];
-			this.transitions[slideName] = this.transitions[blindName + 'CSS'];
-			this.transitions['push' + capitalized] = this.transitions['push' + capitalized + 'CSS'];
-		}.bind(this));
+			SlideShow.transitions[blindName] = SlideShow.transitions[blindName + 'CSS'];
+			SlideShow.transitions[slideName] = SlideShow.transitions[blindName + 'CSS'];
+			SlideShow.transitions['push' + capitalized] = SlideShow.transitions['push' + capitalized + 'CSS'];
+		});
 		return this;
-	},
+	}
 
 });

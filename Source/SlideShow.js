@@ -22,8 +22,6 @@ provides:
 
 ;(function(){
 
-var transitions = {};
-
 var SlideShow = this.SlideShow = new Class({
 
 	Implements: [Options, Events, Loop],
@@ -82,7 +80,7 @@ var SlideShow = this.SlideShow = new Class({
 
 		this.fireEvent('show', slideData);
 
-		transitions[transition]({
+		SlideShow.transitions[transition]({
 			previous: previous,
 			next: next,
 			duration: duration,
@@ -174,8 +172,10 @@ var SlideShow = this.SlideShow = new Class({
 
 });
 
+SlideShow.transitions = {};
+
 SlideShow.defineTransition = function(name, fn){
-	transitions[name] = fn;
+	SlideShow.transitions[name] = fn;
 };
 
 SlideShow.defineTransitions = function(transitions){
