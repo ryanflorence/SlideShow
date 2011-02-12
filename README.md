@@ -5,7 +5,7 @@ SlideShow
 
 Extensible mid-level class that manages transitions of elements that share the same space, typically for slideshows, tabs, and galleries.
 
-View the [Docs](http://raflorence.net:8888/slideshow/) for all methods and details.
+View the [Docs](https://github.com/rpflorence/SlideShow/tree/2.0.0pre/Docs/SlideShow) for all methods and details.
 
 About this Repository
 ---------------------
