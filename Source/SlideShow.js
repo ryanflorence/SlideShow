@@ -152,11 +152,7 @@ var SlideShow = this.SlideShow = new Class({
 	},
 
 	reset: function(slide){
-		return slide.set('style', slide.retrieve('slideshow:oldStyles')).setStyles({
-			position: 'absolute',
-			top: 0,
-			left: 0
-		});
+		return slide.set('style', slide.retrieve('slideshow:oldStyles'));
 	},
 
 	nextSlide: function(){
