@@ -11,7 +11,6 @@ author: "Ryan Florence <http://ryanflorence.com>"
 
 requires:
   - Core/Fx.Tween
-  - Core/Element.Dimensions
   - Core/Slick.Parser
   - Loop/Loop
 
