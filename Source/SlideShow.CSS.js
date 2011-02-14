@@ -86,18 +86,14 @@ provides:
 
 })();
 
-SlideShow.implement({
-
-	useCSS: function(){
-		['left', 'right', 'up', 'down'].each(function(direction){
-			var capitalized = direction.capitalize(),
-				blindName = 'blind' + capitalized,
-				slideName = 'slide' + capitalized;
-			SlideShow.transitions[blindName] = SlideShow.transitions[blindName + 'CSS'];
-			SlideShow.transitions[slideName] = SlideShow.transitions[blindName + 'CSS'];
-			SlideShow.transitions['push' + capitalized] = SlideShow.transitions['push' + capitalized + 'CSS'];
-		});
-		return this;
-	}
-
-});
+SlideShow.useCSS = function(){
+	['left', 'right', 'up', 'down'].each(function(direction){
+		var capitalized = direction.capitalize(),
+			blindName = 'blind' + capitalized,
+			slideName = 'slide' + capitalized;
+		SlideShow.transitions[blindName] = SlideShow.transitions[blindName + 'CSS'];
+		SlideShow.transitions[slideName] = SlideShow.transitions[blindName + 'CSS'];
+		SlideShow.transitions['push' + capitalized] = SlideShow.transitions['push' + capitalized + 'CSS'];
+	});
+	return this;
+}
