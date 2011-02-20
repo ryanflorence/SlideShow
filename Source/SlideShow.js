@@ -45,13 +45,14 @@ var SlideShow = this.SlideShow = new Class({
 	transitioning: false,
 	reversed: false,
 
-	initialize: function(element, options){
+	initialize: function(element, options, noSetup){
 		this.element = document.id(element);
-		if (!options || !options.noSetup) this.setup(options);
+		this.setOptions(options);
+		if (!noSetup) this.setup();
 	},
 
 	setup: function(options){
-		this.setOptions(options);
+		if (options) this.setOptions(options);
 		this.slides = this.element.getElements(this.options.selector);
 		this.setupElement().setupSlides();
 		this.current = this.current || this.slides[0];
