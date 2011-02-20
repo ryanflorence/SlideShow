@@ -3,9 +3,7 @@ Class: SlideShow {#SlideShow}
 
 Extensible mid-level class that manages transitions of elements that share the same space, typically for slideshows, tabs, and galleries.
 
-### Demo
- 
-* [jsfiddle](http://jsfiddle.net/rpflorence/KaAAK/3)
+### [Demos](http://ryanflorence.com/slideshow)
 
 ### Implements:
 
@@ -17,12 +15,13 @@ SlideShow Method: constructor {#SlideShow:constructor}
 
 ### Syntax:
 
-	var mySlideShow = new SlideShow(element, options);
+	var mySlideShow = new SlideShow(element[, options, noSetup]);
 
 ### Arguments:
 
 1. element - (element) The string for an id of an element of an element reference.
 2. options - (object) See below
+3. noSetup - (boolean) Prevents the slideshow from initializing (useful for loading dynamic data before initializing)
 
 ### Options:
 
@@ -74,7 +73,7 @@ SlideShow Event: onShowComplete {#SlideShow:onShowComplete}
 
 ### Arguments
 
-*   slideData - (*object*) An object containing slide data that looks like, same as `onShow`.
+*   slideData - (*object*) An object containing slide data the same as `onShow`.
 
 SlideShow Method: show {#SlideShow:show}
 -----------------------------------------
@@ -114,7 +113,7 @@ This SlideShow instance.
 SlideShow Method: setup {#SlideShow:setup}
 -----------------------------------------
 
-Called automatically in the constructor, unless a `noSetup` option is provided.  Initializes the slideshow, you can reinitialize on demand.  Mostly useful when slides are dynamically added.
+Called automatically in the constructor, unless the `noSetup` argument is provided.  Initializes the slideshow, you can reinitialize on demand.  Mostly useful when slides are dynamically added.
 
 ### Syntax:
 
@@ -191,7 +190,7 @@ Adds a custom transition to the SlideShow class to be used in any instances.
 
 ### Syntax:
 
-    SlideShow.defineTransition(function(data){
+    SlideShow.defineTransition(name, function(data){
       // code
     });
 
@@ -228,6 +227,23 @@ When a transition starts:
 2. The next slide's `z-index` is `0` so it's behind.
 3. All other slides have `display:none`
 4. When the `duration` is met, the previous slide will be reset to `display: none`, and all other styles wiped out, so you don't need to worry about removing styles you've changed during the transition.
+
+
+SlideShow function: defineTransition {#SlideShow:defineTransition}
+------------------------------------------------------------
+
+Same as `defineTransition` except that it takes an object map of transition names and functions.
+
+### Example:
+
+    SlideShow.defineTransitions({
+      flash: function(){
+        // code
+      },
+      'bounce-slide': function(){
+        // code
+      }
+    });
 
 
 SlideShow property: current {#SlideShow:current}
@@ -328,10 +344,9 @@ This release brings with it lots of new features, better performance, and less c
 - [Changed] `showNext` -> `show('next')`
 - [Changed] `showPrevious` -> `show('previous')`
 - [Changed] `SlideShow.add` -> `SlideShow.defineTransition`
-- [Changed] `SlideShow.add` -> `SlideShow.defineTransition`
 - [New] `SlideShow.defineTransitions` - define multiple transitions at once
 - [New] `setup` method initializes everything, reinitialize on-demand
-- [New] constructor takes a `noSetup` option to prevent initializing everything
+- [New] constructor takes a `noSetup` argument to prevent initializing everything
 - [New] `dataAttribute` option for which element attribute to parse
 - [New] `selector` option, select whichever elements you want instead of just immediate children
 - [Changed] `data` object is passed to `defineTransition` instead of several args
