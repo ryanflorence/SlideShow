@@ -68,10 +68,8 @@ div#slides div {
 
 <script>
 
+SlideShow.useCSS();
 var mySlideShow = new SlideShow('slides');
-
-var supportsCSS = true;
-if (supportsCSS) mySlideShow.useCSS();
 
 mySlideShow.addEvents({
 	onShow: function(){ $('onShow').highlight(); },
