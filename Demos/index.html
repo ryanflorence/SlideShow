@@ -1,0 +1,359 @@
+<!doctype html>  
+
+<!--[if lt IE 7 ]> <html lang="en" class="no-js not-ready ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js not-ready ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js not-ready ie8"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--> <html lang="en" class="no-js not-ready"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>MooTools SlideShow, by Ryan Florence</title>
+
+  <meta name="description" content="MooTools SlideShow, a highly extensible interface widget">
+  <meta name="author" content="Ryan Florence">
+
+  <meta name="viewport" content="width=900, initial-scale=1.0">
+
+  <link rel="stylesheet" href="css/style.css?v=1">
+  <link href='http://fonts.googleapis.com/css?family=Josefin+Slab:regular,bolditalic' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Josefin+Sans' rel='stylesheet' type='text/css'>
+
+  <script src="js/modernizr-1.6.min.js"></script>
+
+</head>
+
+<body>
+
+<header>
+	<h1>MooTools SlideShow</h1>
+	<h2>v2.0.0</h2>
+	<p>A highly extensible interface widget</p>
+	<p>[
+		<a href="http://github.com/rpflorence/SlideShow">Github</a> | 
+		<a href="http://mootools.net/forge/p/slideshow">The Forge</a> | 
+		<a href="http://ryanflorence.com">ryanflorence.com</a>
+		]
+	</p>
+	<p class=info>
+		Documentation in the repository, view source of these examples for some starting points.
+	</p>
+</header>
+
+
+
+<!--
+
+* Demos HTML/CSS
+* inlined styles for the copy/paste friends out there
+* JavaScript dependencies at the bottom of this file
+
+-->
+
+
+
+<!-- flickr -->
+<style>
+#flickr{background:#000;}
+#flickr-slideshow{margin:auto;width:800px;height:400px;overflow:hidden;position:relative;}
+#flickr-slideshow div{width:100%;height:100%;position:absolute;left:0;top:0;}
+#flickr-slideshow div span{display:block;width:200px;height:200px;position:relative;float:left;overflow:hidden;}
+</style>
+
+<section id=flickr class=demo>
+	<div id=flickr-slideshow class=slideshow></div>
+	<div class=about>
+		<h2>Full-featured flickr slideshow</h2>
+		<ul>
+			<li>Custom transition</li>
+			<li>Sub-class</li>
+			<li><em>new</em> <code>noSetup</code> argument</li>
+			<li><code>autoPlay</code></li>
+		</ul>
+		<a href="js/flickr.js" class=view-source>View Source</a>
+	</div>
+</section>
+
+
+
+<!-- basic -->
+<style>
+#basic{padding:50px;background:#F2EFBD;}
+#basic-slideshow{width:800px;height:300px;margin:auto;overflow:hidden;-webkit-box-shadow:0 5px 20px rgba(0,0,0,0.5);}
+#basic-slideshow div{width:100%;height:100%;position:absolute;top:0;left:0;font-size:150px;text-align:center;line-height:300px;color:#fff;font-family:"Josefin Slab";}
+</style>
+
+<section id=basic class=demo>
+	<div id=basic-slideshow class=slideshow>
+		<div style="background-color: #1B1E26">One</div>
+		<div style="background-color: #B6D051">Two</div>
+		<div style="background-color: #70A99A">Three</div>
+		<div style="background-color: #2F6D7A">Four</div>
+	</div>
+	<div class=about>
+		<h2>Basic SlideShow</h2>
+		<ul>
+			<li><em>New</em>, maintains elements' inline styles</li>
+			<li><em>New</em> <code>slide</code> transition</li>
+			<li><code>autoplay</code></li>
+		</ul>
+		<a class=view-source href="js/basic.js">View Source</a>
+	</div>
+</section>
+
+
+
+<!-- navigation -->
+<style>
+#navigation{background:#fff;}
+#navigation .about > *{background:#eee;}
+#navigation-slideshow{width:800px;height:400px;margin:auto;overflow:hidden;position:relative;}
+#navigation-slideshow img{position:absolute;left:0;right:0;}
+#navigation-slideshow ul{position:absolute;top:20px;left:0px;width:800px;z-index:2;color:#000;padding:0;margin:0;list-style:none;text-align:center;cursor:default;}
+#navigation-slideshow li{display:inline-block;margin-right:10px;}
+#navigation-slideshow a{display:block;width:20px;height:20px;background:rgba(0,0,0,0.5);-webkit-border-radius:10px;-moz-border-radius:10px;-ms-border-radius:10px;border-radius:10px;}
+#navigation-slideshow a:hover,
+#navigation-slideshow a.current{background:rgba(0,0,0,0.75);}
+.tip-wrap{z-index:3;}
+.tip{background:rgba(255,255,255,0.5);color:#000;width:200px;height:auto;padding:10px;font-size:85%;text-align:center;}
+.tip-top{height:0;width:0px;border-style:solid;border-color:transparent transparent rgba(255,255,255,0.5) transparent;border-width:10px;margin-left:100px;}
+</style>
+
+<section id=navigation class=demo>
+	<div id=navigation-slideshow class=slideshow>
+		<img id="lp01" src="images/letterpress/01.jpg">
+		<img id="lp02" src="images/letterpress/02.jpg">
+		<img id="lp03" src="images/letterpress/03.jpg">
+		<img id="lp04" src="images/letterpress/04.jpg">
+		<ul>
+			<li><a class=current href="#lp01" title="Blind Letterpress into Reich Shine"></a></li>
+			<li><a href="#lp02" title="Detail shot of Venn Diagram Infographic showing types of Symbols"></a></li>
+			<li><a href="#lp03" title="Pull Quote typeset in Neutraface Italic"></a></li>
+			<li><a href="#lp04" title="Breakdown of Pierce's symbol classifactions"></a></li>
+		</ul>
+	</div>
+	<div class=about>
+		<h2>Navigation</h2>
+		<ul>
+			<li>On-the-fly <code>pushLeft</code> &amp; <code>pushRight</code> transitions</li>
+			<li><em>New</em> <code>slideshow.index</code> property</li>
+			<li><em>New</em> <code>selector</code> option</li>
+			<li>Use of <code>show(index)</code> method</li>
+			<li>Use of <code>onShow</code> event</li>
+		</ul>
+		<a class=view-source href="js/navigation.js">View Source</a>
+	</div>
+</section>
+
+
+
+<!-- declarative -->
+
+<style>
+#declarative{padding:50px;background:#3b3013;}
+#declarative-slideshow{position:relative;width:800px;height:300px;margin:auto;overflow:hidden;}
+#declarative-slideshow div{width:100%;height:200px;position:absolute;top:0;left:0;font-size:50px;padding-top:100px;text-align:center;color:#fdf3c1;font-family:"Josefin Slab";}
+#declarative .about > *{background:#fdf3c1;}
+.red{background:#9c0c0a;}
+.orange{background:#e88833;}
+.brown{background:#8f6031;}
+</style>
+
+<section id=declarative class=demo>
+	<div id=declarative-slideshow class=slideshow data-slideshow="delay:2000 duration:1000 transition:fade">
+		<div data-slideshow="transition:none"                  class=orange>none</div>
+		<div data-slideshow="transition:slideDown"             class=brown>slideDown</div>
+		<div data-slideshow="transition:slideUp duration:500"  class=red>slideUp:500</div>
+		<div data-slideshow="transition:slideLeft"             class=orange>slideLeft</div>
+		<div data-slideshow="transition:slideRight"            class=brown>slideRight</div>
+		<div data-slideshow="transition:crossFade"             class=red>crossFade</div>
+		<div data-slideshow="transition:pushUp duration:500"   class=red>pushUp:500</div>
+		<div data-slideshow="transition:pushDown"              class=brown>pushDown</div>
+		<div data-slideshow="transition:pushLeft duration:1500" class=orange>pushLeft:1500</div>
+		<div data-slideshow="transition:pushRight"             class=brown>pushRight</div>
+		<div data-slideshow="transition:fadeThroughBackground" class=red>fadeThroughBackground</div>
+		<div data-slideshow="transition:blindUp"               class=red>blindUp</div>
+		<div data-slideshow="transition:blindDown"             class=orange>blindDown</div>
+		<div data-slideshow="transition:blindLeft"             class=brown>blindLeft</div>
+		<div data-slideshow="transition:blindRight"            class=red>blindRight</div>
+		<div data-slideshow="transition:blindUpFade"           class=orange>blindUpFade</div>
+		<div data-slideshow="transition:blindDownFade"         class=brown>blindDownFade</div>
+		<div data-slideshow="transition:blindLeftFade"         class=red>blindLeftFade</div>
+		<div data-slideshow="transition:blindRightFade"        class=orange>blindRightFade</div>
+		<div data-slideshow="transition:fade"                  class=orange>fade</div>
+	</div>
+	<div class=about>
+		<h2>Declarative HTML with 19 Transitions</h2>
+		<ul>
+			<li>19 Transitions out-of-the-box</li>
+			<li>Declarative HTML configuration for transitions per slide</li>
+			<li>Element method <code>playSlideShow</code></li>
+			<li><em>New</em> <code>dataAttribute</code> option to configure the element attribute to find transition data on</li>
+		</ul>
+		<a class=view-source href="js/navigation.js">View Source</a>
+	</div>
+</section>
+
+
+
+<style>
+#css-transitions{padding:50px;background:#fff;}
+#css-transitions-slideshow{position:relative;border:solid 3px;width:794px;height:300px;margin:auto;color:#27243d;overflow:hidden;}
+#css-transitions-slideshow div{width:100%;height:200px;position:absolute;top:0;left:0;font-size:50px;padding-top:100px;text-align:center;font-family:"Josefin Slab";}
+#css-transitions .red{background:#f63f33;}
+#css-transitions .orange{background:#9bfbff;}
+#css-transitions .brown{background:#97fe5b;}
+#css-transitions .about > *{background:#27243d;color:#fff;}
+</style>
+
+<section id=css-transitions class=demo>
+	<div id=css-transitions-slideshow class=slideshow data-slideshow="delay:2000 duration:1500 transition:fade">
+		<div data-slideshow="transition:blindUpCSS"    class=red>blindUp</div>
+		<div data-slideshow="transition:blindDownCSS"  class=orange>blindDown</div>
+		<div data-slideshow="transition:blindLeftCSS"  class=brown>blindLeft</div>
+		<div data-slideshow="transition:blindRightCSS" class=red>blindRight</div>
+		<div data-slideshow="transition:slideDownCSS"  class=brown>slideDown</div>
+		<div data-slideshow="transition:slideUpCSS"    class=red>slideUp</div>
+		<div data-slideshow="transition:slideLeftCSS"  class=orange>slideLeft</div>
+		<div data-slideshow="transition:slideRightCSS" class=brown>slideRight</div>
+		<div data-slideshow="transition:pushUpCSS"     class=red>pushUp</div>
+		<div data-slideshow="transition:pushDownCSS"   class=brown>pushDown</div>
+		<div data-slideshow="transition:pushLeftCSS"   class=orange>pushLeft</div>
+		<div data-slideshow="transition:pushRightCSS"  class=brown>pushRight</div>
+	</div>
+	<div class=about>
+		<h2>SlideShow.CSS (Experimental), CSS Transform Transitions</h2>
+		<ul>
+			<li>12 CSS Transitions using transform</li>
+			<li><code>SlideShow.useCSS</code> (not used here) reassigns non-css transitions to the css transitions</li>
+		</ul>
+		<a class=view-source href="js/navigation.js">View Source</a>
+	</div>
+</section>
+
+
+
+<!-- tabs -->
+
+<style>
+#tabs{background-color:#8c4a3b;}
+#tabs-slideshow ul{width:800px;margin:0 auto;list-style-type:none;padding:10px;}
+#tabs-slideshow li{float:left;}
+#tabs-slideshow li a{display:block;color:#dceaf2;text-decoration:none;padding-top:4px;padding-left:8px;padding-right:8px;background:#232a40;-webkit-border-top-left-radius:6px;-webkit-border-top-right-radius:6px;margin-right:4px;}
+#tabs-slideshow li a:hover{background-color:#313a40;}
+#tabs-slideshow li a.current{background:#dceaf2;color:#232a40;}
+.tab{width:800px;margin:auto;clear:both;padding:10px;background:#dceaf2;overflow:hidden;}
+</style>
+
+<section id=tabs class=demo>
+	<div id=tabs-slideshow class=slideshow>
+		<ul>
+			<li><a class=current href="#tab1">Tab One</a></li>
+			<li><a href="#tab2">Tab Two</a></li>
+			<li><a href="#tab3">Tab Three</a></li>
+		</ul>
+		<div id=tab1 class=tab>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		</div>
+		<div id=tab2 class=tab>
+			<p>Magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		</div>
+		<div id=tab3 class=tab>
+			<p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			<p>Ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+		</div>
+	</div>
+	<div class=about>
+		<h2>Tabs</h2>
+		<ul>
+			<li><em>New</em> SlideShow purges any styles applied so you can create whatever layouts (and transitions) you want</li>
+			<li>In the end, auto height is ~just fine~</li>
+		</ul>
+		<a class=view-source href="js/tabs.js">View Source</a>
+	</div>
+</section>
+
+<!-- ticker -->
+<style>
+#ticker{background:#999;}
+#ticker-slideshow{height:2.25em;width:800px;margin:auto;overflow:hidden;background:#fff;font-family:helvetica,arial;-webkit-border-radius:6px;-webkit-box-shadow:0 2px 4px rgba(0,0,0,0.25);}
+a.item{display:block;text-decoration:none;color:#000;padding:.5em;position:absolute;top:0;left:0;width:100%;}
+a.item:hover{text-decoration: underline;}
+a.item i{display:block;float:left;margin-top:4px;height:0;width:0px;border-style:solid;border-color:transparent transparent transparent #454545;border-width:5px;margin-left:10px;}
+</style>
+<section id=ticker class=demo>
+	<div id=ticker-slideshow class=slideshow><!-- updated via JSONP --></div>
+	<div class=about>
+		<h2>News Ticker</h2>
+		<ul>
+			<li><code>pushUp</code> transition and</li>
+			<li><code>autoplay</code>, that's it!</li>
+		</ul>
+		<a class=view-source href="js/ticker.js">View Source</a>
+	</div>
+</section>
+
+<footer>
+	[ <a href="http://ryanflorence.com">by Ryan Florence</a> | <a href="http://twitter.com/ryanflorence">@ryanflorence</a> ]
+</footer>
+
+
+<!-- Demo JavaScript -->
+
+<!-- SlideShow and Dependencies (building with Packager is better!) -->
+<script charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/mootools/1.3.0/mootools-yui-compressed.js"></script>
+<script charset="utf-8" src="https://github.com/rpflorence/Loop/raw/master/Source/Loop.js"></script>
+<script charset="utf-8" src="../Source/SlideShow.js"></script>
+
+<!-- demos -->
+
+<!-- flickr demo dependencies -->
+<script charset="utf-8" src="https://github.com/mootools/mootools-more/raw/master/Source/Utilities/Assets.js"></script>
+<script charset="utf-8" src="https://github.com/mootools/mootools-more/raw/1.3.0.1/Source/Request/Request.JSONP.js"></script>
+<script charset="utf-8" src="https://github.com/rpflorence/mootools-wallpaper/raw/master/Source/Wallpaper.js"></script>
+<script charset="utf-8" src="https://github.com/rpflorence/mootools-wallpaper/raw/master/Source/Wallpaper.Fill.js"></script>
+<!-- flickr -->
+<script charset="utf-8" src="js/flickr.js"></script>
+
+<!-- basic -->
+<script charset="utf-8" src="js/basic.js"></script>
+
+<!-- navigation demo dependencies -->
+<script charset="utf-8" src="https://github.com/mootools/mootools-more/raw/master/Source/Interface/Tips.js"></script>
+<!-- navigation demo -->
+<script charset="utf-8" src="js/navigation.js"></script>
+
+<!-- navigation declarative -->
+<script charset="utf-8" src="js/declarative.js"></script>
+
+<!-- css-transitions dependencies -->
+<script charset="utf-8" src="https://github.com/rpflorence/CSSAnimation/raw/0.2.0/Source/CSSAnimation.js"></script>
+<script charset="utf-8" src="https://github.com/rpflorence/CSSAnimation/raw/0.2.0/Source/CSSAnimation.MooTools.js"></script>
+<script charset="utf-8" src="https://github.com/rpflorence/SlideShow/raw/2.0.0pre/Source/SlideShow.CSS.js"></script>
+
+<!-- css-transitions -->
+<script charset="utf-8" src="js/css-transitions.js"></script>
+
+<!-- tabs -->
+<script charset="utf-8" src="js/tabs.js"></script>
+
+<!-- ticker -->
+<script charset="utf-8" src="js/ticker.js"></script>
+
+<!-- this site -->
+<script charset="utf-8" src="js/site.js"></script>
+<script>
+ var _gaq = [['_setAccount', 'UA-6960372-1'], ['_trackPageview']];
+ (function(d, t) {
+  var g = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+  g.async = true;
+  g.src = ('https:' == location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g, s);
+ })(document, 'script');
+</script>
+ 
+</body>
+</html>
