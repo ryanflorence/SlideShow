@@ -196,7 +196,7 @@ Element.Properties.slideshow = {
 	get: function(){
 		var instance = this.retrieve('slideshow');
 		if (!instance){
-			instance = new SlideShow(this, {noSetup: true});
+			instance = new SlideShow(this, {}, true);
 			this.store('slideshow', instance);
 		}
 		return instance;
