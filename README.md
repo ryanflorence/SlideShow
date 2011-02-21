@@ -5,16 +5,9 @@ SlideShow
 
 Extensible mid-level class that manages transitions of elements that share the same space, typically for slideshows, tabs, and galleries.
 
-View the [Docs](https://github.com/rpflorence/SlideShow/tree/2.0.0pre/Docs/SlideShow) for all methods and details.
+View the [demo site](http://ryanflorence.com/slideshow) for real world examples.
 
-About this Repository
----------------------
-
-### Only Tagged Commits are Guaranteed Stable
-
-The develop branch is the tracking branch, **which is not guaranteed to be stable** and the documentation is bound to have inaccuracies.  Please download a tagged release from the download button.
-
-I was sloppy in the beginning, but plan to have the master branch only contain the stable, tagged, releases.
+View the [Docs](https://github.com/rpflorence/SlideShow/tree/develop/Docs/SlideShow) for all methods and details.
 
 Features:
 ---------
@@ -42,10 +35,19 @@ Features:
 - slideLeft, slideRight, slideUp, slideDown
 - blindLeftFade, blindRightFade, blindUpFade, blindDownFade
 
+Events
+------
+
+- `onShow`
+- `onShowComplte`
+- `onPlay`
+- `onPause`
+- `onReverse`
+
 CSS Transitions!
 ----------------
 
-New in 2.0, `SlideShow.CSS` has a method to override JS animations with CSS3 animations.
+New in 2.0, `SlideShow.CSS` has a method to override JS animations with CSS3 animations.  Still experimental.
 
 How to use
 ----------
@@ -65,16 +67,20 @@ SlideShow naturally grabs all children elements of a parent as the slides.
 
 _CSS_
 
-Not required, but defining a few things like so will make your slideshow look better.
+Most transitions require absolutely positioned slides:
 
     #CSS
     #slideshow {
       width: 500px;
       height: 300px;
       overflow: hidden;
+      position: relative
     }
     
     #slideshow > * {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
     }
@@ -113,9 +119,8 @@ _JavaScript_
 First include the `SlideShow.CSS.js` file.  You'll then want to verify if the browser supports CSS transitions and transforms, I typically use Modernizr:
 
     #JS
-    var slideshow = new SlideShow('slideshow');
     if (Modernizr.csstransitions && Modernizr.csstransforms){
-        slideshow.useCSS();
+        SlideShow.useCSS();
     }
 
 Browsers that support transitions and transforms will use the new CSS transitions instead of JavaScript.
