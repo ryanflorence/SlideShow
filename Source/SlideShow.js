@@ -7,7 +7,7 @@ description: "Extensible mid-level class that manages transitions of elements th
 
 license: "MIT-style license."
 
-author: "Ryan Florence <http://ryanflorence.com>"
+authors: "Ryan Florence <http://ryanflorence.com>"
 
 requires:
   - Core/Fx.Tween
