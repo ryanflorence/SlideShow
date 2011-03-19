@@ -39,7 +39,7 @@ Events
 ------
 
 - `onShow`
-- `onShowComplte`
+- `onShowComplete`
 - `onPlay`
 - `onPause`
 - `onReverse`
