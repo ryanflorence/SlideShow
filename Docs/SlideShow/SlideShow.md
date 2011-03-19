@@ -11,7 +11,7 @@ Options, Events, [Loop](https://github.com/rpflorence/Loop)
 
 
 SlideShow Method: constructor {#SlideShow:constructor}
--------------------------------------------------------
+------------------------------------------------------
 
 ### Syntax:
 
@@ -63,7 +63,7 @@ SlideShow Event: onShow {#SlideShow:onShow}
     });
 
 SlideShow Event: onShowComplete {#SlideShow:onShowComplete}
--------------------------------------------
+-----------------------------------------------------------
 
 * (*function*) Executes when a slide transition ends.
 
@@ -76,7 +76,7 @@ SlideShow Event: onShowComplete {#SlideShow:onShowComplete}
 *   slideData - (*object*) An object containing slide data the same as `onShow`.
 
 SlideShow Method: show {#SlideShow:show}
------------------------------------------
+----------------------------------------
 
 Transitions from one slide to another.
 
@@ -111,7 +111,7 @@ This SlideShow instance.
     });
 
 SlideShow Method: setup {#SlideShow:setup}
------------------------------------------
+------------------------------------------
 
 Called automatically in the constructor, unless the `noSetup` argument is provided.  Initializes the slideshow, you can reinitialize on demand.  Mostly useful when slides are dynamically added.
 
@@ -136,7 +136,7 @@ This SlideShow instance.
 
 
 SlideShow Method: play {#SlideShow:play}
------------------------------------------
+----------------------------------------
 
 Auto-plays the slideshow on the `options.delay`.
 
@@ -151,7 +151,7 @@ This SlideShow instance.
 
 
 SlideShow Method: pause {#SlideShow:pause}
------------------------------------------
+------------------------------------------
 
 Pauses the auto-play.
 
@@ -166,7 +166,7 @@ This SlideShow instance.
 
 
 SlideShow Method: reverse {#SlideShow:reverse}
------------------------------------------
+----------------------------------------------
 
 Reverses the slideshow auto-play direction.
 
@@ -184,7 +184,7 @@ This SlideShow instance.
 
 
 SlideShow function: defineTransition {#SlideShow:defineTransition}
-------------------------------------------------------------
+------------------------------------------------------------------
 
 Adds a custom transition to the SlideShow class to be used in any instances.
 
@@ -230,7 +230,7 @@ When a transition starts:
 
 
 SlideShow function: defineTransition {#SlideShow:defineTransition}
-------------------------------------------------------------
+------------------------------------------------------------------
 
 Same as `defineTransition` except that it takes an object map of transition names and functions.
 
@@ -293,7 +293,7 @@ Element shortcut method to create a slideshow instance with this element.
 1. options (*object*) - Same options as the constructor except `autoplay` will be ignored.
 
 Element method: pauseSlideShow {#Element:pauseSlideShow}
-------------------------------------------------------
+--------------------------------------------------------
 
 Element shortcut method to pause a slideshow instance created with the `playSlideShow` method.
 
@@ -319,17 +319,17 @@ SlideShow Method: showNext {#Deprecated:showNext}
 Deprecated, use `show('next')`.
 
 SlideShow Method: showPrevious {#Deprecated:showPrevious}
--------------------------------------------------
+---------------------------------------------------------
 
 Deprecated, use `show('previous')`.
 
 SlideShow Method: resetOptions {#Deprecated:resetOptions}
---------------------------------------------------------
+---------------------------------------------------------
 
 Deprecated, use `setup(options)`.
 
 SlideShow function: add {#Deprecated:add}
-----------------------------------------
+-----------------------------------------
 
 Deprecated, use `addTransition`
 
