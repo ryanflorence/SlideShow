@@ -59,7 +59,7 @@ SlideShow Event: onShow {#SlideShow:onShow}
       slideData.next.element; // the actual DOM element
       slideData.next.index; // the index of the element in the slideshow
       slideData.previous.element;
-      slideData.prevoius.index;
+      slideData.previous.index;
     });
 
 SlideShow Event: onShowComplete {#SlideShow:onShowComplete}
