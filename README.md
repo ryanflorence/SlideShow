@@ -67,22 +67,22 @@ SlideShow naturally grabs all children elements of a parent as the slides.
 
 _CSS_
 
-Most transitions require absolutely positioned slides:
+Most transitions require absolutely positioned slides **with top and left set to 0**.  SlideShow doesn't do this for you, keeping it more flexible for all types of transitions:
 
     #CSS
     #slideshow {
       width: 500px;
       height: 300px;
       overflow: hidden;
-      position: relative
+      position: relative; /* not required, slideshow will set this for you */
     }
     
     #slideshow > * {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      position: absolute; /* required for most transitions */
+      top: 0;             /* ditto */
+      left: 0;            /* ditto */
+      width: 100%;        /* usually required */
+      height: 100%;       /* same */
     }
 
 _JavaScript_
