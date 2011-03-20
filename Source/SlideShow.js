@@ -73,7 +73,7 @@ var SlideShow = this.SlideShow = new Class({
 		var transition = (options && options.transition) ? options.transition : slide.retrieve('slideshow-transition'),
 			duration = (options && options.duration) ? options.duration : slide.retrieve('slideshow-duration'),
 			previous = this.current.setStyle('z-index', 1),
-			next = this.reset(slide),
+			next = this.reset(slide).setStyle('z-index', 0),
 			nextIndex = this.index = next.retrieve('slideshow-index')
 			slideData = {
 				previous: { element: previous, index: previous.retrieve('slideshow-index') },
