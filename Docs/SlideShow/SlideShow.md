@@ -31,6 +31,7 @@ SlideShow Method: constructor {#SlideShow:constructor}
 * autoplay - (*boolean*: defaults to `false`) Calls `play` upon initialization.
 * dataAttribute - (*string*: defaults to `data-slideshow`) The element attribute from which to pull transition options.
 * selector - (*CSS string*: defaults to `> *`) The selector used to find the slides relative to the slideshow element.
+* initialSlideIndex = (*number*: defaults to `0`) The index of the initial slide to be shown.
 
 ### Events:
 

@@ -39,7 +39,8 @@ var SlideShow = this.SlideShow = new Class({
 		duration: 500,
 		autoplay: false,
 		dataAttribute: 'data-slideshow',
-		selector: '> *'
+		selector: '> *',
+		initialSlideIndex: 0
 	},
 
 	transitioning: false,
@@ -55,7 +56,7 @@ var SlideShow = this.SlideShow = new Class({
 		if (options) this.setOptions(options);
 		this.slides = this.element.getElements(this.options.selector);
 		this.setupElement().setupSlides();
-		this.current = this.current || this.slides[0];
+		this.current = this.current || this.slides[this.options.initialSlideIndex];
 		this.index = this.current.retrieve('slideshow-index');
 		this.setLoop(this.show.pass(this.reversed ? 'previous' : 'next', this), this.options.delay);
 		if (this.options.autoplay) this.play();
@@ -131,8 +132,7 @@ var SlideShow = this.SlideShow = new Class({
 		this.slides.each(function(slide, index){
 			slide.store('slideshow-index', index).store('slideshow:oldStyles', slide.get('style'));
 			this.storeData(slide);
-			this.reset(slide);
-			slide.setStyle('display', (this.current || index == 0) ? '' : 'none');
+			slide.setStyle('display', (this.current || index == this.options.initialSlideIndex) ? '' : 'none');
 		}, this);
 		return this;
 	},

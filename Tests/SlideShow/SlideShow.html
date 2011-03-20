@@ -42,7 +42,7 @@ div#slides div {
 
 <div id="slides" data-slideshow="delay:2000 duration:1000 transition:fade">
 	<div data-slideshow="transition:none"                  class=green>0<br> none</div>
-	<div data-slideshow="transition:slideDown"             class=blue>1<br> slideDown</div>
+	<div data-slideshow="transition:slideDown"             class=blue>1 (initial)<br> slideDown</div>
 	<div data-slideshow="transition:slideUp"               class=red>2<br> slideUp</div>
 	<div data-slideshow="transition:slideLeft"             class=green>3<br> slideLeft</div>
 	<div data-slideshow="transition:slideRight"            class=blue>4<br> slideRight</div>
@@ -89,7 +89,10 @@ SlideShow.defineTransition('flash', function(data){
 });
 
 // tests element methods in the background
-var mySlideShow = $('slides').playSlideShow({selector: '> div'}).pauseSlideShow().get('slideshow');
+var mySlideShow = $('slides').playSlideShow({
+	selector: '> div',
+	initialSlideIndex: 1
+}).pauseSlideShow().get('slideshow');
 
 mySlideShow.addEvents({
 	onShow: function(){ $('onShow').highlight(); },
