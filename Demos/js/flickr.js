@@ -12,7 +12,7 @@ Array.implement({
 
 // Define a new transition
 SlideShow.defineTransition('squares', function(data){
-	// data contains information about the transition like the 
+	// data contains information about the transition like the
 	// previous and next slides as well as the duration of the transition
 	var elements = data.next.getElements('span'),
 		duration = data.duration / elements.length - 1;
@@ -104,7 +104,7 @@ SlideShow.Flickr = new Class({
 		this.initialized = true;
 		this.element.fade('in');
 	},
-	
+
 	show: function(index, options){
 		if (!this.initialized) return this;
 		return this.parent(index, options);

@@ -49,8 +49,8 @@ var watcher = {
 document.addEvent('domready', function(){
 	$$('html')[0].removeClass('not-ready').removeClass('no-js');
 	watcher.init([
-		flickr, basic.pause(), 
-		css.pause(), 
+		flickr, basic.pause(),
+		css.pause(),
 		declarative.pause()
 	]);
 });
