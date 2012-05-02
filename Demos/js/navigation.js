@@ -36,6 +36,6 @@ document.addEvent('domready', function(){
 			y: 20
 		}
 	});
-	
+
 
 });
