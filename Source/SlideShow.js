@@ -132,7 +132,7 @@ var SlideShow = this.SlideShow = new Class({
 		this.slides.each(function(slide, index){
 			slide.store('slideshow-index', index).store('slideshow:oldStyles', slide.get('style'));
 			this.storeData(slide);
-			slide.setStyle('display', (this.current || index == this.options.initialSlideIndex) ? '' : 'none');
+			slide.setStyle('display', (slide == this.current || index == this.options.initialSlideIndex) ? '' : 'none');
 		}, this);
 		return this;
 	},
