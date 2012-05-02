@@ -69,7 +69,7 @@ var SlideShow = this.SlideShow = new Class({
 		if (slide == this.current || this.transitioning) return this;
 
 		this.transitioning = true;
-		this.current.store('slideshow:oldStyles', this.current.get('style'));
+		this.current.store('slideshow:oldStyles', this.current.get('style').replace(/display: ?(none|block|inline)(; )?/, ''));
 
 		var transition = (options && options.transition) ? options.transition : slide.retrieve('slideshow-transition'),
 			duration = (options && options.duration) ? options.duration : slide.retrieve('slideshow-duration'),
@@ -130,7 +130,7 @@ var SlideShow = this.SlideShow = new Class({
 
 	setupSlides: function(){
 		this.slides.each(function(slide, index){
-			slide.store('slideshow-index', index).store('slideshow:oldStyles', slide.get('style'));
+			slide.store('slideshow-index', index).store('slideshow:oldStyles', slide.get('style').replace(/display: ?(none|block|inline)(; )?/, ''));
 			this.storeData(slide);
 			slide.setStyle('display', (this.current || index == this.options.initialSlideIndex) ? '' : 'none');
 		}, this);
