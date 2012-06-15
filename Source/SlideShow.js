@@ -82,13 +82,24 @@ var SlideShow = this.SlideShow = new Class({
 			};
 
 		this.fireEvent('show', slideData);
-
-		SlideShow.transitions[transition]({
-			previous: previous,
-			next: next,
-			duration: duration,
-			instance: this
-		});
+		
+		if (transition == 'random') {
+			var keys = Object.keys(SlideShow.transitions);
+			var rnd = $random(0, keys.length - 1);
+			SlideShow.transitions[keys[rnd]]({
+				previous: previous,
+				next: next,
+				duration: duration,
+				instance: this
+			});
+		} else {
+			SlideShow.transitions[transition]({
+				previous: previous,
+				next: next,
+				duration: duration,
+				instance: this
+			});
+		}
 
 		(function(){
 			previous.setStyle('display', 'none');

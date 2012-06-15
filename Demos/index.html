@@ -104,6 +104,31 @@
 
 
 
+<!-- random -->
+<style>
+#random{padding:50px;background:#f6a8e5;}
+#random-slideshow{width:800px;height:300px;margin:auto;overflow:hidden;-webkit-box-shadow:0 5px 20px rgba(0,0,0,0.5);}
+#random-slideshow div{width:100%;height:100%;position:absolute;top:0;left:0;font-size:150px;text-align:center;line-height:300px;color:#fff;font-family:"Josefin Slab";}
+</style>
+
+<section id=random class=demo>
+	<div id=random-slideshow class=slideshow>
+		<div style="background-color: #1B1E26">1</div>
+		<div style="background-color: #B6D051">2</div>
+		<div style="background-color: #70A99A">3</div>
+		<div style="background-color: #2F6D7A">4</div>
+	</div>
+	<div class=about>
+		<h2>Random Transition SlideShow</h2>
+		<ul>
+			<li>Declaring the Transition as '<em>random</em>', causes each slide's transition to be randomly chosen</li>
+		</ul>
+		<a class=view-source href="js/random.js">View Source</a>
+	</div>
+</section>
+
+
+
 <!-- navigation -->
 <style>
 #navigation{background:#fff;}
@@ -319,6 +344,9 @@ a.item i{display:block;float:left;margin-top:4px;height:0;width:0px;border-style
 
 <!-- basic -->
 <script charset="utf-8" src="js/basic.js"></script>
+
+<!-- random -->
+<script charset="utf-8" src="js/random.js"></script>
 
 <!-- navigation demo dependencies -->
 <script charset="utf-8" src="https://github.com/mootools/mootools-more/raw/master/Source/Interface/Tips.js"></script>
